@@ -6,6 +6,7 @@
  */
 
 #include"atmega32a.h"
+#include"interfacing_connection_logic.h"
 #include <avr/io.h>
 
 int main(void) {

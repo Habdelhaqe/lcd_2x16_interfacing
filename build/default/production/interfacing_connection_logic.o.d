@@ -1,6 +1,6 @@
-build/default/production/lcd_control_main.o.d \
- build/default/production/lcd_control_main.o: lcd_control_main.c \
- atmega32a.h \
+build/default/production/interfacing_connection_logic.o.d \
+ build/default/production/interfacing_connection_logic.o: \
+ interfacing_connection_logic.c atmega32a.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\io.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\sfr_defs.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\inttypes.h \

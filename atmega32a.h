@@ -11,11 +11,20 @@
     #define	ATMEGA32A_H
 
     //Renaming the DDRx Registers
+    /*
+     * gives compilation error :case label 
+     * does not reduce to an integer constant
+     */
+//    #define IOA DDRA
+//    #define IOB DDRB 
+//    #define IOC DDRC
+//    #define IOD DDRC
+
     #define IOA 0
-    #define IOB 1 
+    #define IOB 1
     #define IOC 2
     #define IOD 3
-    
+
     //renaming the PORTx registers
     #define OUTA 0
     #define OUTB 1
@@ -43,7 +52,8 @@
     typedef enum FUN_RETURN_STATUS{
         NO_ERRORS,
         ERR_WRONG_PORT_NUMBER,
-        ERR_WRONG_PIN_NUMBER
+        ERR_WRONG_PIN_NUMBER,
+        ERR        
     }FUN_RETURN_STATUS;
         
     
@@ -52,6 +62,7 @@
         u8 scanned_data;
     }scan_fun_return;
     
+
     /*
      * program/configure the port to be used
      * as Input / Reader control signal in=> LOW

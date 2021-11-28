@@ -3,6 +3,7 @@
  * "common_types_defs.h" is already included
  */
 #include "atmega32a.h"
+
 scan_fun_return fun_ret_status_and_data;
 
 FUN_RETURN_STATUS setPortInOut(u8 port_number, u8 control_siganl_configuration){
@@ -238,6 +239,7 @@ scan_fun_return scanControlSignalThroughPort(u8 port_number){
 scan_fun_return scanControlSignalThroughPortPin(u8 port_number, u8 pin_number){
     
     //initialization of fun_ret_status_and_data
+    
     fun_ret_status_and_data.fun_return   = NO_ERRORS;
     fun_ret_status_and_data.scanned_data = LOW;
     

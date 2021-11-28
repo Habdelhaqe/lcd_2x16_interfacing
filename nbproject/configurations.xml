@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>common_types_defs.h</itemPath>
       <itemPath>atmega32a.h</itemPath>
+      <itemPath>interfacing_connection_logic.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -16,6 +17,7 @@
                    projectFiles="true">
       <itemPath>lcd_control_main.c</itemPath>
       <itemPath>atemga32a.c</itemPath>
+      <itemPath>interfacing_connection_logic.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
