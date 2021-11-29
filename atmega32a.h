@@ -65,8 +65,12 @@
 
     /*
      * program/configure the port to be used
-     * as Input / Reader control signal in=> LOW
-     * as Output / Writer control signal out=> HIGH 
+     * as Input:Reader control signal_in : LOW
+     * as Output:Writer control signal_out : HIGH 
+     * fun arguments : -port number to select which port to program/configure
+     *                 -port control signal to program/configure selected port
+     *                  to be : o/p passing HIGH
+     *                          i/p passing LOW
      * caller of fun should check for the return
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
@@ -76,8 +80,14 @@
    
     /*
      * program/configure the port pin to be used
-     * as Input / Reader control signal in=> LOW
-     * as Output / Writer control signal out=> HIGH 
+     * as Input:Reader control signal_in : LOW
+     * as Output:Writer control signal_out : HIGH 
+     * fun arguments : -port number to select which port to program/configure
+     *                 -pin number to select which pin on the selected port 
+     *                  to program/configure
+     *                 -port control signal to program/configure selected port
+     *                  pin to be : o/p passing HIGH
+     *                              i/p passing LOW
      * caller of fun should check for the return
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER 
@@ -89,8 +99,10 @@
                          u8 /*port configuration in LOW or out HIG*/);
     
     /*
-     * output selected control signal status on 
-     * selected port
+     * output selected control signal status on selected port
+     * fun arguments : -port number to select which port to output control
+     *                  signal through
+     *                 -port control signal status to be weather HIGH/LOW
      * caller of fun should check for the return
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
@@ -99,8 +111,12 @@
                          u8 /*control signal status*/);
     
     /*
-     * output selected control signal status on 
-     * selected port pin
+     * output selected control signal status on selected port pin
+     * fun arguments : -port number to select which port to output control
+     *                  signal through
+     *                 -pin number to select which pin on the selected port to
+     *                  output control signal through 
+     *                 -port control signal status to be weather HIGH/LOW
      * caller of fun should check for the return
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
@@ -110,10 +126,11 @@
                                         u8 /*control signal status*/);
     
     /*
-     * input / scan selected control signal status on 
-     * selected port
+     * input/scan/read selected control signal status on selected port
+     * fun arguments : -port number to select which port the passed control 
+     *                  signal will be available on
      * fun return is the scanned control signal status passing through
-     * the port selected
+     * the selected port
      * caller of fun should check for the return structure "scan_fun_return"
      * member : fun_return to decide if to discard the data scanned or to
      * use it 
@@ -124,10 +141,13 @@
     scan_fun_return scanControlSignalThroughPort(u8 /*port number*/ );
     
     /*
-     * output selected control signal status on 
-     * selected port pin
+     * input/scan/read selected control signal status on selected port pin
+     * fun arguments : -port number to select which port the passed control 
+     *                  signal will be available on
+     *                 -pin number to select which port pin the passed control 
+     *                  signal will be available on
      * fun return is the scanned control signal status passing through
-     * the port pin selected
+     * the selected port
      * caller of fun should check for the return structure "scan_fun_return"
      * member : fun_return to decide if to discard the data scanned or to
      * use it 

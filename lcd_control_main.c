@@ -8,10 +8,26 @@
 #include"atmega32a.h"
 #include"interfacing_connection_logic.h"
 #include <avr/io.h>
+#define KEEP_EXECUTING 1
 
 int main(void) {
     /* Replace with your application code */
-    while (1) {
-        
+    if(NO_ERRORS == initBTNS()){
+        if(NO_ERRORS == initLEDS()){
+            
+            //all initialization is done corectly proceed to business logic
+            while (KEEP_EXECUTING) {
+                
+                if(chekLEDOnOFF(LED0).scanned_data == OFF){
+                    signalLEDOnOff(LED0,ON);
+                }
+               
+            }
+                
+        }else{
+               //ERR Should Be handled here @ higher logic to decide what to do
+        }
+    }else{
+        //ERR Should Be handled here @ higher logic to decide what to do
     }
 }

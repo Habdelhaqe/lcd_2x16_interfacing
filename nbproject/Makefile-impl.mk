@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=lcd_2x16_interfacing
+PROJECTNAME=lcd2x16_interfacing.X
 
 # Active Configuration
 DEFAULTCONF=default

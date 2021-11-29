@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/lcd_2x16_interfacing.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=lcd_2x16_interfacing.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=lcd2x16interfacing/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/lcd2x16_interfacing.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=lcd2x16_interfacing.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=lcd2x16interfacing.x/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/lcd2x16interfacing/bin
+makeDirectory ${TMPDIR}/lcd2x16interfacing.x/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/lcd2x16interfacing.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/lcd2x16interfacing.x.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/lcd2x16interfacing.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/lcd2x16interfacing.x.tar *
 checkReturnCode
 
 # Cleanup

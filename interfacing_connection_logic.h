@@ -7,16 +7,14 @@
 
 #ifndef INTERFACING_CONNECTION_LOGIC_H
 
-#include "atmega32a.h"
-
     #define	INTERFACING_CONNECTION_LOGIC_H
     
     #define ON  1
     #define OFF 0
     
-    #define BTTN0 PIN0 //portB pin:0 IN
-    #define BTTN1 PIN6 //portD pin:6 IN
-    #define BTTN2 PIN2 //portD pin:2 IN
+    #define BTN0 PIN0 //portB pin:0 IN
+    #define BTN1 PIN6 //portD pin:6 IN
+    #define BTN2 PIN2 //portD pin:2 IN
 
     #define LED0 PIN2 //portC pin:2 OUT ON/OFF
     #define LED1 PIN7 //portC pin:7 OUT ON/OFF
@@ -26,16 +24,16 @@
     #define RELLAY PIN2 //portA pin:2 OUT
     
     /*
-     * LCD_RS : data register access O/P LOW signalling LCD To Treat coming 
+     * LCD_RS : data register access O/P LOW signaling LCD To Treat coming 
      *      data as data to display (DATA Holder)    
-     *        : command register access O/P HIGH signalling LCD To Treat coming 
+     *        : command register access O/P HIGH signaling LCD To Treat coming 
      *      data as command to control LCD Microcontroller (COMMAND Holder)
      */
     #define LCD_RS PIN1 //portB pin:1 OUT 
     
     /*
-     * LCD_RW : read from LCD O/P LOW signalling LCD To Send Data Back  
-     *        : write  to LCD O/P HIGH signalling LCD To Receive Data available
+     * LCD_RW : read from LCD O/P LOW signaling LCD To Send Data Back  
+     *        : write  to LCD O/P HIGH signaling LCD To Receive Data available
      *          on DATA Lines  
      */
     #define LCD_RW PIN2 //portB pin:2 OUT
@@ -46,7 +44,6 @@
      *      placed on the DATA lines      
      */
     #define LCD_EN PIN3 //portB pin:3 OUT
-    
     
     //that's what connected on the Kit (4-bit LCD Mode nibble)
     #define LCD_D4 PIN4 //PortA pin:4 OUT/IN
@@ -61,13 +58,76 @@
     #define LCD_D3 PIN3 //PortA pin:3 OUT/IN
     
     //initiate all interfacing port pins 
+    /*
+     * initialize/configure/program the LED Connected Port pin to be o/p
+     * for write/output control signal
+     * fun argument : u8 which_led to do work for
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
     FUN_RETURN_STATUS initLED(u8 /*which LED*/);
-    FUN_RETURN_STATUS initBNT(u8 /*which BTN*/);
+ 
+    /*
+     * initialize/configure/program the BTN Connected Port pin to be i/p
+     * for read/scan control signal
+     * fun argument : u8 which_BTN to do work for
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS initBTN(u8 /*which BTN*/);
+
+    /*
+     * initialize/configure/program the BUZZER Connected Port pin to be o/p
+     * for write/output control signal
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
     FUN_RETURN_STATUS initBuzzer(void);
-    FUN_RETURN_STATUS initRellay(void);
     
-    //control logic signals
+    /*
+     * initialize/configure/program the Relay Connected Port pin to be o/p
+     * for write/output control signal
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */    
+    FUN_RETURN_STATUS initRelay(void);
+
+    /*
+     * initialize/configure/program the All LEDs Connected Port pin to be o/p
+     * for write/output control signal for all LEDs
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */        
+    FUN_RETURN_STATUS initLEDS(void);
+
+    /*
+     * initialize/configure/program the All BTNs Connected Port pin to be i/p
+     * for read/scan control signal from all BTNs
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */    
+    FUN_RETURN_STATUS initBTNS(void);
+    
+    //business logic signals
+    
+    /*
+     * signal LED to be turned ON/OFF via o/p a control signal on the 
+     * connected port pin HIGH : TURN ON / lOW : TURN OFF
+     * fun argument : which LED select LED to control
+     *                control signal to TURN LED ON(HIGH)/OFF(LOW)
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
     FUN_RETURN_STATUS signalLEDOnOff(u8 /*which LED*/,u8 /*turn on off*/);
+    
+    /*
+     * scan signal From BTN to be turned HIGH/LOW via i/p on control signal 
+     * on the connected port pin HIGH : BTN Pushed / lOW : BTN Not Pushed
+     * fun argument : which BTN select BTN to scan control signal from
+     * fun return : scan_fun_return to check for function return status along
+     *              with scanned control signal
+     */
     scan_fun_return scanSignalFromBTN(u8 /*which button*/);
+    
+    /*
+     * check weather LED is turned ON/OFF via Checking the o/p control signal
+     * on the LED connected port pin weather it's HIGH/LOW
+     * fun return : scan_fun_return to check for function return status along
+     *              with scanned control signal status
+     */
+    scan_fun_return chekLEDOnOFF(u8 /*which LED*/);
     
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */
