@@ -22,19 +22,32 @@
 
     #define BUZZER PIN3 //portA pin:3 OUT
     #define RELLAY PIN2 //portA pin:2 OUT
-    
+
     /*
-     * LCD_RS : data register access O/P LOW signaling LCD To Treat coming 
-     *      data as data to display (DATA Holder)    
-     *        : command register access O/P HIGH signaling LCD To Treat coming 
-     *      data as command to control LCD Microcontroller (COMMAND Holder)
+     * LCD 16*2 URLs:
+     * https://www.elprocus.com/lcd-16x2-pin-configuration-and-its-working/
+     * https://www.watelectronics.com/lcd-16x2/
+     * https://www.electronicsforu.com/technology-trends/learn-electronics/16x2-lcd-pinout-diagram
+     * 
+     */
+
+    /* configure/control which type of data 
+     * (weather a data to display : o/p HIGH on that pin OR 
+     *          a command to signal the internal microcontroller of LCD to do 
+     *          some work: o/p LOW on that pin) 
+     * is available on Data lines of LCD
+     * LCD_RS : -data register access O/P HIGH signaling LCD To Treat coming 
+     *           data as data to display (DATA Holder)    
+     *          -command register access O/P LOW signaling LCD To Treat coming 
+     *           data as command to control LCD Microcontroller (COMMAND Holder)
      */
     #define LCD_RS PIN1 //portB pin:1 OUT 
     
     /*
-     * LCD_RW : read from LCD O/P LOW signaling LCD To Send Data Back  
-     *        : write  to LCD O/P HIGH signaling LCD To Receive Data available
-     *          on DATA Lines  
+     * LCD_RW : read from LCD O/P HIGH signaling LCD microcontroller to make 
+     *          data available on data lines for reading
+     *        : write to LCD O/P LOW signaling LCD microcontroller to receive 
+     *          data available on data lines(weather it's data/command)
      */
     #define LCD_RW PIN2 //portB pin:2 OUT
 
