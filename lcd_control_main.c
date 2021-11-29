@@ -6,6 +6,7 @@
  */
 
 #include"atmega32a.h"
+#define F_CPU 16000000UL
 #include"interfacing_connection_logic.h"
 #include <avr/io.h>
 #define KEEP_EXECUTING 1

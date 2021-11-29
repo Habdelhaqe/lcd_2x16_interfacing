@@ -7,11 +7,18 @@
 
 #ifndef INTERFACING_CONNECTION_LOGIC_H
 
+    #include "atmega32a.h"
+    #include<util/delay.h>
+
+    #define PULSE_DELAY 10 //10ms for 16MHZ CLK    
+
     #define	INTERFACING_CONNECTION_LOGIC_H
-    
     #define ON  1
     #define OFF 0
     
+    #define OUTPUT HIGH
+    #define INPUT  LOW
+
     #define BTN0 PIN0 //portB pin:0 IN
     #define BTN1 PIN6 //portD pin:6 IN
     #define BTN2 PIN2 //portD pin:2 IN
@@ -28,6 +35,9 @@
      * https://www.elprocus.com/lcd-16x2-pin-configuration-and-its-working/
      * https://www.watelectronics.com/lcd-16x2/
      * https://www.electronicsforu.com/technology-trends/learn-electronics/16x2-lcd-pinout-diagram
+     * http://www.firmcodes.com/microcontrollers/8051-3/interfacing-lcd-with-8051/lcd-commands-and-understanding-of-lcd/
+     * https://circuitdigest.com/article/16x2-lcd-display-module-pinout-datasheet
+     * https://mil.ufl.edu/3744/docs/lcdmanual/commands.html
      * 
      */
 
@@ -45,9 +55,9 @@
     
     /*
      * LCD_RW : read from LCD O/P HIGH signaling LCD microcontroller to make 
-     *          data available on data lines for reading
+     *          data available on data bus lines for reading
      *        : write to LCD O/P LOW signaling LCD microcontroller to receive 
-     *          data available on data lines(weather it's data/command)
+     *          data available on data bus lines(weather it's data/command)
      */
     #define LCD_RW PIN2 //portB pin:2 OUT
 
@@ -70,6 +80,16 @@
     #define LCD_D2 PIN2 //PortA pin:2 OUT/IN
     #define LCD_D3 PIN3 //PortA pin:3 OUT/IN
     
+    #define CMD   LOW
+    #define DATA  HIGH
+    #define WRITE LOW
+    #define READ  HIGH
+    
+    //CMD for LCD control in Hex
+    #define CLEAR_LCD 0x01
+    #define CUSROR_HOME 0x02 //ALSO 0x03 
+
+
     //initiate all interfacing port pins 
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
@@ -142,5 +162,54 @@
      *              with scanned control signal status
      */
     scan_fun_return chekLEDOnOFF(u8 /*which LED*/);
+    
+    /*
+     * LCD Configuration RS RW EN all are o/p pins from 
+     * atmega32a microcontroller
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */    
+    FUN_RETURN_STATUS configureLCDControlPins(void);
+    
+    /*
+     * LCD Commands :-
+     *      CMD         RS  RW D7|6|6|4|3|2|1|0           Description
+     * Clear display :  0   0   0|0|0|0|0|0|0|1     Clears display and returns 
+     *                                              cursor to the home position 
+     *                                              (address 0).
+     *                                              Execution time:	1.64mS
+     * 
+     * Cursor home	 :  0	0	0|0|0|0|0|0|1|*     Returns cursor to home 
+     *                                              position (address 0). 
+     *                                              Also returns display being 
+     *                                              shifted to the original 
+     *                                              position. DDRAM contents 
+     *                                              remains unchanged.	
+     *                                              Execution time:	1.64mS
+     */
+    
+    /*
+     * generate a pulse to trigger LCD MicroController to start communicating/
+     * interfacing with it through data bus lines 
+     */
+    FUN_RETURN_STATUS generateLCDEnableControlPuls(void);
+   
+    /*
+     * Clears display and returns cursor to the home position (address 0).
+     * put 0x01 on data bus lines
+     * put LOW to RS:command
+     * put LOW to RW:write
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS clearLCD(void);
+    
+    /*
+     * Returns cursor to home position (address 0).
+     * Also returns display being shifted to the original position
+     * put 0x02/03 on data bus lines
+     * put LOW to RS:command
+     * put LOW to RW:write
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS returnLCDCursorHome(void);
     
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */

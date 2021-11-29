@@ -32,6 +32,14 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 build/default/production/interfacing_connection_logic.o
  .text.scanSignalFromBTN
                 0x0000000000000000       0x52 build/default/production/interfacing_connection_logic.o
+ .text.configureLCDControlPins
+                0x0000000000000000       0x2c build/default/production/interfacing_connection_logic.o
+ .text.generateLCDEnableControlPuls
+                0x0000000000000000       0x38 build/default/production/interfacing_connection_logic.o
+ .text.returnLCDCursorHome
+                0x0000000000000000       0x32 build/default/production/interfacing_connection_logic.o
+ .text.clearLCD
+                0x0000000000000000       0x32 build/default/production/interfacing_connection_logic.o
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)
@@ -367,56 +375,56 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000       0xb8
+.debug_aranges  0x0000000000000000       0xd8
  *(.debug_aranges)
  .debug_aranges
                 0x0000000000000000       0x20 build/default/production/lcd_control_main.o
  .debug_aranges
                 0x0000000000000020       0x48 build/default/production/atemga32a.o
  .debug_aranges
-                0x0000000000000068       0x50 build/default/production/interfacing_connection_logic.o
+                0x0000000000000068       0x70 build/default/production/interfacing_connection_logic.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1359
+.debug_info     0x0000000000000000     0x1623
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x4e6 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_info    0x00000000000004e6      0x301 build/default/production/lcd_control_main.o
  .debug_info    0x00000000000007e7      0x507 build/default/production/atemga32a.o
- .debug_info    0x0000000000000cee      0x66b build/default/production/interfacing_connection_logic.o
+ .debug_info    0x0000000000000cee      0x935 build/default/production/interfacing_connection_logic.o
 
-.debug_abbrev   0x0000000000000000      0x6fc
+.debug_abbrev   0x0000000000000000      0x76f
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x4a3 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_abbrev  0x00000000000004a3       0x98 build/default/production/lcd_control_main.o
  .debug_abbrev  0x000000000000053b       0xcd build/default/production/atemga32a.o
- .debug_abbrev  0x0000000000000608       0xf4 build/default/production/interfacing_connection_logic.o
+ .debug_abbrev  0x0000000000000608      0x167 build/default/production/interfacing_connection_logic.o
 
-.debug_line     0x0000000000000000      0x790
+.debug_line     0x0000000000000000      0x8e2
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000      0x119 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_line    0x0000000000000119       0x8f build/default/production/lcd_control_main.o
  .debug_line    0x00000000000001a8      0x3db build/default/production/atemga32a.o
- .debug_line    0x0000000000000583      0x20d build/default/production/interfacing_connection_logic.o
+ .debug_line    0x0000000000000583      0x35f build/default/production/interfacing_connection_logic.o
 
-.debug_frame    0x0000000000000000      0x11c
+.debug_frame    0x0000000000000000      0x15c
  *(.debug_frame)
  .debug_frame   0x0000000000000000       0x24 build/default/production/lcd_control_main.o
  .debug_frame   0x0000000000000024       0x74 build/default/production/atemga32a.o
- .debug_frame   0x0000000000000098       0x84 build/default/production/interfacing_connection_logic.o
+ .debug_frame   0x0000000000000098       0xc4 build/default/production/interfacing_connection_logic.o
 
-.debug_str      0x0000000000000000      0x2bf
+.debug_str      0x0000000000000000      0x2db
  *(.debug_str)
  .debug_str     0x0000000000000000      0x196 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_str     0x0000000000000196       0x2e build/default/production/lcd_control_main.o
  .debug_str     0x00000000000001c4       0x76 build/default/production/atemga32a.o
- .debug_str     0x000000000000023a       0x85 build/default/production/interfacing_connection_logic.o
+ .debug_str     0x000000000000023a       0xa1 build/default/production/interfacing_connection_logic.o
 
-.debug_loc      0x0000000000000000      0x81e
+.debug_loc      0x0000000000000000      0x866
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x575 build/default/production/atemga32a.o
- .debug_loc     0x0000000000000575      0x2a9 build/default/production/interfacing_connection_logic.o
+ .debug_loc     0x0000000000000575      0x2f1 build/default/production/interfacing_connection_logic.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -436,11 +444,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000       0x88
+.debug_ranges   0x0000000000000000       0xa8
  *(.debug_ranges)
  .debug_ranges  0x0000000000000000       0x10 build/default/production/lcd_control_main.o
  .debug_ranges  0x0000000000000010       0x38 build/default/production/atemga32a.o
- .debug_ranges  0x0000000000000048       0x40 build/default/production/interfacing_connection_logic.o
+ .debug_ranges  0x0000000000000048       0x60 build/default/production/interfacing_connection_logic.o
 
 .debug_macro
  *(.debug_macro)

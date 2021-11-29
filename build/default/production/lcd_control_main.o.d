@@ -12,7 +12,10 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\version.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\fuse.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h \
- common_types_defs.h interfacing_connection_logic.h
+ common_types_defs.h interfacing_connection_logic.h \
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h \
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h \
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h
 
 atmega32a.h:
 
@@ -41,3 +44,9 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h:
 common_types_defs.h:
 
 interfacing_connection_logic.h:
+
+c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h:
+
+c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h:
+
+c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h:
