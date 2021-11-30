@@ -420,12 +420,12 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1969
+.debug_info     0x0000000000000000     0x197e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x4e6 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_info    0x00000000000004e6      0x35a build/default/production/lcd_control_main.o
- .debug_info    0x0000000000000840      0x507 build/default/production/atemga32a.o
- .debug_info    0x0000000000000d47      0xc22 build/default/production/interfacing_connection_logic.o
+ .debug_info    0x00000000000004e6      0x361 build/default/production/lcd_control_main.o
+ .debug_info    0x0000000000000847      0x50e build/default/production/atemga32a.o
+ .debug_info    0x0000000000000d55      0xc29 build/default/production/interfacing_connection_logic.o
 
 .debug_abbrev   0x0000000000000000      0x86e
  *(.debug_abbrev)
@@ -485,7 +485,7 @@ END GROUP
 
 .debug_macro
  *(.debug_macro)
-OUTPUT(dist/default/production/lcd2x16_interfacing.X.production.elf elf32-avr)
+OUTPUT(dist/default/production/lcd_2x16_interfacing.production.elf elf32-avr)
 LOAD linker stubs
 LOAD data_init
 
