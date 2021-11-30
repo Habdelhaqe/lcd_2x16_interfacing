@@ -8,6 +8,9 @@
 #ifndef ENG_AHMED_DEFS_H
     #define	ENG_AHMED_DEFS_H 9742
     
+    #define NULL (void *)0
+    #define NULL_CHAR '\0'
+
     //SIGNALS STATUS
     #define HIGH 1
     #define LOW  0
@@ -37,5 +40,7 @@
     #define PIN5 5
     #define PIN6 6
     #define PIN7 7
-
+    
+    typedef unsigned char u8;
+    
 #endif	/* COMMON_TYPES_DEFS_H */

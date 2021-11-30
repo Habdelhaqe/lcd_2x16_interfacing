@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/interfacing_connection_logic.c</file>
             <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/lcd_control_main.c</file>
             <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/common_types_defs.h</file>
+            <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/interfacing_connection_logic.h</file>
             <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/atmega32a.h</file>
             <file>file:/D:/Eng_ahmed_MPLAP_Projects/lcd2x16_interfacing.X/atemga32a.c</file>
         </group>

@@ -9,6 +9,7 @@
 
     #include "atmega32a.h"
     #include<util/delay.h>
+    #include<stdlib.h>
 
     #define PULSE_DELAY 10 //10ms for 16MHZ CLK    
 
@@ -16,6 +17,9 @@
     #define ON  1
     #define OFF 0
     
+    #define DECIMAL_RADIX 10
+    #define BUFFER_MAX_SIZE 11 //8 bytes: 10 digit number + 1 null char
+
     #define OUTPUT HIGH
     #define INPUT  LOW
 
@@ -38,6 +42,7 @@
      * http://www.firmcodes.com/microcontrollers/8051-3/interfacing-lcd-with-8051/lcd-commands-and-understanding-of-lcd/
      * https://circuitdigest.com/article/16x2-lcd-display-module-pinout-datasheet
      * https://mil.ufl.edu/3744/docs/lcdmanual/commands.html
+     * https://www.electronicwings.com/8051/lcd16x2-interfacing-in-8-bit-with-8051
      * 
      */
 
@@ -86,8 +91,14 @@
     #define READ  HIGH
     
     //CMD for LCD control in Hex
-    #define CLEAR_LCD 0x01
+    #define CLEAR_DISPLAY 0x01
     #define CUSROR_HOME 0x02 //ALSO 0x03 
+    #define _8BIT_1L_MODE 0x30
+    #define _8BIT_2L_MODE 0x38
+    #define _4BIT_1L_MODE 0x20
+    #define _4BIT_2L_MODE 0x28
+    #define DISPLAY_ON_CUSROR_ON 0x0F
+    #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
 
 
     //initiate all interfacing port pins 
@@ -171,7 +182,14 @@
     FUN_RETURN_STATUS configureLCDControlPins(void);
     
     /*
+     * 0x30 : function set:8-bit ,1 Line,5x7 Dots
+     * 0x38 : function set:8-bit ,2 Line,5x7 Dots
+     * 0x20 : function set:4-bit ,1 Line,5x7 Dots
+     * 0x28 : function set:4-bit ,2 Line,5x7 Dots
+     * 
+     * 
      * LCD Commands :-
+     * ---------------
      *      CMD         RS  RW D7|6|6|4|3|2|1|0           Description
      * Clear display :  0   0   0|0|0|0|0|0|0|1     Clears display and returns 
      *                                              cursor to the home position 
@@ -185,6 +203,35 @@
      *                                              position. DDRAM contents 
      *                                              remains unchanged.	
      *                                              Execution time:	1.64mS
+     * 
+     * Display On	 : 0	0	0|0|0|0|1|D|C|B     Sets On/Off of all display (D)
+     * /Off control                                 , cursor On/Off (C) 
+     *                                              and blink of cursor 
+     *                                              position character (B).
+     *                                              Execution time:	40uS
+     * 
+     * Entry mode set: 0	0	0|0|0|0|0|1|I|S     Sets cursor move direction 
+     *                                      D       (I/D), specifies to shift 
+     *                                              the display (S). 
+     *                                              These operations are 
+     *                                              performed during data 
+     *                                              read/write.
+     *                                              Execution time:	40uS
+     * 
+     * Cursor/display: 0	0	0|0|0|1|S|R|*|*     Sets cursor-move 
+     * shift                            C|L         or display-shift (S/C), 
+     *                                              shift direction (R/L). 
+     *                                              DDRAM contents remains 
+     *                                              unchanged.
+     *                                              Execution time:	40uS
+     *
+     * Function set  :0     0	0|0|1|DL|N|F|*|*	Sets interface data length 
+     *                                              (DL), number of display 
+     *                                              line (N) and character 
+     *                                              font(F).
+     *                                              Execution time:	40uS
+     * 
+     * 
      */
     
     /*
@@ -198,9 +245,9 @@
      * put 0x01 on data bus lines
      * put LOW to RS:command
      * put LOW to RW:write
-     * fun return : FUN_RETURN_STATUS to check for function return status
+     * fun return : FUN_RETURN_STATUS to check for function re-turn status
      */
-    FUN_RETURN_STATUS clearLCD(void);
+//    FUN_RETURN_STATUS clearLCD(void);
     
     /*
      * Returns cursor to home position (address 0).
@@ -210,6 +257,84 @@
      * put LOW to RW:write
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS returnLCDCursorHome(void);
+//    FUN_RETURN_STATUS returnLCDCursorHome(void);
+    
+    /*
+     * configure LCD to be in:
+     * CMD  0x30 set 8-bit ,1 Line,5x7 Dots
+     * CMD  0x38 set 8-bit ,2 Line,5x7 Dots
+     * CMD  0x20 set 4-bit ,1 Line,5x7 Dots
+     * CMD  0x28 set 4-bit ,2 Line,5x7 Dots
+     */
+//    FUN_RETURN_STATUS configureLCD8_4bitMode1_2Line(u8 /*8_bit_mode_4_bit_mode*/,
+//                                            u8 /*2_lines_mode_1_line_mode*/);
+    
+    /*
+     * Passing LCD command signals to LCD microcontroller for
+     * controlling actions
+     * configuration pin:
+     *      -put LOW to RS:command
+     *      -put LOW to RW:write
+     * place CMD passed on data bus lines
+     * call enable pulse generator to deliver pulse to signal the LCD 
+     *  microcontroller to get CMD control signals
+     * fun argument :- command to control LCD microcontroller
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS commandLCD(u8 /*command to control LCD microcontroller*/);
+
+    /*
+     * Passing data(characters) to LCD microcontroller for displaying
+     * configuration pin:
+     *      -put HIGH to RS:data
+     *      -put LOW  to RW:write
+     * place data passed on data bus lines
+     * call enable pulse generator to deliver pulse to signal the LCD 
+     *  microcontroller to get CMD control signals
+     * fun argument :- command to control LCD microcontroller
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS displayCharacterOnLCD(u8 /*character data*/);
+
+    /*
+     * same as : FUN_RETURN_STATUS displayCharacterOnLCD(u8 character)
+     * it's called inside the code for display character
+     * Passing data(string) to LCD microcontroller for displaying
+     * configuration pin:
+     *      -put HIGH to RS:data
+     *      -put LOW  to RW:write
+     * place data char by char passed on data bus lines
+     * call enable pulse generator to deliver pulse to signal the LCD 
+     *  microcontroller to get CMD control signals
+     * fun argument :- command to control LCD microcontroller
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS displayStringOnLCD(u8 */*pointer to string of chars*/);    
+    
+    /*
+     * integer value is converted to char[n] via \c stdlib.iota() function
+     * then passed to \c  FUN_RETURN_STATUS displayStringOnLCD(u8 *)
+     * Passing data(integer) to LCD microcontroller for displaying
+     * configuration pin:
+     *      -put HIGH to RS:data
+     *      -put LOW  to RW:write
+     * place data char by char passed on data bus lines
+     * call enable pulse generator to deliver pulse to signal the LCD 
+     *  microcontroller to get CMD control signals
+     * fun argument :- command to control LCD microcontroller
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS displayINTOnLCD(int /*integer value to display*/);
+    
+    /*
+     * initialize LCD
+     * fun argument :- command to control LCD microcontroller mode:
+     * CMD  0x30 set 8-bit ,1 Line,5x7 Dots
+     * CMD  0x38 set 8-bit ,2 Line,5x7 Dots
+     * CMD  0x20 set 4-bit ,1 Line,5x7 Dots
+     * CMD  0x28 set 4-bit ,2 Line,5x7 Dots
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS initLCD(u8 /*LCD operation mode*/);
     
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */

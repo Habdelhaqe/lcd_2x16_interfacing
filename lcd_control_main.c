@@ -16,7 +16,7 @@ int main(void) {
     if(NO_ERRORS == initBTNS()){
         if(NO_ERRORS == initLEDS()){
             
-            //all initialization is done corectly proceed to business logic
+            //all initialization is done correctly proceed to business logic
             while (KEEP_EXECUTING) {
                 
                 if(chekLEDOnOFF(LED0).scanned_data == OFF){

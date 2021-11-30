@@ -47,8 +47,6 @@
     #define OUT_LOW_ON_PIN(PORT , PIN)      CLEAR_BIT(PORT , PIN)
     #define SCAN_SIGANL_ON_PIN(PORT , PIN)  GET_BIT(PORT , PIN)
 
-    typedef unsigned char u8;
-
     typedef enum FUN_RETURN_STATUS{
         NO_ERRORS,
         ERR_WRONG_PORT_NUMBER,
