@@ -98,17 +98,17 @@ FUN_RETURN_STATUS signalLEDOnOff(u8 which_led,u8 on_off_signal){
         
         case LED0:
             fun_ret_status_and_data.fun_return = 
-                    outControlSignalThroughPortPin(OUTC,PIN2,on_off_signal);
+                    outControlSignalThroughPortPin(OUTC,LED0,on_off_signal);
             break;
             
         case LED1:
             fun_ret_status_and_data.fun_return = 
-                    outControlSignalThroughPortPin(OUTC,PIN7,on_off_signal);
+                    outControlSignalThroughPortPin(OUTC,LED1,on_off_signal);
             break;
             
         case LED2:
             fun_ret_status_and_data.fun_return = 
-                    outControlSignalThroughPortPin(OUTD,PIN2,on_off_signal);
+                    outControlSignalThroughPortPin(OUTD,LED2,on_off_signal);
             break;
         
         default:
@@ -123,15 +123,18 @@ scan_fun_return isBTNPressed(u8 which_btn){
     switch(which_btn){
         
         case BTN0:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(INB,PIN0);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(INB,BTN0);
             break;
             
         case BTN1:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(IND,PIN6);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(IND,BTN1);
             break;
             
         case BTN2:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(IND,PIN2);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(IND,BTN2);
             break;
         
         default:
@@ -149,15 +152,18 @@ scan_fun_return chekLEDOnOFF(u8 which_led){
     switch(which_led){
         
         case LED0:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(OUTC,PIN2);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(OUTC,LED0);
             break;
             
         case LED1:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(OUTC,PIN7);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(OUTC,LED1);
             break;
             
         case LED2:
-            fun_ret_status_and_data = scanControlSignalThroughPortPin(OUTD,PIN2);
+            fun_ret_status_and_data = 
+                    scanControlSignalThroughPortPin(OUTD,LED2);
             break;
         
         default:
