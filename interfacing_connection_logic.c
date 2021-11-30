@@ -10,17 +10,17 @@ FUN_RETURN_STATUS initLED(u8 which_led){
         
         case LED0:
             fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOC,PIN2,OUTPUT);
+                    = setPortPinInOut(IOC,LED0,OUTPUT);
             break;
             
         case LED1:
             fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOC,PIN7,OUTPUT);
+                    = setPortPinInOut(IOC,LED1,OUTPUT);
             break;
             
         case LED2:
             fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOD,PIN2,OUTPUT);
+                    = setPortPinInOut(IOD,LED2,OUTPUT);
             break;
         
         default:
@@ -36,17 +36,17 @@ FUN_RETURN_STATUS initBTN(u8 which_btn){
         
         case BTN0:
             fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOB,PIN0,INPUT);
+                    setPortPinInOut(IOB,BTN0,INPUT);
             break;
             
         case BTN1:
             fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOD,PIN6,INPUT);
+                    setPortPinInOut(IOD,BTN1,INPUT);
             break;
             
         case BTN2:
             fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOD,PIN2,INPUT);
+                    setPortPinInOut(IOD,BTN2,INPUT);
             break;
         
         default:
