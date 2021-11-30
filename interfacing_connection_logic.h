@@ -43,6 +43,7 @@
      * https://circuitdigest.com/article/16x2-lcd-display-module-pinout-datasheet
      * https://mil.ufl.edu/3744/docs/lcdmanual/commands.html
      * https://www.electronicwings.com/8051/lcd16x2-interfacing-in-8-bit-with-8051
+     * https://abcrob.com/lcd-interfacing-in-8-bit-mode/
      * 
      */
 
