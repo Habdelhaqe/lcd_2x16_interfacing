@@ -193,6 +193,10 @@ FUN_RETURN_STATUS configureLCDControlPins(void){
     return fun_ret_status_and_data.fun_return;
 }
 
+FUN_RETURN_STATUS configureLCDDataBusLines(void){
+    return setPortInOut(IOD,ALL_PINS_CONFIG_OUT);
+}
+
 FUN_RETURN_STATUS generateLCDEnableControlPuls(void){
     
     if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_EN,LOW)){
@@ -331,7 +335,6 @@ FUN_RETURN_STATUS displayINTOnLCD(int int_value_to_display){
     }
     return fun_ret_status_and_data.fun_return;
 }
-
 
 FUN_RETURN_STATUS initLCD(u8 mode_LCD){
     if(mode_LCD == _8BIT_1L_MODE || 

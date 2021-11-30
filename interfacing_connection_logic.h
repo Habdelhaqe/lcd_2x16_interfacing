@@ -187,6 +187,13 @@
     FUN_RETURN_STATUS configureLCDControlPins(void);
     
     /*
+     * configuration/programming LCD data bus lines on microcontroller
+     * D7 through D0
+     * fun return : FUN_RETURN_STATUS to check for function return status
+     */
+    FUN_RETURN_STATUS configureLCDDataBusLines(void);
+    
+    /*
      * 0x30 : function set:8-bit ,1 Line,5x7 Dots
      * 0x38 : function set:8-bit ,2 Line,5x7 Dots
      * 0x20 : function set:4-bit ,1 Line,5x7 Dots

@@ -13,24 +13,64 @@
 
 int main(void) {
     /* Replace with your application code */
-    if(NO_ERRORS == initBTNS()){
-        if(NO_ERRORS == initLEDS()){
-            
-            //all initialization is done correctly proceed to business logic
-            while (KEEP_EXECUTING) {
+
+//    if(NO_ERRORS == initBTNS()){
+//        if(NO_ERRORS == initLEDS()){
+//            
+//            //all initialization is done correctly proceed to business logic
+//            while (KEEP_EXECUTING) {
+//                
+//                if(chekLEDOnOFF(LED0).scanned_data == OFF){
+//                    signalLEDOnOff(LED0,ON);
+//                }
+//                
+//                if (ON == chekLEDOnOFF(signalLEDOnOff(LED1,isBTNPressed(BTN1)
+//                        .scanned_data))
+//                        .scanned_data){
+//                    /*
+//                     * Prove that all configuration functionality 
+//                     * and control signals passing and scanning 
+//                     * are in correct form that LED Went on
+//                     */
+//                }else{
+//                    /*
+//                     * something went wrong and further checking is needed
+//                     */
+//                }
+//                
+//                signalLEDOnOff(LED1,isBTNPressed(BTN1).scanned_data);
+//                signalLEDOnOff(LED2,isBTNPressed(BTN2).scanned_data);
+//            }
+//                
+//        }else{
+//               //ERR Should Be handled here @ higher logic to decide what to do
+//        }
+//    }else{
+//        //ERR Should Be handled here @ higher logic to decide what to do
+//    }
+    
+                    //test LCD on PORTD
+    
+    //u8 string[] = "IN The Name Of Allah";
+
+    if(NO_ERRORS == configureLCDControlPins()){
+        if(NO_ERRORS == configureLCDDataBusLines()){  
+            if(NO_ERRORS == initLCD(_8BIT_2L_MODE)){
                 
-                if(chekLEDOnOFF(LED0).scanned_data == OFF){
-                    signalLEDOnOff(LED0,ON);
+                //displayStringOnLCD(string);
+                
+                displayCharacterOnLCD('A');
+                
+                while(KEEP_EXECUTING){
                 }
-                
-                signalLEDOnOff(LED1,isBTNPressed(BTN1).scanned_data);
-                signalLEDOnOff(LED2,isBTNPressed(BTN2).scanned_data);
+            }else{
+            
             }
-                
         }else{
-               //ERR Should Be handled here @ higher logic to decide what to do
+            
         }
     }else{
-        //ERR Should Be handled here @ higher logic to decide what to do
+                    
     }
+
 }

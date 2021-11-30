@@ -111,36 +111,40 @@ FUN_RETURN_STATUS outControlSignalThroughPort(u8 port_number, u8 output_control_
     
     switch(port_number){
        
-        case OUTA: //Output Through Port'A' 
-            if(output_control_signal){
-                PORTA = OUT_ALL_PINS_HIGH;
-            }else{
-                PORTA = OUT_ALL_PINS_LOW;
-            }
+        case OUTA: //Output Through Port'A'
+            PORTA = output_control_signal;
+//            if(output_control_signal){
+//                PORTA = OUT_ALL_PINS_HIGH;
+//            }else{
+//                PORTA = OUT_ALL_PINS_LOW;
+//            }
             break;
         
         case OUTB: //Output Through Port'B'
-           if(output_control_signal){
-                PORTB = OUT_ALL_PINS_HIGH;
-            }else{
-                PORTB = OUT_ALL_PINS_LOW;
-            }
+           PORTC = output_control_signal; 
+//           if(output_control_signal){
+//                PORTB = OUT_ALL_PINS_HIGH;
+//            }else{
+//                PORTB = OUT_ALL_PINS_LOW;
+//            }
             break;
             
         case OUTC: //Output Through Port'C'
-           if(output_control_signal){
-                PORTC = OUT_ALL_PINS_HIGH;
-            }else{
-                PORTC = OUT_ALL_PINS_LOW;
-            }
+            PORTC = output_control_signal;
+//           if(output_control_signal){
+//                PORTC = OUT_ALL_PINS_HIGH;
+//            }else{
+//                PORTC = OUT_ALL_PINS_LOW;
+//            }
             break;
 
         case OUTD: //Output Through Port'D'
-           if(output_control_signal){
-                PORTD = OUT_ALL_PINS_HIGH;
-            }else{
-                PORTD = OUT_ALL_PINS_LOW;
-            }
+            PORTD = output_control_signal;
+//           if(output_control_signal){
+//                PORTD = OUT_ALL_PINS_HIGH;
+//            }else{
+//                PORTD = OUT_ALL_PINS_LOW;
+//            }
             break;
         
         default:
