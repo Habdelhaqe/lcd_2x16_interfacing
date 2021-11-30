@@ -118,7 +118,7 @@ FUN_RETURN_STATUS signalLEDOnOff(u8 which_led,u8 on_off_signal){
     return fun_ret_status_and_data.fun_return;
 }
 
-scan_fun_return scanSignalFromBTN(u8 which_btn){
+scan_fun_return isBTNPressed(u8 which_btn){
     
     switch(which_btn){
         
@@ -137,6 +137,9 @@ scan_fun_return scanSignalFromBTN(u8 which_btn){
         default:
             fun_ret_status_and_data.fun_return = ERR;
     }
+    
+    fun_ret_status_and_data.scanned_data = 
+            fun_ret_status_and_data.scanned_data? BTN_PRESSED : BTN_UNPRSSED;
     
     return fun_ret_status_and_data;
 }

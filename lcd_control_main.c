@@ -22,7 +22,9 @@ int main(void) {
                 if(chekLEDOnOFF(LED0).scanned_data == OFF){
                     signalLEDOnOff(LED0,ON);
                 }
-               
+                
+                signalLEDOnOff(LED1,isBTNPressed(BTN1).scanned_data);
+                signalLEDOnOff(LED2,isBTNPressed(BTN2).scanned_data);
             }
                 
         }else{

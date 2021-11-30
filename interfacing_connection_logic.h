@@ -23,13 +23,16 @@
     #define OUTPUT HIGH
     #define INPUT  LOW
 
+    #define BTN_PRESSED   HIGH
+    #define BTN_UNPRSSED  LOW
+
     #define BTN0 PIN0 //portB pin:0 IN
     #define BTN1 PIN6 //portD pin:6 IN
     #define BTN2 PIN2 //portD pin:2 IN
 
     #define LED0 PIN2 //portC pin:2 OUT ON/OFF
     #define LED1 PIN7 //portC pin:7 OUT ON/OFF
-    #define LED2 PIN3 //portD pin:2 OUT ON/OFF
+    #define LED2 PIN3 //portD pin:3 OUT ON/OFF
 
     #define BUZZER PIN3 //portA pin:3 OUT
     #define RELLAY PIN2 //portA pin:2 OUT
@@ -165,7 +168,8 @@
      * fun return : scan_fun_return to check for function return status along
      *              with scanned control signal
      */
-    scan_fun_return scanSignalFromBTN(u8 /*which button*/);
+    //scan_fun_return scanSignalFromBTN(u8 /*which button*/);
+    scan_fun_return isBTNPressed(u8 /*which button*/);
     
     /*
      * check weather LED is turned ON/OFF via Checking the o/p control signal
