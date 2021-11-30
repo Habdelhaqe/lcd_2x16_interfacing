@@ -121,7 +121,7 @@ FUN_RETURN_STATUS outControlSignalThroughPort(u8 port_number, u8 output_control_
             break;
         
         case OUTB: //Output Through Port'B'
-           PORTC = output_control_signal; 
+           PORTB = output_control_signal; 
 //           if(output_control_signal){
 //                PORTB = OUT_ALL_PINS_HIGH;
 //            }else{
