@@ -26,9 +26,9 @@
     #define BTN_PRESSED   HIGH
     #define BTN_UNPRSSED  LOW
 
-    #define BTN0 PIN0 //portB pin:0 IN
-    #define BTN1 PIN6 //portD pin:6 IN
-    #define BTN2 PIN2 //portD pin:2 IN
+    #define BTN0 PIN4 //portB pin:0 IN
+    #define BTN1 PIN3 //portD pin:6 IN
+    #define BTN2 PIN5 //portD pin:2 IN
 
     #define LED0 PIN2 //portC pin:2 OUT ON/OFF
     #define LED1 PIN7 //portC pin:7 OUT ON/OFF
@@ -109,18 +109,21 @@
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
      * for write/output control signal
-     * fun argument : u8 which_led to do work for
+     * fun argument : -which_led determine the pin attached to that led
+     *                -which port selected led/pin is attached to    
+     * 
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS initLED(u8 /*which LED*/);
+    FUN_RETURN_STATUS initLED(u8 /*which LED*/,u8 /*on which port*/);
  
     /*
      * initialize/configure/program the BTN Connected Port pin to be i/p
      * for read/scan control signal
-     * fun argument : u8 which_BTN to do work for
+     * fun argument : -which_BTN 
+     *                -which port selected BTN/pin is attached to    
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS initBTN(u8 /*which BTN*/);
+    FUN_RETURN_STATUS initBTN(u8 /*which BTN*/,u8 /*on which port*/);
 
     /*
      * initialize/configure/program the BUZZER Connected Port pin to be o/p

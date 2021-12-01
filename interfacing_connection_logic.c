@@ -4,54 +4,88 @@
 
 extern scan_fun_return fun_ret_status_and_data;
 
-FUN_RETURN_STATUS initLED(u8 which_led){
+FUN_RETURN_STATUS initLED(u8 which_led , u8 which_port){
+
+    //checking if argument are of correct value
+    if( (which_led == LED0 ||
+            which_led == LED1 ||
+                which_led == LED2 ||) 
+                        && 
+                    (which_port == IOA ||
+                        which_port == IOB ||
+                            which_port == IOC ||
+                                which_port == IOD ||) ){
     
-    switch(which_led){
-        
-        case LED0:
-            fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOC,LED0,OUTPUT);
-            break;
-            
-        case LED1:
-            fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOC,LED1,OUTPUT);
-            break;
-            
-        case LED2:
-            fun_ret_status_and_data.fun_return 
-                    = setPortPinInOut(IOD,LED2,OUTPUT);
-            break;
-        
-        default:
-            fun_ret_status_and_data.fun_return = ERR;
+        //we are good to go
+        fun_ret_status_and_data.fun_return =
+                setPortPinInOut(which_port,which_led,OUTPUT);
+    }else{
+        fun_ret_status_and_data.fun_return = ERR;
     }
+    
+//    switch(which_led){
+//        
+//        case LED0:
+//            fun_ret_status_and_data.fun_return 
+//                    = setPortPinInOut(IOC,LED0,OUTPUT);
+//            break;
+//            
+//        case LED1:
+//            fun_ret_status_and_data.fun_return 
+//                    = setPortPinInOut(IOC,LED1,OUTPUT);
+//            break;
+//            
+//        case LED2:
+//            fun_ret_status_and_data.fun_return 
+//                    = setPortPinInOut(IOD,LED2,OUTPUT);
+//            break;
+//        
+//        default:
+//            fun_ret_status_and_data.fun_return = ERR;
+//    }
     
     return fun_ret_status_and_data.fun_return;
 }
 
-FUN_RETURN_STATUS initBTN(u8 which_btn){
+FUN_RETURN_STATUS initBTN(u8 which_btn,u8 which_port){
+
+    //checking if argument are of correct value
+    if( (which_btn == BTN0 ||
+            which_btn == BTN1 ||
+                which_btn == BTN2 ||) 
+                        && 
+                    (which_port == IOA ||
+                        which_port == IOB ||
+                            which_port == IOC ||
+                                which_port == IOD ||) ){
     
-    switch(which_btn){
-        
-        case BTN0:
-            fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOB,BTN0,INPUT);
-            break;
-            
-        case BTN1:
-            fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOD,BTN1,INPUT);
-            break;
-            
-        case BTN2:
-            fun_ret_status_and_data.fun_return = 
-                    setPortPinInOut(IOD,BTN2,INPUT);
-            break;
-        
-        default:
-            fun_ret_status_and_data.fun_return = ERR;
+        //we are good to go
+        fun_ret_status_and_data.fun_return =
+                setPortPinInOut(which_port,which_btn,INPUT);
+    }else{
+        fun_ret_status_and_data.fun_return = ERR;
     }
+    
+//    switch(which_btn){
+//        
+//        case BTN0:
+//            fun_ret_status_and_data.fun_return = 
+//                    setPortPinInOut(IOB,BTN0,INPUT);
+//            break;
+//            
+//        case BTN1:
+//            fun_ret_status_and_data.fun_return = 
+//                    setPortPinInOut(IOD,BTN1,INPUT);
+//            break;
+//            
+//        case BTN2:
+//            fun_ret_status_and_data.fun_return = 
+//                    setPortPinInOut(IOD,BTN2,INPUT);
+//            break;
+//        
+//        default:
+//            fun_ret_status_and_data.fun_return = ERR;
+//    }
     
     return fun_ret_status_and_data.fun_return;
 }

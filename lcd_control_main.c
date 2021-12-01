@@ -49,28 +49,61 @@ int main(void) {
 //        //ERR Should Be handled here @ higher logic to decide what to do
 //    }
     
-                    //test LCD on PORTD
+ 
+    //--------------------------------test LCD on PORTD
+
+//    //u8 string[] = "IN The Name Of Allah";
+//    if(NO_ERRORS == configureLCDControlPins()){
+//        if(NO_ERRORS == configureLCDDataBusLines()){  
+//            if(NO_ERRORS == initLCD(_8BIT_2L_MODE)){
+//                
+//                //displayStringOnLCD(string);
+//                
+//                displayCharacterOnLCD('A');
+//                
+//                while(KEEP_EXECUTING){
+//                }
+//            }else{
+//            
+//            }
+//        }else{
+//            
+//        }
+//    }else{
+//                    
+//    }
     
-    //u8 string[] = "IN The Name Of Allah";
-
-    if(NO_ERRORS == configureLCDControlPins()){
-        if(NO_ERRORS == configureLCDDataBusLines()){  
-            if(NO_ERRORS == initLCD(_8BIT_2L_MODE)){
-                
-                //displayStringOnLCD(string);
-                
-                displayCharacterOnLCD('A');
-                
-                while(KEEP_EXECUTING){
-                }
-            }else{
-            
-            }
-        }else{
-            
+    //set portD pins for o/p
+    setPortInOut(IOD,OUTPUT);
+    
+    initBTN(IOB,BTN0);
+    initBTN(IOB,BTN1);
+    initBTN(IOB,BTN2);
+    
+//    setPortPinInOut(IOB,BTN0,INPUT);
+//    setPortPinInOut(IOB,BTN1,INPUT);
+//    setPortPinInOut(IOB,BTN2,INPUT);
+    
+    initLED(IOC,LED0);
+    initLED(IOC,LED1);
+    
+//    setPortPinInOut(IOC,LED0,OUTPUT);
+//    setPortPinInOut(IOC,LED1,OUTPUT);
+    
+    while(KEEP_EXECUTING){
+        if(BTN_PRESSED == isBTNPressed(BTN0).scanned_data){
+            outControlSignalThroughPort(OUTD,0x00);
+            signalLEDOnOff(LED0,isBTNPressed(BTN0).scanned_data);
+            signalLEDOnOff(LED1,isBTNPressed(BTN0).scanned_data);
         }
-    }else{
-                    
+        if(BTN_PRESSED == isBTNPressed(BTN1).scanned_data){
+            outControlSignalThroughPort(OUTD,0x01);
+            signalLEDOnOff(LED0,isBTNPressed(BTN1).scanned_data);
+            signalLEDOnOff(LED1,isBTNPressed(BTN1).scanned_data);
+        }
+        if(BTN_PRESSED == isBTNPressed(BTN2).scanned_data){
+            outControlSignalThroughPort(OUTD,0x02);
+        }
+        
     }
-
 }
