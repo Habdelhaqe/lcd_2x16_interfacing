@@ -126,7 +126,7 @@ FUN_RETURN_STATUS initBTN(u8 which_btn,u8 which_port){
 //    return fun_ret_status_and_data.fun_return;
 //}
 
-FUN_RETURN_STATUS signalLEDOnOff(u8 which_led,u8 on_off_signal){
+FUN_RETURN_STATUS turnlLEDOnOff(u8 which_led,u8 on_off_signal){
     
     switch(which_led){
         

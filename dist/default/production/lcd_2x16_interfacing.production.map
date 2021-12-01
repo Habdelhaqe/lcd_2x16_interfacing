@@ -420,12 +420,12 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x1a6a
+.debug_info     0x0000000000000000     0x1a69
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x4e6 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_info    0x00000000000004e6      0x4f3 build/default/production/lcd_control_main.o
  .debug_info    0x00000000000009d9      0x50e build/default/production/atemga32a.o
- .debug_info    0x0000000000000ee7      0xb83 build/default/production/interfacing_connection_logic.o
+ .debug_info    0x0000000000000ee7      0xb82 build/default/production/interfacing_connection_logic.o
 
 .debug_abbrev   0x0000000000000000      0x8d3
  *(.debug_abbrev)
@@ -447,12 +447,12 @@ END GROUP
  .debug_frame   0x0000000000000024       0x74 build/default/production/atemga32a.o
  .debug_frame   0x0000000000000098      0x100 build/default/production/interfacing_connection_logic.o
 
-.debug_str      0x0000000000000000      0x318
+.debug_str      0x0000000000000000      0x317
  *(.debug_str)
  .debug_str     0x0000000000000000      0x196 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_str     0x0000000000000196       0x45 build/default/production/lcd_control_main.o
- .debug_str     0x00000000000001db       0x76 build/default/production/atemga32a.o
- .debug_str     0x0000000000000251       0xc7 build/default/production/interfacing_connection_logic.o
+ .debug_str     0x0000000000000196       0x44 build/default/production/lcd_control_main.o
+ .debug_str     0x00000000000001da       0x76 build/default/production/atemga32a.o
+ .debug_str     0x0000000000000250       0xc7 build/default/production/interfacing_connection_logic.o
 
 .debug_loc      0x0000000000000000      0xa40
  *(.debug_loc)
@@ -529,11 +529,11 @@ LOAD data_init
                 0x000000000000043e       0x5c build/default/production/atemga32a.o
                 0x000000000000043e                setPortInOut
 
-.text.signalLEDOnOff
+.text.turnlLEDOnOff
                 0x000000000000049a       0x46
- .text.signalLEDOnOff
+ .text.turnlLEDOnOff
                 0x000000000000049a       0x46 build/default/production/interfacing_connection_logic.o
-                0x000000000000049a                signalLEDOnOff
+                0x000000000000049a                turnlLEDOnOff
 
 .text.initLED   0x00000000000004e0       0x2e
  .text.initLED  0x00000000000004e0       0x2e build/default/production/interfacing_connection_logic.o

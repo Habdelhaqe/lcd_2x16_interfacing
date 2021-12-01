@@ -162,7 +162,7 @@
      *                control signal to TURN LED ON(HIGH)/OFF(LOW)
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS signalLEDOnOff(u8 /*which LED*/,u8 /*turn on off*/);
+    FUN_RETURN_STATUS turnlLEDOnOff(u8 /*which LED*/,u8 /*turn on off*/);
     
     /*
      * scan signal From BTN to be turned HIGH/LOW via i/p on control signal 
