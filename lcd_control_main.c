@@ -76,25 +76,19 @@ int main(void) {
     //set portD pins for o/p
     setPortInOut(IOD,OUTPUT);
     
-    initBTN(IOB,BTN0);
-    initBTN(IOB,BTN1);
-    initBTN(IOB,BTN2);
-    
-//    setPortPinInOut(IOB,BTN0,INPUT);
-//    setPortPinInOut(IOB,BTN1,INPUT);
-//    setPortPinInOut(IOB,BTN2,INPUT);
-    
-    initLED(IOC,LED0);
-    initLED(IOC,LED1);
-    
-//    setPortPinInOut(IOC,LED0,OUTPUT);
-//    setPortPinInOut(IOC,LED1,OUTPUT);
+    initBTN(BTN0,IOB);
+    initBTN(BTN1,IOB);
+    initBTN(BTN2,IOB);
+        
+    initLED(LED0,IOC);
+    initLED(LED1,IOC);
     
     while(KEEP_EXECUTING){
         if(BTN_PRESSED == isBTNPressed(BTN0).scanned_data){
-            outControlSignalThroughPort(OUTD,0x00);
+            outControlSignalThroughPort(OUTD,0x38);
             signalLEDOnOff(LED0,isBTNPressed(BTN0).scanned_data);
             signalLEDOnOff(LED1,isBTNPressed(BTN0).scanned_data);
+            _delay_ms(500);
         }
         if(BTN_PRESSED == isBTNPressed(BTN1).scanned_data){
             outControlSignalThroughPort(OUTD,0x01);

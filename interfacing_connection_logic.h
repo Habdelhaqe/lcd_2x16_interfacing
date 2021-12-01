@@ -26,8 +26,8 @@
     #define BTN_PRESSED   HIGH
     #define BTN_UNPRSSED  LOW
 
-    #define BTN0 PIN4 //portB pin:0 IN
-    #define BTN1 PIN3 //portD pin:6 IN
+    #define BTN0 PIN3 //portB pin:0 IN
+    #define BTN1 PIN4 //portD pin:6 IN
     #define BTN2 PIN5 //portD pin:2 IN
 
     #define LED0 PIN2 //portC pin:2 OUT ON/OFF
@@ -144,14 +144,14 @@
      * for write/output control signal for all LEDs
      * fun return : FUN_RETURN_STATUS to check for function return status
      */        
-    FUN_RETURN_STATUS initLEDS(void);
+    //FUN_RETURN_STATUS initLEDS(void);
 
     /*
      * initialize/configure/program the All BTNs Connected Port pin to be i/p
      * for read/scan control signal from all BTNs
      * fun return : FUN_RETURN_STATUS to check for function return status
      */    
-    FUN_RETURN_STATUS initBTNS(void);
+    //FUN_RETURN_STATUS initBTNS(void);
     
     //business logic signals
     

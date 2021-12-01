@@ -9,12 +9,12 @@ FUN_RETURN_STATUS initLED(u8 which_led , u8 which_port){
     //checking if argument are of correct value
     if( (which_led == LED0 ||
             which_led == LED1 ||
-                which_led == LED2 ||) 
+                which_led == LED2) 
                         && 
                     (which_port == IOA ||
                         which_port == IOB ||
                             which_port == IOC ||
-                                which_port == IOD ||) ){
+                                which_port == IOD) ){
     
         //we are good to go
         fun_ret_status_and_data.fun_return =
@@ -52,12 +52,12 @@ FUN_RETURN_STATUS initBTN(u8 which_btn,u8 which_port){
     //checking if argument are of correct value
     if( (which_btn == BTN0 ||
             which_btn == BTN1 ||
-                which_btn == BTN2 ||) 
+                which_btn == BTN2) 
                         && 
                     (which_port == IOA ||
                         which_port == IOB ||
                             which_port == IOC ||
-                                which_port == IOD ||) ){
+                                which_port == IOD) ){
     
         //we are good to go
         fun_ret_status_and_data.fun_return =
@@ -90,41 +90,41 @@ FUN_RETURN_STATUS initBTN(u8 which_btn,u8 which_port){
     return fun_ret_status_and_data.fun_return;
 }
 
-FUN_RETURN_STATUS initLEDS(void){
+//FUN_RETURN_STATUS initLEDS(void){
+//
+//    if(NO_ERRORS == initLED(LED0)){
+//        if(NO_ERRORS == initLED(LED1)){
+//            if(NO_ERRORS == initLED(LED2)){
+//                //also here nothing to do
+//            }else{
+//                //nothing to do for now may be call debug code
+//            }
+//        }else{
+//            //nothing to do for now may be call debug code
+//        }
+//    }else{
+//        //nothing to do for now may be call debug code
+//    }
+//    return fun_ret_status_and_data.fun_return;
+//}
 
-    if(NO_ERRORS == initLED(LED0)){
-        if(NO_ERRORS == initLED(LED1)){
-            if(NO_ERRORS == initLED(LED2)){
-                //also here nothing to do
-            }else{
-                //nothing to do for now may be call debug code
-            }
-        }else{
-            //nothing to do for now may be call debug code
-        }
-    }else{
-        //nothing to do for now may be call debug code
-    }
-    return fun_ret_status_and_data.fun_return;
-}
-
-FUN_RETURN_STATUS initBTNS(void){
-
-    if(NO_ERRORS == initBTN(BTN0)){
-        if(NO_ERRORS == initBTN(BTN1)){
-            if(NO_ERRORS == initBTN(BTN2)){
-                //also here nothing to do
-            }else{
-                //nothing to do for now may be call debug code
-            }
-        }else{
-            //nothing to do for now may be call debug code
-        }
-    }else{
-        //nothing to do for now may be call debug code
-    }
-    return fun_ret_status_and_data.fun_return;
-}
+//FUN_RETURN_STATUS initBTNS(void){
+//
+//    if(NO_ERRORS == initBTN(BTN0)){
+//        if(NO_ERRORS == initBTN(BTN1)){
+//            if(NO_ERRORS == initBTN(BTN2)){
+//                //also here nothing to do
+//            }else{
+//                //nothing to do for now may be call debug code
+//            }
+//        }else{
+//            //nothing to do for now may be call debug code
+//        }
+//    }else{
+//        //nothing to do for now may be call debug code
+//    }
+//    return fun_ret_status_and_data.fun_return;
+//}
 
 FUN_RETURN_STATUS signalLEDOnOff(u8 which_led,u8 on_off_signal){
     
