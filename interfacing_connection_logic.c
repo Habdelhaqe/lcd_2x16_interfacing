@@ -437,21 +437,22 @@ void displayStringOnLCD(u8 *ptr_string){
     
     }else{
         //loop until encountering null char
-        while(ptr_string != NULL_CHAR){
-            displayCharacterOnLCD(*ptr_string);
-            ptr_string++;
+//        while(ptr_string != NULL_CHAR){
+//            displayCharacterOnLCD(*ptr_string);
+//            ptr_string++;
+//        }
+        for(u8 i=0 , line=0 ; *(ptr_string+i) != NULL_CHAR ;i++ ){
+            if(i>15 && !line ){
+                moveCursorToLocation(2,0);
+                line = 1 ;
+            }
+            displayCharacterOnLCD(*(ptr_string+i));
         }
     }
 }
 
 void displayINTOnLCD(int int_value_to_display){
 
-    if(int_value_to_display==0){
-    
-        displayCharacterOnLCD('0');    
-    
-    }else{
-        
         /*
          * the up coming code give me this warning
          * warning: pointer targets in passing argument 1 of 
@@ -459,15 +460,17 @@ void displayINTOnLCD(int int_value_to_display){
          *  char (*char_buffer_to_int_value)[BUFFER_MAX_SIZE];
          */
         
-        u8 (*char_buffer_to_int_value)[BUFFER_MAX_SIZE]={NULL_CHAR};
+    //u8 (*char_buffer_to_int_value)[BUFFER_MAX_SIZE]={NULL_CHAR};
+    u8 char_buffer_to_int_value[BUFFER_MAX_SIZE]={NULL_CHAR};
+    
+//    itoa(int_value_to_display , 
+//                /*casting to (char *) for itoa 2nd argument to overcome warning*/
+//                *((char (*)[])char_buffer_to_int_value) , 
+//                    DECIMAL_RADIX);
+//        displayStringOnLCD(*char_buffer_to_int_value);
+    itoa(int_value_to_display , *((char(*)[])&char_buffer_to_int_value) ,DECIMAL_RADIX);
         
-        itoa(int_value_to_display , 
-                /*casting to (char *) for itoa 2nd argument to overcome warning*/
-                *((char (*)[])char_buffer_to_int_value) , 
-                    DECIMAL_RADIX);
-        
-        displayStringOnLCD(*char_buffer_to_int_value);
-    }
+    displayStringOnLCD(char_buffer_to_int_value);
 }
 void initLCD(void){
     
@@ -477,9 +480,16 @@ void initLCD(void){
     commandLCD(CLEAR_DISPLAY);
     commandLCD(LCD_OPERATION_MODE);
     commandLCD(FORCE_AT_BEGINNING);
-    commandLCD(DISPLAY_ON_CUSROR_OFF);
+    //commandLCD(DISPLAY_ON_CUSROR_OFF);
     
 //    commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
 //    commandLCD(CUSROR_HOME);
      
+}
+void moveCursorToLocation(u8 row,u8 col){
+    u8 address = FORCE_AT_BEGINNING;
+    if(row){
+        address += 0x40;
+    }
+    commandLCD(address+col);
 }

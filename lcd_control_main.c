@@ -13,6 +13,8 @@
 int main(void) {
 
     u8 string[] = "IN The Name Of Allah";
+
+    int my_id=9742;
     
     configureLCDDataBusLines();
     
@@ -27,6 +29,10 @@ int main(void) {
     
     displayStringOnLCD(string);
     
+//    moveCursorToLocation(2,0);
+//    
+//    displayINTOnLCD(my_id);
+//    
     //blinking light
     turnLEDOnOff(LED0,ON);
     turnLEDOnOff(LED1,ON);

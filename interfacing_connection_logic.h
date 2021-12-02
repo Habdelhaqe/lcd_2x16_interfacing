@@ -409,4 +409,12 @@
     //FUN_RETURN_STATUS initLCD(u8 /*LCD operation mode*/);
     void initLCD(void);
     
+    /*
+     * move the LCD cursor to the selected location
+     * start cursor position address is 0x80
+     * row (2): line1 = 0x80 
+     *        : line2 = 0x80+0x40
+     * col (16):  
+     */
+    void moveCursorToLocation(u8 /*row*/,u8 /*col*/);
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */
