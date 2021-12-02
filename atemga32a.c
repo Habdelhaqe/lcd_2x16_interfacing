@@ -522,7 +522,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         case _PC_PIN0:  if(control_signal_status){
                             OUT_HIGH_ON_PIN(PORTC,PIN0);
                         }else{
-                            OUT_LOW_ON_PIN(PORTD,PIN0);
+                            OUT_LOW_ON_PIN(PORTC,PIN0);
                         } 
                         break;                        
         case _PC_PIN1:  if(control_signal_status){

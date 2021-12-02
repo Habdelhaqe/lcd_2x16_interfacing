@@ -26,7 +26,7 @@ int main(void) {
     turnLEDOnOff(LED0,ON);
     turnLEDOnOff(LED1,ON);
     turnLEDOnOff(LED2,ON);
-    _delay_ms(500);
+    _delay_ms(100);
     turnLEDOnOff(LED0,OFF);
     turnLEDOnOff(LED1,OFF);
     turnLEDOnOff(LED2,OFF);
@@ -35,20 +35,25 @@ int main(void) {
 
         if(BTN_PRESSED == isBTNPressed(BTN0).scanned_data){
             outControlSignalThroughPort(OUTD,0x38);
-            turnLEDOnOff(LED0,isBTNPressed(BTN0).scanned_data);
-            turnLEDOnOff(LED1,isBTNPressed(BTN0).scanned_data);
-            _delay_ms(500);
-        }
-
+            turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
+        }        
+        
         if(BTN_PRESSED == isBTNPressed(BTN1).scanned_data){
             outControlSignalThroughPort(OUTD,0x01);
-            turnLEDOnOff(LED0,isBTNPressed(BTN1).scanned_data);
-            turnLEDOnOff(LED1,isBTNPressed(BTN1).scanned_data);
+            turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
         }
-
+                
         if(BTN_PRESSED == isBTNPressed(BTN2).scanned_data){
             outControlSignalThroughPort(OUTD,0x02);
-        }
-        
+            turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
+            turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
+        }        
+       _delay_ms(500);
     }
+    
 }

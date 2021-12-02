@@ -111,7 +111,6 @@
         u8 scanned_data;
     }scan_fun_return;
     
-
     /*
      * program/configure the port to be used
      * as Input:Reader control signal_in : LOW
