@@ -12,24 +12,31 @@
 
 int main(void) {
 
-    //u8 string[] = "IN The Name Of Allah";
-
-    //set portD pins for o/p
-    //setPortInOut(IOD,OUTPUT);
+    u8 string[] = "IN The Name Of Allah";
     
     configureLCDDataBusLines();
+    
+    configureLCDControlPins();
+    initLCD();
         
     initLEDS();
 
     initBTNS();
     
+    //displayCharacterOnLCD('a');
+    
+    displayStringOnLCD(string);
+    
+    //blinking light
     turnLEDOnOff(LED0,ON);
     turnLEDOnOff(LED1,ON);
     turnLEDOnOff(LED2,ON);
-    _delay_ms(100);
-    turnLEDOnOff(LED0,OFF);
-    turnLEDOnOff(LED1,OFF);
-    turnLEDOnOff(LED2,OFF);
+    for(u8 i = 0 ; i<11 ; i++){
+        _delay_ms(200);
+        turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
+        turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
+        turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
+    }
     
     while(KEEP_EXECUTING){
 

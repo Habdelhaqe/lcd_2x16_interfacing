@@ -12,7 +12,7 @@
     #include<util/delay.h>
     #include<stdlib.h>
 
-    #define PULSE_DELAY 10 //10ms for 16MHZ CLK    
+    #define PULSE_DELAY 300 //10ms for 16MHZ CLK    
 
     #define	INTERFACING_CONNECTION_LOGIC_H
 
@@ -44,8 +44,11 @@
     #define LED1 _PC_PIN1
     #define LED2 _PC_PIN2
 
-    #define BUZZER PIN3 //portA pin:3 OUT
-    #define RELLAY PIN2 //portA pin:2 OUT
+//    #define BUZZER PIN3 //portA pin:3 OUT
+//    #define RELLAY PIN2 //portA pin:2 OUT
+
+    #define BUZZER _PA_PIN3 //portA pin:3 OUT
+    #define RELLAY _PA_PIN2 //portA pin:2 OUT
 
     /*
      * LCD 16*2 URLs:
@@ -57,6 +60,8 @@
      * https://mil.ufl.edu/3744/docs/lcdmanual/commands.html
      * https://www.electronicwings.com/8051/lcd16x2-interfacing-in-8-bit-with-8051
      * https://abcrob.com/lcd-interfacing-in-8-bit-mode/
+     * https://www.vishay.com/docs/37484/lcd016n002bcfhet.pdf
+     * http://web.alfredstate.edu/faculty/weimandn/lcd/lcd_initialization/lcd_initialization_index.html
      * 
      */
 
@@ -71,7 +76,7 @@
      *           data as command to control LCD Microcontroller (COMMAND Holder)
      */
     //#define LCD_RS PIN1 //portB pin:1 OUT 
-    #define LCD_RS _PB_PIN1
+    #define LCD_RS _PB_PIN2
     
     /*
      * LCD_RW : read from LCD O/P HIGH signaling LCD microcontroller to make 
@@ -80,7 +85,7 @@
      *          data available on data bus lines(weather it's data/command)
      */
     //#define LCD_RW PIN2 //portB pin:2 OUT
-    #define LCD_RW _PB_PIN2
+    #define LCD_RW _PB_PIN1
 
     /*
      * LCD_EN : o/p a pulse LOW__|-HIGH<delayed>-|__LOW 
@@ -124,7 +129,12 @@
     #define _4BIT_1L_MODE 0x20
     #define _4BIT_2L_MODE 0x28
     #define DISPLAY_ON_CUSROR_ON 0x0F
+    #define DISPLAY_ON_CUSROR_OFF 0x0C
+    #define FORCE_AT_BEGINNING 0x80
     #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
+    #define FUNCTION_SET 0b00111100
+    
+    #define LCD_OPERATION_MODE _8BIT_2L_MODE
 
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
@@ -215,7 +225,7 @@
      * atmega32a microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
      * the fun return not needed so the fun signature changed to 
-     * /c     void configureLCDControlPins(void);
+     * \c     void configureLCDControlPins(void);
      */    
     //FUN_RETURN_STATUS configureLCDControlPins(void);
     void configureLCDControlPins(void);
@@ -225,7 +235,7 @@
      * D7 through D0
      * fun return : FUN_RETURN_STATUS to check for function return status
      * the fun return not needed so the fun signature changed to 
-     * /c     void configureLCDDataBusLines(void);
+     * \c     void configureLCDDataBusLines(void);
      */
     //FUN_RETURN_STATUS configureLCDDataBusLines(void);
     void configureLCDDataBusLines(void);
@@ -287,7 +297,7 @@
      * generate a pulse to trigger LCD MicroController to start communicating/
      * interfacing with it through data bus lines 
      */
-    FUN_RETURN_STATUS generateLCDEnableControlPuls(void);
+    void generateLCDEnableControlPuls(void);
    
     /*
      * Clears display and returns cursor to the home position (address 0).
@@ -329,8 +339,10 @@
      *  microcontroller to get CMD control signals
      * fun argument :- command to control LCD microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * no need for function return 
      */
-    FUN_RETURN_STATUS commandLCD(u8 /*command to control LCD microcontroller*/);
+    //FUN_RETURN_STATUS commandLCD(u8 /*command to control LCD microcontroller*/);
+    void commandLCD(u8 /*command to control LCD microcontroller*/);
 
     /*
      * Passing data(characters) to LCD microcontroller for displaying
@@ -342,8 +354,10 @@
      *  microcontroller to get CMD control signals
      * fun argument :- command to control LCD microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * no need for function return 
      */
-    FUN_RETURN_STATUS displayCharacterOnLCD(u8 /*character data*/);
+    //FUN_RETURN_STATUS displayCharacterOnLCD(u8 /*character data*/);
+    void displayCharacterOnLCD(u8 /*character data*/);
 
     /*
      * same as : FUN_RETURN_STATUS displayCharacterOnLCD(u8 character)
@@ -357,8 +371,10 @@
      *  microcontroller to get CMD control signals
      * fun argument :- command to control LCD microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * no need for function return 
      */
-    FUN_RETURN_STATUS displayStringOnLCD(u8 */*pointer to string of chars*/);    
+    //FUN_RETURN_STATUS displayStringOnLCD(u8 */*pointer to string of chars*/);    
+    void displayStringOnLCD(u8 */*pointer to string of chars*/);    
     
     /*
      * integer value is converted to char[n] via \c stdlib.iota() function
@@ -372,8 +388,10 @@
      *  microcontroller to get CMD control signals
      * fun argument :- command to control LCD microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * no need for function return 
      */
-    FUN_RETURN_STATUS displayINTOnLCD(int /*integer value to display*/);
+    //FUN_RETURN_STATUS displayINTOnLCD(int /*integer value to display*/);
+    void displayINTOnLCD(int /*integer value to display*/);
     
     /*
      * initialize LCD
@@ -382,8 +400,13 @@
      * CMD  0x38 set 8-bit ,2 Line,5x7 Dots
      * CMD  0x20 set 4-bit ,1 Line,5x7 Dots
      * CMD  0x28 set 4-bit ,2 Line,5x7 Dots
+     * not needed also using \c macro LCD_operation_mode which will hold
+     * the mode value 
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * the fun return not needed so the fun signature changed to 
+     * \c     void configureLCDDataBusLines(void);
      */
-    FUN_RETURN_STATUS initLCD(u8 /*LCD operation mode*/);
+    //FUN_RETURN_STATUS initLCD(u8 /*LCD operation mode*/);
+    void initLCD(void);
     
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */

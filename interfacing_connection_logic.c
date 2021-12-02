@@ -188,6 +188,109 @@ extern scan_fun_return fun_ret_status_and_data;
 //FUN_RETURN_STATUS configureLCDDataBusLines(void){
 //    return setPortInOut(IOD,ALL_PINS_CONFIG_OUT);
 //}
+//FUN_RETURN_STATUS initLCD(u8 mode_LCD){
+//    if(mode_LCD == _8BIT_1L_MODE || 
+//            mode_LCD == _8BIT_2L_MODE || 
+//                mode_LCD == _4BIT_1L_MODE || 
+//                    mode_LCD == _4BIT_2L_MODE){
+//        
+//        //LCD operation mode
+//        if(NO_ERRORS == outControlSignalThroughPort(OUTD,mode_LCD)){
+//        
+//            if(NO_ERRORS == outControlSignalThroughPort(OUTD,DISPLAY_ON_CUSROR_ON)){
+//        
+//                if(NO_ERRORS == outControlSignalThroughPort(OUTD,INC_DISPLAY_SHIFT_TO_RIGHT)){
+//                
+//                    if(NO_ERRORS == outControlSignalThroughPort(OUTD,CLEAR_DISPLAY)){
+//                    
+////                        if(NO_ERRORS == outControlSignalThroughPort(OUTD,CUSROR_HOME)){
+////                            //nothing to do here yet                
+////                        }else{
+////                            //nothing to do for now may be call debug code
+////                        }
+//                        
+//                    }else{
+//                        //nothing to do for now may be call debug code
+//                    }
+//                
+//                }else{
+//                    //nothing to do for now may be call debug code
+//                }
+//        
+//            }else{
+//                //nothing to do for now may be call debug code        
+//            }
+//        
+//        }else{
+//            //nothing to do for now may be call debug code
+//        }
+//
+//    }else{
+//        fun_ret_status_and_data.fun_return = ERR;
+//    }
+//    
+//    return fun_ret_status_and_data.fun_return;
+//}
+
+//FUN_RETURN_STATUS returnLCDCursorHome(void){
+//    //LCD RS control signal access command register
+//    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,CMD) ){
+//   
+//        //LCD RW control signal configured to write 
+//        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
+//            
+//            //LCD EN control signal sending control PULS
+//            if(NO_ERRORS == generateLCDEnableControlPuls()){
+//                
+//                //write command to data bus lines
+//                if(NO_ERRORS == outControlSignalThroughPort(OUTD,CUSROR_HOME)){
+//                    //nothing to do here yet
+//                }else{
+//                    //nothing to do for now may be call debug code                
+//                }
+//                
+//            }else{
+//                //nothing to do for now may be call debug code
+//            }
+//            
+//        }else{
+//            //nothing to do for now may be call debug code
+//        }
+//    }else{
+//        //nothing to do for now may be call debug code    
+//    }
+//    return fun_ret_status_and_data.fun_return;
+//}
+
+//FUN_RETURN_STATUS clearLCD(void){
+//    //LCD RS control signal access command register
+//    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,CMD) ){
+//   
+//        //LCD RW control signal configured to write 
+//        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
+//            
+//            //LCD EN control signal sending control PULS
+//            if(NO_ERRORS == generateLCDEnableControlPuls()){
+//                
+//                //write command to data bus lines
+//                if(NO_ERRORS == outControlSignalThroughPort(OUTD,CLEAR_DISPLAY)){
+//                    //nothing to do here yet
+//                }else{
+//                    //nothing to do for now may be call debug code                
+//                }
+//                
+//            }else{
+//                //nothing to do for now may be call debug code
+//            }
+//            
+//        }else{
+//            //nothing to do for now may be call debug code
+//        }
+//    }else{
+//        //nothing to do for now may be call debug code    
+//    }
+//    return fun_ret_status_and_data.fun_return;
+//}
 
 FUN_RETURN_STATUS initLED(u8 which_led ){
     
@@ -299,141 +402,63 @@ void configureLCDDataBusLines(void){
    programPortPinInOut(LCD_D6,OUTPUT);
    programPortPinInOut(LCD_D7,OUTPUT);
    
-//   setPortPinInOut(IOD,PIN0,OUTPUT);
-//   setPortPinInOut(IOD,PIN1,OUTPUT);
-//   setPortPinInOut(IOD,PIN2,OUTPUT);
-//   setPortPinInOut(IOD,PIN3,OUTPUT);
-//   setPortPinInOut(IOD,PIN4,OUTPUT);
-//   setPortPinInOut(IOD,PIN5,OUTPUT);
-//   setPortPinInOut(IOD,PIN6,OUTPUT);
-//   setPortPinInOut(IOD,PIN7,OUTPUT);
-  
    //OR CALL THIS FOR WHOLE DDRD AS O/P 
    //setPortInOut(IOD,OUTPUT);
 }
 
-FUN_RETURN_STATUS generateLCDEnableControlPuls(void){
+void generateLCDEnableControlPuls(void){
+     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
     
-    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_EN,LOW)){
-        
-        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_EN,HIGH)){
-            
-            _delay_ms(PULSE_DELAY);
-            
-            if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_EN,LOW)){
-                //also nothing to do here yet    
-            }else{
-                //nothing to do for now may be call debug code           
-            }
-         
-        }else{
-            //nothing to do for now may be call debug code
-        }
-    
-    }else{
-        //nothing to do for now may be call debug code
-    }
-    return fun_ret_status_and_data.fun_return;
+    //pulse:__/-High for 10 ms-\_____________________
+    writeControlSignalOnPortPin(LCD_EN,LOW);
+    writeControlSignalOnPortPin(LCD_EN,HIGH);
+    _delay_ms(PULSE_DELAY);
+    writeControlSignalOnPortPin(LCD_EN,LOW);
 }
 
-FUN_RETURN_STATUS commandLCD(u8 pass_CMD_TO_LCD){
-    //LCD RS control signal access command register
-    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,CMD) ){
-   
-        //LCD RW control signal configured to write 
-        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
-            
-            //write command to data bus lines
-            if(NO_ERRORS == outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD)){
-
-                //LCD EN control signal sending control PULS
-                if(NO_ERRORS == generateLCDEnableControlPuls()){
-                    //nothing to do here yet
-                }else{
-                    //nothing to do for now may be call debug code                
-                }
-                
-            }else{
-                //nothing to do for now may be call debug code
-            }
-            
-        }else{
-            //nothing to do for now may be call debug code
-        }
-    }else{
-        //nothing to do for now may be call debug code    
-    }
-    return fun_ret_status_and_data.fun_return;
+void commandLCD(u8 pass_CMD_TO_LCD){
+    //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
+    writeControlSignalOnPortPin(LCD_RW,WRITE);
+    writeControlSignalOnPortPin(LCD_RS,CMD);
+    outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD);
+    generateLCDEnableControlPuls();
 }
 
-FUN_RETURN_STATUS displayCharacterOnLCD(u8 character){
-    //LCD RS control signal access data register
-    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,DATA) ){
-   
-        //LCD RW control signal configured to write 
-        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
-            
-            //write command to data bus lines
-            if(NO_ERRORS == outControlSignalThroughPort(OUTD,character)){
-
-                //LCD EN control signal sending control PULS
-                if(NO_ERRORS == generateLCDEnableControlPuls()){
-                    //nothing to do here yet
-                }else{
-                    //nothing to do for now may be call debug code                
-                }
-                
-            }else{
-                //nothing to do for now may be call debug code
-            }
-            
-        }else{
-            //nothing to do for now may be call debug code
-        }
-    }else{
-        //nothing to do for now may be call debug code    
-    }
-    return fun_ret_status_and_data.fun_return;
+void displayCharacterOnLCD(u8 character_toDisplay){
+        //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
+    writeControlSignalOnPortPin(LCD_RW,WRITE);
+    writeControlSignalOnPortPin(LCD_RS,DATA);
+    outControlSignalThroughPort(OUTD,character_toDisplay);
+    generateLCDEnableControlPuls();
 }
 
-FUN_RETURN_STATUS displayStringOnLCD(u8 *ptr_string){
+void displayStringOnLCD(u8 *ptr_string){
     if(NULL == ptr_string){
-        fun_ret_status_and_data.fun_return=ERR;
+    
     }else{
         //loop until encountering null char
         while(ptr_string != NULL_CHAR){
-            
-            if(NO_ERRORS == displayCharacterOnLCD(*ptr_string)){
-                //proceed for next character in line
-                ptr_string++;
-                
-            }else{
-                //something gone wrong break for safety reasons
-                break;
-            }
+            displayCharacterOnLCD(*ptr_string);
+            ptr_string++;
         }
-    
     }
-    return fun_ret_status_and_data.fun_return;
 }
 
-FUN_RETURN_STATUS displayINTOnLCD(int int_value_to_display){
+void displayINTOnLCD(int int_value_to_display){
 
     if(int_value_to_display==0){
     
-        if(NO_ERRORS == displayCharacterOnLCD(NULL_CHAR)){
-            //nothing to do here yet
-        }else{
-            //nothing to do for now may be call debug code
-        }
+        displayCharacterOnLCD('0');    
     
     }else{
+        
         /*
          * the up coming code give me this warning
          * warning: pointer targets in passing argument 1 of 
          *  'displayStringOnLCD' differ in signedness [-Wpointer-sign]
          *  char (*char_buffer_to_int_value)[BUFFER_MAX_SIZE];
          */
+        
         u8 (*char_buffer_to_int_value)[BUFFER_MAX_SIZE]={NULL_CHAR};
         
         itoa(int_value_to_display , 
@@ -441,116 +466,20 @@ FUN_RETURN_STATUS displayINTOnLCD(int int_value_to_display){
                 *((char (*)[])char_buffer_to_int_value) , 
                     DECIMAL_RADIX);
         
-        if(NO_ERRORS == displayStringOnLCD(*char_buffer_to_int_value)){
-            //nothing to do here yet
-        }else{
-            //nothing to do for now may be call debug code
-        }
-        
+        displayStringOnLCD(*char_buffer_to_int_value);
     }
-    return fun_ret_status_and_data.fun_return;
 }
-
-FUN_RETURN_STATUS initLCD(u8 mode_LCD){
-    if(mode_LCD == _8BIT_1L_MODE || 
-            mode_LCD == _8BIT_2L_MODE || 
-                mode_LCD == _4BIT_1L_MODE || 
-                    mode_LCD == _4BIT_2L_MODE){
-        
-        //LCD operation mode
-        if(NO_ERRORS == outControlSignalThroughPort(OUTD,mode_LCD)){
-        
-            if(NO_ERRORS == outControlSignalThroughPort(OUTD,DISPLAY_ON_CUSROR_ON)){
-        
-                if(NO_ERRORS == outControlSignalThroughPort(OUTD,INC_DISPLAY_SHIFT_TO_RIGHT)){
-                
-                    if(NO_ERRORS == outControlSignalThroughPort(OUTD,CLEAR_DISPLAY)){
-                    
-//                        if(NO_ERRORS == outControlSignalThroughPort(OUTD,CUSROR_HOME)){
-//                            //nothing to do here yet                
-//                        }else{
-//                            //nothing to do for now may be call debug code
-//                        }
-                        
-                    }else{
-                        //nothing to do for now may be call debug code
-                    }
-                
-                }else{
-                    //nothing to do for now may be call debug code
-                }
-        
-            }else{
-                //nothing to do for now may be call debug code        
-            }
-        
-        }else{
-            //nothing to do for now may be call debug code
-        }
-
-    }else{
-        fun_ret_status_and_data.fun_return = ERR;
-    }
+void initLCD(void){
     
-    return fun_ret_status_and_data.fun_return;
+    //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
+    commandLCD(FUNCTION_SET);
+    commandLCD(DISPLAY_ON_CUSROR_ON);    
+    commandLCD(CLEAR_DISPLAY);
+    commandLCD(LCD_OPERATION_MODE);
+    commandLCD(FORCE_AT_BEGINNING);
+    commandLCD(DISPLAY_ON_CUSROR_OFF);
+    
+//    commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+//    commandLCD(CUSROR_HOME);
+     
 }
-
-//FUN_RETURN_STATUS returnLCDCursorHome(void){
-//    //LCD RS control signal access command register
-//    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,CMD) ){
-//   
-//        //LCD RW control signal configured to write 
-//        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
-//            
-//            //LCD EN control signal sending control PULS
-//            if(NO_ERRORS == generateLCDEnableControlPuls()){
-//                
-//                //write command to data bus lines
-//                if(NO_ERRORS == outControlSignalThroughPort(OUTD,CUSROR_HOME)){
-//                    //nothing to do here yet
-//                }else{
-//                    //nothing to do for now may be call debug code                
-//                }
-//                
-//            }else{
-//                //nothing to do for now may be call debug code
-//            }
-//            
-//        }else{
-//            //nothing to do for now may be call debug code
-//        }
-//    }else{
-//        //nothing to do for now may be call debug code    
-//    }
-//    return fun_ret_status_and_data.fun_return;
-//}
-
-//FUN_RETURN_STATUS clearLCD(void){
-//    //LCD RS control signal access command register
-//    if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RS,CMD) ){
-//   
-//        //LCD RW control signal configured to write 
-//        if(NO_ERRORS == outControlSignalThroughPortPin(OUTB,LCD_RW,WRITE)){
-//            
-//            //LCD EN control signal sending control PULS
-//            if(NO_ERRORS == generateLCDEnableControlPuls()){
-//                
-//                //write command to data bus lines
-//                if(NO_ERRORS == outControlSignalThroughPort(OUTD,CLEAR_DISPLAY)){
-//                    //nothing to do here yet
-//                }else{
-//                    //nothing to do for now may be call debug code                
-//                }
-//                
-//            }else{
-//                //nothing to do for now may be call debug code
-//            }
-//            
-//        }else{
-//            //nothing to do for now may be call debug code
-//        }
-//    }else{
-//        //nothing to do for now may be call debug code    
-//    }
-//    return fun_ret_status_and_data.fun_return;
-//}
