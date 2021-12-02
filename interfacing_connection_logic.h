@@ -14,8 +14,9 @@
     #define PULSE_DELAY 10 //10ms for 16MHZ CLK    
 
     #define	INTERFACING_CONNECTION_LOGIC_H
-    #define ON  1
-    #define OFF 0
+
+    #define ON  HIGH
+    #define OFF LOW
     
     #define DECIMAL_RADIX 10
     #define BUFFER_MAX_SIZE 11 //8 bytes: 10 digit number + 1 null char
@@ -26,13 +27,21 @@
     #define BTN_PRESSED   HIGH
     #define BTN_UNPRSSED  LOW
 
-    #define BTN0 PIN3 //portB pin:0 IN
-    #define BTN1 PIN4 //portD pin:6 IN
-    #define BTN2 PIN5 //portD pin:2 IN
+//    #define BTN0 PIN3 //portB pin:0 IN
+//    #define BTN1 PIN4 //portD pin:6 IN
+//    #define BTN2 PIN5 //portD pin:2 IN
 
-    #define LED0 PIN2 //portC pin:2 OUT ON/OFF
-    #define LED1 PIN7 //portC pin:7 OUT ON/OFF
-    #define LED2 PIN3 //portD pin:3 OUT ON/OFF
+    #define BTN0 _PB_PIN3
+    #define BTN1 _PB_PIN4
+    #define BTN2 _PB_PIN5
+
+//    #define LED0 PIN2 //portC pin:2 OUT ON/OFF
+//    #define LED1 PIN7 //portC pin:7 OUT ON/OFF
+//    #define LED2 PIN3 //portD pin:3 OUT ON/OFF
+
+    #define LED0 _PA_PIN5 
+    #define LED1 _PA_PIN6
+    #define LED2 _PA_PIN7
 
     #define BUZZER PIN3 //portA pin:3 OUT
     #define RELLAY PIN2 //portA pin:2 OUT
@@ -60,7 +69,8 @@
      *          -command register access O/P LOW signaling LCD To Treat coming 
      *           data as command to control LCD Microcontroller (COMMAND Holder)
      */
-    #define LCD_RS PIN1 //portB pin:1 OUT 
+    //#define LCD_RS PIN1 //portB pin:1 OUT 
+    #define LCD_RS _PB_PIN1
     
     /*
      * LCD_RW : read from LCD O/P HIGH signaling LCD microcontroller to make 
@@ -68,26 +78,37 @@
      *        : write to LCD O/P LOW signaling LCD microcontroller to receive 
      *          data available on data bus lines(weather it's data/command)
      */
-    #define LCD_RW PIN2 //portB pin:2 OUT
+    //#define LCD_RW PIN2 //portB pin:2 OUT
+    #define LCD_RW _PB_PIN2
 
     /*
      * LCD_EN : o/p a pulse LOW__|-HIGH<delayed>-|__LOW 
      *      to signal to LCD to start accepting data/command
      *      placed on the DATA lines      
      */
-    #define LCD_EN PIN3 //portB pin:3 OUT
+    //#define LCD_EN PIN3 //portB pin:3 OUT
+    #define LCD_EN _PB_PIN3
     
-    //that's what connected on the Kit (4-bit LCD Mode nibble)
-    #define LCD_D4 PIN4 //PortA pin:4 OUT/IN
-    #define LCD_D5 PIN5 //PortA pin:5 OUT/IN
-    #define LCD_D6 PIN6 //PortA pin:6 OUT/IN
-    #define LCD_D7 PIN7 //PortA pin:7 OUT/IN
-    
-    //only use those will testing the LCD (8-bit Mode)
-    #define LCD_D0 PIN0 //PortA pin:0 OUT/IN
-    #define LCD_D1 PIN1 //PortA pin:1 OUT/IN
-    #define LCD_D2 PIN2 //PortA pin:2 OUT/IN
-    #define LCD_D3 PIN3 //PortA pin:3 OUT/IN
+//    //that's what connected on the Kit (4-bit LCD Mode nibble)
+//    #define LCD_D4 PIN4 //PortA pin:4 OUT/IN
+//    #define LCD_D5 PIN5 //PortA pin:5 OUT/IN
+//    #define LCD_D6 PIN6 //PortA pin:6 OUT/IN
+//    #define LCD_D7 PIN7 //PortA pin:7 OUT/IN
+//    
+//    //only use those will testing the LCD (8-bit Mode)
+//    #define LCD_D0 PIN0 //PortA pin:0 OUT/IN
+//    #define LCD_D1 PIN1 //PortA pin:1 OUT/IN
+//    #define LCD_D2 PIN2 //PortA pin:2 OUT/IN
+//    #define LCD_D3 PIN3 //PortA pin:3 OUT/IN
+
+    #define LCD_D4 _PD_PIN4 
+    #define LCD_D5 _PD_PIN5
+    #define LCD_D6 _PD_PIN6 
+    #define LCD_D7 _PD_PIN7 
+    #define LCD_D0 _PD_PIN0 
+    #define LCD_D1 _PD_PIN1 
+    #define LCD_D2 _PD_PIN2 
+    #define LCD_D3 _PD_PIN3 
     
     #define CMD   LOW
     #define DATA  HIGH
@@ -104,26 +125,26 @@
     #define DISPLAY_ON_CUSROR_ON 0x0F
     #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
 
-
-    //initiate all interfacing port pins 
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
      * for write/output control signal
-     * fun argument : -which_led determine the pin attached to that led
-     *                -which port selected led/pin is attached to    
+     * fun argument : -\c which_led determine the pin attached to that led
+     *                and port selected led/pin is attached to    
      * 
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS initLED(u8 /*which LED*/,u8 /*on which port*/);
+    //FUN_RETURN_STATUS initLED(u8 /*which LED*/,u8 /*on which port*/);
+    FUN_RETURN_STATUS initLED(u8 /*which LED*/);
  
     /*
      * initialize/configure/program the BTN Connected Port pin to be i/p
      * for read/scan control signal
-     * fun argument : -which_BTN 
-     *                -which port selected BTN/pin is attached to    
+     * fun argument : -which_BTN determine the pin attached to that BTN
+     *                and port selected BTN/pin is attached to    
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS initBTN(u8 /*which BTN*/,u8 /*on which port*/);
+    //FUN_RETURN_STATUS initBTN(u8 /*which BTN*/,u8 /*on which port*/);
+    FUN_RETURN_STATUS initBTN(u8 /*which BTN*/);
 
     /*
      * initialize/configure/program the BUZZER Connected Port pin to be o/p
@@ -143,15 +164,21 @@
      * initialize/configure/program the All LEDs Connected Port pin to be o/p
      * for write/output control signal for all LEDs
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * the fun return not needed so the fun signature changed to 
+     * /c     void initLEDS(void);
      */        
     //FUN_RETURN_STATUS initLEDS(void);
+    void initLEDS(void);
 
     /*
      * initialize/configure/program the All BTNs Connected Port pin to be i/p
      * for read/scan control signal from all BTNs
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * the fun return not needed so the fun signature changed to 
+     * /c     void initBTNS(void);
      */    
     //FUN_RETURN_STATUS initBTNS(void);
+    void initBTNS(void);
     
     //business logic signals
     
@@ -162,7 +189,7 @@
      *                control signal to TURN LED ON(HIGH)/OFF(LOW)
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    FUN_RETURN_STATUS turnlLEDOnOff(u8 /*which LED*/,u8 /*turn on off*/);
+    FUN_RETURN_STATUS turnLEDOnOff(u8 /*which LED*/,u8 /*turn on off*/);
     
     /*
      * scan signal From BTN to be turned HIGH/LOW via i/p on control signal 
@@ -180,21 +207,27 @@
      * fun return : scan_fun_return to check for function return status along
      *              with scanned control signal status
      */
-    scan_fun_return chekLEDOnOFF(u8 /*which LED*/);
+    scan_fun_return isLEDOnOrOFF(u8 /*which LED*/);
     
     /*
      * LCD Configuration RS RW EN all are o/p pins from 
      * atmega32a microcontroller
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * the fun return not needed so the fun signature changed to 
+     * /c     void configureLCDControlPins(void);
      */    
-    FUN_RETURN_STATUS configureLCDControlPins(void);
+    //FUN_RETURN_STATUS configureLCDControlPins(void);
+    void configureLCDControlPins(void);
     
     /*
      * configuration/programming LCD data bus lines on microcontroller
      * D7 through D0
      * fun return : FUN_RETURN_STATUS to check for function return status
+     * the fun return not needed so the fun signature changed to 
+     * /c     void configureLCDDataBusLines(void);
      */
-    FUN_RETURN_STATUS configureLCDDataBusLines(void);
+    //FUN_RETURN_STATUS configureLCDDataBusLines(void);
+    void configureLCDDataBusLines(void);
     
     /*
      * 0x30 : function set:8-bit ,1 Line,5x7 Dots
