@@ -6,7 +6,6 @@
  */
 
 #include"atmega32a.h"
-#define F_CPU 16000000UL
 #include"interfacing_connection_logic.h"
 #include <avr/io.h>
 #define KEEP_EXECUTING 1
@@ -19,19 +18,10 @@ int main(void) {
     //setPortInOut(IOD,OUTPUT);
     
     configureLCDDataBusLines();
-    
-    setPortPinInOut(IOD,PIN2,1);
-    
-    //initLEDS();
-    programPortPinInOut(LED0,OUTPUT);
-    programPortPinInOut(LED1,OUTPUT);
-    programPortPinInOut(LED2,OUTPUT);
+        
+    initLEDS();
 
-    //initBTNS();
-    programPortPinInOut(BTN0,INPUT);
-    programPortPinInOut(BTN1,INPUT);
-    programPortPinInOut(BTN2,INPUT);
-    
+    initBTNS();
     
     turnLEDOnOff(LED0,ON);
     turnLEDOnOff(LED1,ON);

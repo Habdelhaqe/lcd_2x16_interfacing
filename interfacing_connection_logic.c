@@ -290,14 +290,14 @@ void configureLCDControlPins(void){
 void configureLCDDataBusLines(void){
    
     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
-   programPortPinInOut(_PD_PIN0,OUTPUT);
-   programPortPinInOut(_PD_PIN1,OUTPUT);
-   programPortPinInOut(_PD_PIN2,OUTPUT);
-   programPortPinInOut(_PD_PIN3,OUTPUT);
-   programPortPinInOut(_PD_PIN4,OUTPUT);
-   programPortPinInOut(_PD_PIN5,OUTPUT);
-   programPortPinInOut(_PD_PIN6,OUTPUT);
-   programPortPinInOut(_PD_PIN7,OUTPUT);
+   programPortPinInOut(LCD_D0,OUTPUT);
+   programPortPinInOut(LCD_D1,OUTPUT);
+   programPortPinInOut(LCD_D2,OUTPUT);
+   programPortPinInOut(LCD_D3,OUTPUT);
+   programPortPinInOut(LCD_D4,OUTPUT);
+   programPortPinInOut(LCD_D5,OUTPUT);
+   programPortPinInOut(LCD_D6,OUTPUT);
+   programPortPinInOut(LCD_D7,OUTPUT);
    
 //   setPortPinInOut(IOD,PIN0,OUTPUT);
 //   setPortPinInOut(IOD,PIN1,OUTPUT);
@@ -307,7 +307,7 @@ void configureLCDDataBusLines(void){
 //   setPortPinInOut(IOD,PIN5,OUTPUT);
 //   setPortPinInOut(IOD,PIN6,OUTPUT);
 //   setPortPinInOut(IOD,PIN7,OUTPUT);
-//  
+  
    //OR CALL THIS FOR WHOLE DDRD AS O/P 
    //setPortInOut(IOD,OUTPUT);
 }

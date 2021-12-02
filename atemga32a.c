@@ -108,63 +108,221 @@ FUN_RETURN_STATUS setPortPinInOut(u8 port_number ,
 
 FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, u8 control_siganl_configuration ){
     
-    u8 DDRx = UN_IDENTIFIED,
-       PINx = UN_IDENTIFIED;
+//    u8 REG_NAME = UN_IDENTIFIED,
+//       PIN_NUMBER = UN_IDENTIFIED;
     
     FUN_RETURN_STATUS fn_return = NO_ERRORS;
 
     switch(port_pin_number){
 
-        case _PA_PIN0:  DDRx = DDRA ; PINx = PIN0; break;
-        case _PA_PIN1:  DDRx = DDRA ; PINx = PIN1; break;
-        case _PA_PIN2:  DDRx = DDRA ; PINx = PIN2; break;
-        case _PA_PIN3:  DDRx = DDRA ; PINx = PIN3; break;
-        case _PA_PIN4:  DDRx = DDRA ; PINx = PIN4; break;
-        case _PA_PIN5:  DDRx = DDRA ; PINx = PIN5; break;
-        case _PA_PIN6:  DDRx = DDRA ; PINx = PIN6; break;
-        case _PA_PIN7:  DDRx = DDRA ; PINx = PIN7; break;
-        
-        case _PB_PIN0:  DDRx = DDRB ; PINx = PIN0; break;
-        case _PB_PIN1:  DDRx = DDRB ; PINx = PIN1; break;
-        case _PB_PIN2:  DDRx = DDRB ; PINx = PIN2; break;
-        case _PB_PIN3:  DDRx = DDRB ; PINx = PIN3; break;
-        case _PB_PIN4:  DDRx = DDRB ; PINx = PIN4; break;
-        case _PB_PIN5:  DDRx = DDRB ; PINx = PIN5; break;
-        case _PB_PIN6:  DDRx = DDRB ; PINx = PIN6; break;
-        case _PB_PIN7:  DDRx = DDRB ; PINx = PIN7; break;
-        
-        case _PC_PIN0:  DDRx = DDRC ; PINx = PIN0; break;
-        case _PC_PIN1:  DDRx = DDRC ; PINx = PIN1; break;
-        case _PC_PIN2:  DDRx = DDRC ; PINx = PIN2; break;
-        case _PC_PIN3:  DDRx = DDRC ; PINx = PIN3; break;
-        case _PC_PIN4:  DDRx = DDRC ; PINx = PIN4; break;
-        case _PC_PIN5:  DDRx = DDRC ; PINx = PIN5; break;
-        case _PC_PIN6:  DDRx = DDRC ; PINx = PIN6; break;
-        case _PC_PIN7:  DDRx = DDRC ; PINx = PIN7; break;
+        case _PA_PIN0:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN0);
+                        } 
+                        break;                        
+        case _PA_PIN1:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN1);
+                        } 
+                        break;                        
+        case _PA_PIN2:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN2);
+                        } 
+                        break;                        
+        case _PA_PIN3:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN3);
+                        } 
+                        break;                        
+        case _PA_PIN4:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN5);
+                        } 
+                        break;                        
+        case _PA_PIN5:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN5);
+                        } 
+                        break;                        
+        case _PA_PIN6:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN6);
+                        } 
+                        break;                        
+        case _PA_PIN7:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRA,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRA,PIN7);
+                        }
+                        break;
 
-        case _PD_PIN0:  DDRx = DDRD ; PINx = PIN0; break;
-        case _PD_PIN1:  DDRx = DDRD ; PINx = PIN1; break;
-        case _PD_PIN2:  DDRx = DDRD ; PINx = PIN2; break;
-        case _PD_PIN3:  DDRx = DDRD ; PINx = PIN3; break;
-        case _PD_PIN4:  DDRx = DDRD ; PINx = PIN4; break;
-        case _PD_PIN5:  DDRx = DDRD ; PINx = PIN5; break;
-        case _PD_PIN6:  DDRx = DDRD ; PINx = PIN6; break;
-        case _PD_PIN7:  DDRx = DDRD ; PINx = PIN7; break;
+        case _PB_PIN0:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN0);
+                        } 
+                        break;                        
+        case _PB_PIN1:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN1);
+                        } 
+                        break;                        
+        case _PB_PIN2:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN2);
+                        } 
+                        break;                        
+        case _PB_PIN3:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN3);
+                        } 
+                        break;                        
+        case _PB_PIN4:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN5);
+                        } 
+                        break;                        
+        case _PB_PIN5:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN5);
+                        } 
+                        break;                        
+        case _PB_PIN6:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN6);
+                        } 
+                        break;                        
+        case _PB_PIN7:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRB,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRB,PIN7);
+                        }
+                        break;
         
+        case _PC_PIN0:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN0);
+                        } 
+                        break;                        
+        case _PC_PIN1:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN1);
+                        } 
+                        break;                        
+        case _PC_PIN2:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN2);
+                        } 
+                        break;                        
+        case _PC_PIN3:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN3);
+                        } 
+                        break;                        
+        case _PC_PIN4:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN5);
+                        } 
+                        break;                        
+        case _PC_PIN5:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN5);
+                        } 
+                        break;                        
+        case _PC_PIN6:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN6);
+                        } 
+                        break;                        
+        case _PC_PIN7:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRC,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRC,PIN7);
+                        }
+                        break;
+
+        case _PD_PIN0:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN0);
+                        } 
+                        break;                        
+        case _PD_PIN1:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN1);
+                        } 
+                        break;                        
+        case _PD_PIN2:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN2);
+                        } 
+                        break;                        
+        case _PD_PIN3:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN3);
+                        } 
+                        break;                        
+        case _PD_PIN4:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN5);
+                        } 
+                        break;                        
+        case _PD_PIN5:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN5);
+                        } 
+                        break;                        
+        case _PD_PIN6:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN6);
+                        } 
+                        break;                        
+        case _PD_PIN7:  if(control_siganl_configuration){
+                            OUT_HIGH_ON_PIN(DDRD,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(DDRD,PIN7);
+                        }
+                        break;
+                        
         default:
             fn_return=ERR;
     }
     
     //PROGRAMMIN/CONFIGURATION/SETTING OF THE PORT PINS
-    if(NO_ERRORS == fn_return){
-        if(control_siganl_configuration){
-            OUT_HIGH_ON_PIN(DDRx,PINx);
-            //DDRx |= HIGH << PINx;
-        }else{
-            OUT_LOW_ON_PIN(DDRx,PINx);
-            //DDRx &= ~(HIGH<<PINx);
-        }
-    }
+//    if(NO_ERRORS == fn_return){
+//        if(control_siganl_configuration){
+//            OUT_HIGH_ON_PIN(REG_NAME,PIN_NUMBER);
+//        }else{
+//            OUT_LOW_ON_PIN(REG_NAME,PIN_NUMBER);
+//        }
+//    }
     
     return fn_return;
 } 
@@ -256,61 +414,221 @@ FUN_RETURN_STATUS outControlSignalThroughPortPin(u8 port_number ,
 
 FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number , 
                                               u8 control_signal_status){
-    u8 PORTx = UN_IDENTIFIED,
-       PINx  = UN_IDENTIFIED;
+//    u8 REG_NAME = UN_IDENTIFIED,
+//       PIN_NUMBER  = UN_IDENTIFIED;
     
     FUN_RETURN_STATUS fn_return = NO_ERRORS;
     
     switch(port_pin_number){
 
-        case _PA_PIN0:  PORTx = PORTA ; PINx = PIN0; break;
-        case _PA_PIN1:  PORTx = PORTA ; PINx = PIN1; break;
-        case _PA_PIN2:  PORTx = PORTA ; PINx = PIN2; break;
-        case _PA_PIN3:  PORTx = PORTA ; PINx = PIN3; break;
-        case _PA_PIN4:  PORTx = PORTA ; PINx = PIN4; break;
-        case _PA_PIN5:  PORTx = PORTA ; PINx = PIN5; break;
-        case _PA_PIN6:  PORTx = PORTA ; PINx = PIN6; break;
-        case _PA_PIN7:  PORTx = PORTA ; PINx = PIN7; break;
-        
-        case _PB_PIN0:  PORTx = PORTB ; PINx = PIN0; break;
-        case _PB_PIN1:  PORTx = PORTB ; PINx = PIN1; break;
-        case _PB_PIN2:  PORTx = PORTB ; PINx = PIN2; break;
-        case _PB_PIN3:  PORTx = PORTB ; PINx = PIN3; break;
-        case _PB_PIN4:  PORTx = PORTB ; PINx = PIN4; break;
-        case _PB_PIN5:  PORTx = PORTB ; PINx = PIN5; break;
-        case _PB_PIN6:  PORTx = PORTB ; PINx = PIN6; break;
-        case _PB_PIN7:  PORTx = PORTB ; PINx = PIN7; break;
-        
-        case _PC_PIN0:  PORTx = PORTC ; PINx = PIN0; break;
-        case _PC_PIN1:  PORTx = PORTC ; PINx = PIN1; break;
-        case _PC_PIN2:  PORTx = PORTC ; PINx = PIN2; break;
-        case _PC_PIN3:  PORTx = PORTC ; PINx = PIN3; break;
-        case _PC_PIN4:  PORTx = PORTC ; PINx = PIN4; break;
-        case _PC_PIN5:  PORTx = PORTC ; PINx = PIN5; break;
-        case _PC_PIN6:  PORTx = PORTC ; PINx = PIN6; break;
-        case _PC_PIN7:  PORTx = PORTC ; PINx = PIN7; break;
+        case _PA_PIN0:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN0);
+                        } 
+                        break;                        
+        case _PA_PIN1:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN1);
+                        } 
+                        break;                        
+        case _PA_PIN2:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN2);
+                        } 
+                        break;                        
+        case _PA_PIN3:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN3);
+                        } 
+                        break;                        
+        case _PA_PIN4:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN5);
+                        } 
+                        break;                        
+        case _PA_PIN5:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN5);
+                        } 
+                        break;                        
+        case _PA_PIN6:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN6);
+                        } 
+                        break;                        
+        case _PA_PIN7:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTA,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTA,PIN7);
+                        }
+                        break;
 
-        case _PD_PIN0:  PORTx = PORTD ; PINx = PIN0; break;
-        case _PD_PIN1:  PORTx = PORTD ; PINx = PIN1; break;
-        case _PD_PIN2:  PORTx = PORTD ; PINx = PIN2; break;
-        case _PD_PIN3:  PORTx = PORTD ; PINx = PIN3; break;
-        case _PD_PIN4:  PORTx = PORTD ; PINx = PIN4; break;
-        case _PD_PIN5:  PORTx = PORTD ; PINx = PIN5; break;
-        case _PD_PIN6:  PORTx = PORTD ; PINx = PIN6; break;
-        case _PD_PIN7:  PORTx = PORTD ; PINx = PIN7; break;
+        case _PB_PIN0:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN0);
+                        } 
+                        break;                        
+        case _PB_PIN1:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN1);
+                        } 
+                        break;                        
+        case _PB_PIN2:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN2);
+                        } 
+                        break;                        
+        case _PB_PIN3:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN3);
+                        } 
+                        break;                        
+        case _PB_PIN4:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN5);
+                        } 
+                        break;                        
+        case _PB_PIN5:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN5);
+                        } 
+                        break;                        
+        case _PB_PIN6:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN6);
+                        } 
+                        break;                        
+        case _PB_PIN7:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTB,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTB,PIN7);
+                        }
+                        break;
         
+        case _PC_PIN0:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN0);
+                        } 
+                        break;                        
+        case _PC_PIN1:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN1);
+                        } 
+                        break;                        
+        case _PC_PIN2:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN2);
+                        } 
+                        break;                        
+        case _PC_PIN3:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN3);
+                        } 
+                        break;                        
+        case _PC_PIN4:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN5);
+                        } 
+                        break;                        
+        case _PC_PIN5:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN5);
+                        } 
+                        break;                        
+        case _PC_PIN6:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN6);
+                        } 
+                        break;                        
+        case _PC_PIN7:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTC,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTC,PIN7);
+                        }
+                        break;
+
+        case _PD_PIN0:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN0);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN0);
+                        } 
+                        break;                        
+        case _PD_PIN1:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN1);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN1);
+                        } 
+                        break;                        
+        case _PD_PIN2:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN2);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN2);
+                        } 
+                        break;                        
+        case _PD_PIN3:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN3);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN3);
+                        } 
+                        break;                        
+        case _PD_PIN4:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN4);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN5);
+                        } 
+                        break;                        
+        case _PD_PIN5:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN5);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN5);
+                        } 
+                        break;                        
+        case _PD_PIN6:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN6);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN6);
+                        } 
+                        break;                        
+        case _PD_PIN7:  if(control_signal_status){
+                            OUT_HIGH_ON_PIN(PORTD,PIN7);
+                        }else{
+                            OUT_LOW_ON_PIN(PORTD,PIN7);
+                        }
+                        break;
+                        
         default:
             fn_return=ERR;
     }
     
     //DRIVING SINAL THROUGH OUT THE PORT
-    if(NO_ERRORS == fn_return){
-        if(control_signal_status){
-            OUT_HIGH_ON_PIN(PORTx,PINx);
-        }else{
-            OUT_LOW_ON_PIN(PORTx,PINx);
-        }
-    }
+//    if(NO_ERRORS == fn_return){
+//        if(control_signal_status){
+//            OUT_HIGH_ON_PIN(REG_NAME,PIN_NUMBER);
+//        }else{
+//            OUT_LOW_ON_PIN(REG_NAME,PIN_NUMBER);
+//        }
+//    }
  
     return fn_return;
 }
@@ -394,46 +712,46 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
     fun_ret_status_and_data.fun_return   = NO_ERRORS;
     fun_ret_status_and_data.scanned_data = LOW;
 
-    u8 PINx = UN_IDENTIFIED,
-       PIN_NUMx = UN_IDENTIFIED;
+    u8 REG_NAME = UN_IDENTIFIED,
+       PIN_NUMBER = UN_IDENTIFIED;
     
     switch(port_pin_number){
 
-        case _PA_PIN0:  PINx = PINA ; PIN_NUMx = PIN0; break;
-        case _PA_PIN1:  PINx = PINA ; PIN_NUMx = PIN1; break;
-        case _PA_PIN2:  PINx = PINA ; PIN_NUMx = PIN2; break;
-        case _PA_PIN3:  PINx = PINA ; PIN_NUMx = PIN3; break;
-        case _PA_PIN4:  PINx = PINA ; PIN_NUMx = PIN4; break;
-        case _PA_PIN5:  PINx = PINA ; PIN_NUMx = PIN5; break;
-        case _PA_PIN6:  PINx = PINA ; PIN_NUMx = PIN6; break;
-        case _PA_PIN7:  PINx = PINA ; PIN_NUMx = PIN7; break;
+        case _PA_PIN0:  REG_NAME = PINA ; PIN_NUMBER = PIN0; break;
+        case _PA_PIN1:  REG_NAME = PINA ; PIN_NUMBER = PIN1; break;
+        case _PA_PIN2:  REG_NAME = PINA ; PIN_NUMBER = PIN2; break;
+        case _PA_PIN3:  REG_NAME = PINA ; PIN_NUMBER = PIN3; break;
+        case _PA_PIN4:  REG_NAME = PINA ; PIN_NUMBER = PIN4; break;
+        case _PA_PIN5:  REG_NAME = PINA ; PIN_NUMBER = PIN5; break;
+        case _PA_PIN6:  REG_NAME = PINA ; PIN_NUMBER = PIN6; break;
+        case _PA_PIN7:  REG_NAME = PINA ; PIN_NUMBER = PIN7; break;
         
-        case _PB_PIN0:  PINx = PINB ; PIN_NUMx = PIN0; break;
-        case _PB_PIN1:  PINx = PINB ; PIN_NUMx = PIN1; break;
-        case _PB_PIN2:  PINx = PINB ; PIN_NUMx = PIN2; break;
-        case _PB_PIN3:  PINx = PINB ; PIN_NUMx = PIN3; break;
-        case _PB_PIN4:  PINx = PINB ; PIN_NUMx = PIN4; break;
-        case _PB_PIN5:  PINx = PINB ; PIN_NUMx = PIN5; break;
-        case _PB_PIN6:  PINx = PINB ; PIN_NUMx = PIN6; break;
-        case _PB_PIN7:  PINx = PINB ; PIN_NUMx = PIN7; break;
+        case _PB_PIN0:  REG_NAME = PINB ; PIN_NUMBER = PIN0; break;
+        case _PB_PIN1:  REG_NAME = PINB ; PIN_NUMBER = PIN1; break;
+        case _PB_PIN2:  REG_NAME = PINB ; PIN_NUMBER = PIN2; break;
+        case _PB_PIN3:  REG_NAME = PINB ; PIN_NUMBER = PIN3; break;
+        case _PB_PIN4:  REG_NAME = PINB ; PIN_NUMBER = PIN4; break;
+        case _PB_PIN5:  REG_NAME = PINB ; PIN_NUMBER = PIN5; break;
+        case _PB_PIN6:  REG_NAME = PINB ; PIN_NUMBER = PIN6; break;
+        case _PB_PIN7:  REG_NAME = PINB ; PIN_NUMBER = PIN7; break;
         
-        case _PC_PIN0:  PINx = PINC ; PIN_NUMx = PIN0; break;
-        case _PC_PIN1:  PINx = PINC ; PIN_NUMx = PIN1; break;
-        case _PC_PIN2:  PINx = PINC ; PIN_NUMx = PIN2; break;
-        case _PC_PIN3:  PINx = PINC ; PIN_NUMx = PIN3; break;
-        case _PC_PIN4:  PINx = PINC ; PIN_NUMx = PIN4; break;
-        case _PC_PIN5:  PINx = PINC ; PIN_NUMx = PIN5; break;
-        case _PC_PIN6:  PINx = PINC ; PIN_NUMx = PIN6; break;
-        case _PC_PIN7:  PINx = PINC ; PIN_NUMx = PIN7; break;
+        case _PC_PIN0:  REG_NAME = PINC ; PIN_NUMBER = PIN0; break;
+        case _PC_PIN1:  REG_NAME = PINC ; PIN_NUMBER = PIN1; break;
+        case _PC_PIN2:  REG_NAME = PINC ; PIN_NUMBER = PIN2; break;
+        case _PC_PIN3:  REG_NAME = PINC ; PIN_NUMBER = PIN3; break;
+        case _PC_PIN4:  REG_NAME = PINC ; PIN_NUMBER = PIN4; break;
+        case _PC_PIN5:  REG_NAME = PINC ; PIN_NUMBER = PIN5; break;
+        case _PC_PIN6:  REG_NAME = PINC ; PIN_NUMBER = PIN6; break;
+        case _PC_PIN7:  REG_NAME = PINC ; PIN_NUMBER = PIN7; break;
 
-        case _PD_PIN0:  PINx = PIND ; PIN_NUMx = PIN0; break;
-        case _PD_PIN1:  PINx = PIND ; PIN_NUMx = PIN1; break;
-        case _PD_PIN2:  PINx = PIND ; PIN_NUMx = PIN2; break;
-        case _PD_PIN3:  PINx = PIND ; PIN_NUMx = PIN3; break;
-        case _PD_PIN4:  PINx = PIND ; PIN_NUMx = PIN4; break;
-        case _PD_PIN5:  PINx = PIND ; PIN_NUMx = PIN5; break;
-        case _PD_PIN6:  PINx = PIND ; PIN_NUMx = PIN6; break;
-        case _PD_PIN7:  PINx = PIND ; PIN_NUMx = PIN7; break;
+        case _PD_PIN0:  REG_NAME = PIND ; PIN_NUMBER = PIN0; break;
+        case _PD_PIN1:  REG_NAME = PIND ; PIN_NUMBER = PIN1; break;
+        case _PD_PIN2:  REG_NAME = PIND ; PIN_NUMBER = PIN2; break;
+        case _PD_PIN3:  REG_NAME = PIND ; PIN_NUMBER = PIN3; break;
+        case _PD_PIN4:  REG_NAME = PIND ; PIN_NUMBER = PIN4; break;
+        case _PD_PIN5:  REG_NAME = PIND ; PIN_NUMBER = PIN5; break;
+        case _PD_PIN6:  REG_NAME = PIND ; PIN_NUMBER = PIN6; break;
+        case _PD_PIN7:  REG_NAME = PIND ; PIN_NUMBER = PIN7; break;
         
         default:
             fun_ret_status_and_data.fun_return = ERR;
@@ -441,7 +759,7 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
     
     //SCAN SINAL THROUGH THE PORT PIN
     if(NO_ERRORS == fun_ret_status_and_data.fun_return){
-        fun_ret_status_and_data.scanned_data = SCAN_SIGANL_ON_PIN(PINx,PIN_NUMx);
+        fun_ret_status_and_data.scanned_data = SCAN_SIGANL_ON_PIN(REG_NAME,PIN_NUMBER);
     }
     
     return fun_ret_status_and_data;

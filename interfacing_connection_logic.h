@@ -6,6 +6,7 @@
  */
 
 #ifndef INTERFACING_CONNECTION_LOGIC_H
+    #define F_CPU 16000000UL
 
     #include "atmega32a.h"
     #include<util/delay.h>
@@ -31,7 +32,7 @@
 //    #define BTN1 PIN4 //portD pin:6 IN
 //    #define BTN2 PIN5 //portD pin:2 IN
 
-    #define BTN0 _PB_PIN3
+    #define BTN0 _PA_PIN7
     #define BTN1 _PB_PIN4
     #define BTN2 _PB_PIN5
 
@@ -39,9 +40,9 @@
 //    #define LED1 PIN7 //portC pin:7 OUT ON/OFF
 //    #define LED2 PIN3 //portD pin:3 OUT ON/OFF
 
-    #define LED0 _PA_PIN5 
-    #define LED1 _PA_PIN6
-    #define LED2 _PA_PIN7
+    #define LED0 _PC_PIN0 
+    #define LED1 _PC_PIN1
+    #define LED2 _PC_PIN2
 
     #define BUZZER PIN3 //portA pin:3 OUT
     #define RELLAY PIN2 //portA pin:2 OUT
