@@ -389,27 +389,34 @@ void configureLCDControlPins(void){
     
 }
 
-
 void configureLCDDataBusLines(void){
    
     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
-   programPortPinInOut(LCD_D0,OUTPUT);
-   programPortPinInOut(LCD_D1,OUTPUT);
-   programPortPinInOut(LCD_D2,OUTPUT);
-   programPortPinInOut(LCD_D3,OUTPUT);
+  
+   if(LCD_OPERATION_MODE == _8BIT_2L_MODE || 
+           LCD_OPERATION_MODE == _8BIT_1L_MODE){
+        programPortPinInOut(LCD_D0,OUTPUT);
+        programPortPinInOut(LCD_D1,OUTPUT);
+        programPortPinInOut(LCD_D2,OUTPUT);
+        programPortPinInOut(LCD_D3,OUTPUT);
+   }
+   
    programPortPinInOut(LCD_D4,OUTPUT);
    programPortPinInOut(LCD_D5,OUTPUT);
    programPortPinInOut(LCD_D6,OUTPUT);
    programPortPinInOut(LCD_D7,OUTPUT);
    
-   //OR CALL THIS FOR WHOLE DDRD AS O/P 
-   //setPortInOut(IOD,OUTPUT);
+    //OR CALL THIS FOR WHOLE DDRD AS O/P
+//   if(LCD_OPERATION_MODE == _8BIT_2L_MODE || 
+//           LCD_OPERATION_MODE == _8BIT_1L_MODE){
+//        setPortInOut(IOD,OUTPUT);
+//   }
 }
 
 void generateLCDEnableControlPuls(void){
      //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
     
-    //pulse:__/-High for 10 ms-\_____________________
+    //pulse:_____________/-High for 10 ms-\_____________________
     writeControlSignalOnPortPin(LCD_EN,LOW);
     writeControlSignalOnPortPin(LCD_EN,HIGH);
     _delay_ms(PULSE_DELAY);
@@ -418,35 +425,191 @@ void generateLCDEnableControlPuls(void){
 
 void commandLCD(u8 pass_CMD_TO_LCD){
     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
+    
     writeControlSignalOnPortPin(LCD_RW,WRITE);
     writeControlSignalOnPortPin(LCD_RS,CMD);
-    outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD);
+
+    if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
+            LCD_OPERATION_MODE == _8BIT_1L_MODE){
+    
+        outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD);
+    
+    }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
+            || LCD_OPERATION_MODE == _4BIT_1L_MODE){
+        
+        //sending UPPER NIBBLE OF COMMAND bits : 4->7
+        writeControlSignalOnPortPin(LCD_D4 , 
+                pass_CMD_TO_LCD & MASK_UPPER_NIBBLE_BIT0); //BIT 4
+        writeControlSignalOnPortPin(LCD_D5 , 
+                pass_CMD_TO_LCD & MASK_UPPER_NIBBLE_BIT1); //BIT 5
+        writeControlSignalOnPortPin(LCD_D6 , 
+                pass_CMD_TO_LCD & MASK_UPPER_NIBBLE_BIT2); //BIT 6
+        writeControlSignalOnPortPin(LCD_D7 , 
+                pass_CMD_TO_LCD & MASK_UPPER_NIBBLE_BIT3); //BIT 7
+        
+//        /*
+//         * initialization of higher bits/nibble of 
+//         * what ever port LCD data lines is connected to
+//         * by anding with \c 0b 0000 1111 : 0x0F
+//         */    
+//       switch(LCD_PORT){
+//            case OUTA:  PORTA &= 0x0F; break;
+//            case OUTB:  PORTB &= 0x0F; break;
+//            case OUTC:  PORTC &= 0x0F; break;
+//            case OUTD:  PORTD &= 0x0F; break;
+//            default  : //we should report error some how
+//                break;
+//        }
+ //        /*
+//         * masking upper nibble of command with this
+//         * \c pass_CMD_TO_LCD & 0xF0
+//         */
+//        outControlSignalThroughPort(LCD_PORT , pass_CMD_TO_LCD & 0xF0 );
+//        
+        generateLCDEnableControlPuls();
+        
+//        /*
+//         * initialization of higher bits/nibble of 
+//         * what ever port LCD data lines is connected to
+//         * by anding with \c 0b 0000 1111 : 0x0F
+//         */    
+//        switch(LCD_PORT){
+//            case OUTA:  PORTA &= 0x0F; break;
+//            case OUTB:  PORTB &= 0x0F; break;
+//            case OUTC:  PORTC &= 0x0F; break;
+//            case OUTD:  PORTD &= 0x0F; break;
+//            default  : //we should report error some how
+//                break;
+//        } 
+//        /*
+//         * shift the command bits by 4 making swapping upper nibble with 
+//         * lower nibble
+//         *  \c (pass_CMD_TO_LCD<<4)
+//         * masking shifted lower nibble of command with this
+//         * \c (pass_CMD_TO_LCD<<4) & 0xF0
+//         */
+//        outControlSignalThroughPort(LCD_PORT , (pass_CMD_TO_LCD<<4) & 0xF0 );
+        //sending LOWER NIBBLE OF COMMAND bits : 0->3
+        
+        writeControlSignalOnPortPin(LCD_D4 , 
+                pass_CMD_TO_LCD & MASK_LOWER_NIBBLE_BIT0); //BIT 0
+        writeControlSignalOnPortPin(LCD_D5 , 
+                pass_CMD_TO_LCD & MASK_LOWER_NIBBLE_BIT1); //BIT 1
+        writeControlSignalOnPortPin(LCD_D6 , 
+                pass_CMD_TO_LCD & MASK_LOWER_NIBBLE_BIT2); //BIT 2
+        writeControlSignalOnPortPin(LCD_D7 , 
+                pass_CMD_TO_LCD & MASK_LOWER_NIBBLE_BIT3); //BIT 3
+    }else{
+        //shit happens
+    }    
     generateLCDEnableControlPuls();
 }
 
-void displayCharacterOnLCD(u8 character_toDisplay){
-        //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
+void displayCharacterOnLCD(u8 character_to_Display){
+    //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
     writeControlSignalOnPortPin(LCD_RW,WRITE);
     writeControlSignalOnPortPin(LCD_RS,DATA);
-    outControlSignalThroughPort(OUTD,character_toDisplay);
+
+    if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
+            LCD_OPERATION_MODE == _8BIT_1L_MODE){
+    
+        outControlSignalThroughPort(OUTD,character_to_Display);
+    
+    }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
+            || LCD_OPERATION_MODE == _4BIT_1L_MODE){
+
+        //sending UPPER NIBBLE OF CHRACTER bits : 4->7
+        writeControlSignalOnPortPin(LCD_D4 , 
+                character_to_Display & MASK_UPPER_NIBBLE_BIT0); //BIT 4
+        writeControlSignalOnPortPin(LCD_D5 , 
+                character_to_Display & MASK_UPPER_NIBBLE_BIT1); //BIT 5
+        writeControlSignalOnPortPin(LCD_D6 , 
+                character_to_Display & MASK_UPPER_NIBBLE_BIT2); //BIT 6
+        writeControlSignalOnPortPin(LCD_D7 , 
+                character_to_Display & MASK_UPPER_NIBBLE_BIT3); //BIT 7
+        
+//        /*
+//         * initialization of higher bits/nibble of 
+//         * what ever port LCD data lines is connected to
+//         * by anding with \c 0b 0000 1111 : 0x0F
+//         */
+//        switch(LCD_PORT){
+//            case OUTA:  PORTA &= 0x0F; break;
+//            case OUTB:  PORTB &= 0x0F; break;
+//            case OUTC:  PORTC &= 0x0F; break;
+//            case OUTD:  PORTD &= 0x0F; break;
+//            default  : //we should report error some how
+//                break;
+//        }
+//        
+//        /*
+//         * masking upper nibble of character with this
+//         * \c character_to_Display & 0xF0
+//         */
+//        outControlSignalThroughPort(LCD_PORT , character_to_Display & 0xF0 );
+        
+        generateLCDEnableControlPuls();
+        
+//        /*
+//         * initialization of higher bits/nibble of 
+//         * what ever port LCD data lines is connected to
+//         * by anding with \c 0b 0000 1111 : 0x0F
+//         */    
+//        switch(LCD_PORT){
+//            case OUTA:  PORTA &= 0x0F; break;
+//            case OUTB:  PORTB &= 0x0F; break;
+//            case OUTC:  PORTC &= 0x0F; break;
+//            case OUTD:  PORTD &= 0x0F; break;
+//            default  : //we should report error some how
+//                break;
+//        }
+//        /*
+//         * shift the character bits by 4 making swapping upper nibble with 
+//         * lower nibble
+//         *  \c (character_to_Display<<4)
+//         * masking shifted lower nibble of character with this
+//         * \c (character_to_Display<<4) & 0xF0
+//         */
+//        outControlSignalThroughPort(LCD_PORT , (character_to_Display<<4) & 0xF0 );
+        
+        //sending LOWER NIBBLE OF CHARACTER bits : 0->3
+        writeControlSignalOnPortPin(LCD_D4 , 
+                character_to_Display & MASK_LOWER_NIBBLE_BIT0); //BIT 0
+        writeControlSignalOnPortPin(LCD_D5 , 
+                character_to_Display & MASK_LOWER_NIBBLE_BIT1); //BIT 1
+        writeControlSignalOnPortPin(LCD_D6 , 
+                character_to_Display & MASK_LOWER_NIBBLE_BIT2); //BIT 2
+        writeControlSignalOnPortPin(LCD_D7 , 
+                character_to_Display & MASK_LOWER_NIBBLE_BIT3); //BIT 3
+    }else{
+        //shit happens
+    }    
     generateLCDEnableControlPuls();
 }
 
 void displayStringOnLCD(u8 *ptr_string){
     if(NULL == ptr_string){
-    
+        //i should kill you for calling me on empty pointer
     }else{
         //loop until encountering null char
 //        while(ptr_string != NULL_CHAR){
 //            displayCharacterOnLCD(*ptr_string);
 //            ptr_string++;
 //        }
-        for(u8 i=0 , line=0 ; *(ptr_string+i) != NULL_CHAR ;i++ ){
-            if(i>15 && !line ){
-                moveCursorToLocation(2,0);
-                line = 1 ;
+        
+        for(u8 i    = LOOP_ZER0_INITIALIZER , 
+               line = LOOP_ZER0_INITIALIZER ; *(ptr_string+i) != NULL_CHAR ; i++ ){
+            
+            if( i >LCD_COLUMN_COUNT && !line /*check if cursor is @ first line */ ){
+                //go to second line PLACE cursor @ position Zero
+                moveCursorToLocation(LCD_ROW_COUNT,ZERO_OFFSET);
+                //mark that we have shifted to the second line
+                line = HIGH ;
             }
-            displayCharacterOnLCD(*(ptr_string+i));
+            
+            displayCharacterOnLCD(*(ptr_string+i /*get the  next char in line 
+                                                  * by offset i */));
+            
         }
     }
 }
@@ -472,24 +635,45 @@ void displayINTOnLCD(int int_value_to_display){
         
     displayStringOnLCD(char_buffer_to_int_value);
 }
+
 void initLCD(void){
     
     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
-    commandLCD(FUNCTION_SET);
-    commandLCD(DISPLAY_ON_CUSROR_ON);    
-    commandLCD(CLEAR_DISPLAY);
-    commandLCD(LCD_OPERATION_MODE);
-    commandLCD(FORCE_AT_BEGINNING);
-    //commandLCD(DISPLAY_ON_CUSROR_OFF);
     
-//    commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
-//    commandLCD(CUSROR_HOME);
-     
-}
-void moveCursorToLocation(u8 row,u8 col){
-    u8 address = FORCE_AT_BEGINNING;
-    if(row){
-        address += 0x40;
+    //ALL COMMENTED IS NOT REQUIRED IN INITIALIZATION OF LCD !!
+    
+    //commandLCD(FUNCTION_SET);
+    if(LCD_OPERATION_MODE == _4BIT_2L_MODE || 
+            LCD_OPERATION_MODE == _4BIT_1L_MODE){
+        
+        //commandLCD(_4BIT_2L_MODE);
+        commandLCD(CUSROR_HOME);
+        //commandLCD(_4BIT_MODE_INIT);
+    }else if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
+                LCD_OPERATION_MODE == _8BIT_1L_MODE){
+        commandLCD(_8BIT_2L_MODE);
+        commandLCD(CLEAR_DISPLAY);
+        commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
     }
-    commandLCD(address+col);
+    commandLCD(DISPLAY_ON_CUSROR_ON);
+    //commandLCD(LCD_OPERATION_MODE);
+    //commandLCD(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE);    
+    //commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+    //commandLCD(CLEAR_DISPLAY);
+}
+
+FUN_RETURN_STATUS moveCursorToLocation(u8 row,u8 col){
+    fun_ret_status_and_data.fun_return = col > LCD_COLUMN_COUNT || 
+                                         row > LCD_ROW_COUNT ? ERR : NO_ERRORS;
+    
+    if (NO_ERRORS == fun_ret_status_and_data.fun_return){
+        commandLCD((row == LCD_ROW_COUNT ?
+                    PLACE_CUR_AT_BEGINE_OF_SECOND_LINE  :
+                    PLACE_CUR_AT_BEGINE_OF_FIRST_LINE) | col);
+        
+        //commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE | (row ? SECOND_ROW_START_OFFSET : ZERO_OFFSET) | col );
+        //commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE + (row ? SECOND_ROW_START_OFFSET : ZERO_OFFSET) + col );
+    }
+
+    return fun_ret_status_and_data.fun_return;
 }

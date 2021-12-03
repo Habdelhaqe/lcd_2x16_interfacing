@@ -12,13 +12,14 @@
 
 int main(void) {
 
-    u8 string[] = "IN The Name Of Allah";
+    u8 string[] = "In The Name Of ALLAH";
 
-    int my_id=9742;
+    //int my_id=9742;
     
     configureLCDDataBusLines();
     
     configureLCDControlPins();
+    
     initLCD();
         
     initLEDS();
@@ -26,6 +27,11 @@ int main(void) {
     initBTNS();
     
     //displayCharacterOnLCD('a');
+    
+    //\c moveCursorToLocation(u8,u8) does not work with 4_bit Mode!!!!!!!
+//    if(ERR == moveCursorToLocation(LCD_ROW_COUNT,4)){
+//        turnLEDOnOff(LED0,ON);
+//    }
     
     displayStringOnLCD(string);
     

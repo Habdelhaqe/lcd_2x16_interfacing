@@ -15,7 +15,9 @@
     #define PULSE_DELAY 300 //10ms for 16MHZ CLK    
 
     #define	INTERFACING_CONNECTION_LOGIC_H
-
+    
+    #define LOOP_ZER0_INITIALIZER 0
+    
     #define ON  HIGH
     #define OFF LOW
     
@@ -62,6 +64,8 @@
      * https://abcrob.com/lcd-interfacing-in-8-bit-mode/
      * https://www.vishay.com/docs/37484/lcd016n002bcfhet.pdf
      * http://web.alfredstate.edu/faculty/weimandn/lcd/lcd_initialization/lcd_initialization_index.html
+     * https://www.electronicwings.com/avr-atmega/interfacing-lcd-16x2-in-4-bit-mode-with-atmega-16-32-#:~:text=LCD%2016x2%20can%20be%20used,required%20data%20in%20data%20mode.
+     * https://asset.conrad.com/media10/add/160267/c1/-/en/001070528ML02/manual-1070528-joy-it-rb-lcd-16x2-module-56-cm-222-inch-16-x-2-p-compatible-with-raspberry-pi.pdf
      * 
      */
 
@@ -115,26 +119,49 @@
     #define LCD_D1 _PD_PIN1 
     #define LCD_D2 _PD_PIN2 
     #define LCD_D3 _PD_PIN3 
+    #define LCD_PORT OUTD
     
     #define CMD   LOW
     #define DATA  HIGH
     #define WRITE LOW
     #define READ  HIGH
     
+    #define MASK_LOWER_NIBBLE_BIT0 0x01
+    #define MASK_LOWER_NIBBLE_BIT1 0x02
+    #define MASK_LOWER_NIBBLE_BIT2 0x04
+    #define MASK_LOWER_NIBBLE_BIT3 0x08
+    
+    #define MASK_UPPER_NIBBLE_BIT0 0x10
+    #define MASK_UPPER_NIBBLE_BIT1 0x20
+    #define MASK_UPPER_NIBBLE_BIT2 0x40
+    #define MASK_UPPER_NIBBLE_BIT3 0x80
+
+
+    //count starts from zero rows:0->1 , columns:0->15
+    #define LCD_ROW_COUNT 1
+    #define LCD_COLUMN_COUNT 15
+
+    #define ZERO_OFFSET 0x00
+
     //CMD for LCD control in Hex
     #define CLEAR_DISPLAY 0x01
-    #define CUSROR_HOME 0x02 //ALSO 0x03 
+    #define CUSROR_HOME 0x02 //make use when talking 4bit mode
+//    #define CUSROR_HOME 0x03 //Same Function as 0x01
     #define _8BIT_1L_MODE 0x30
     #define _8BIT_2L_MODE 0x38
     #define _4BIT_1L_MODE 0x20
     #define _4BIT_2L_MODE 0x28
+    #define _4BIT_MODE_INIT 0x2C
     #define DISPLAY_ON_CUSROR_ON 0x0F
     #define DISPLAY_ON_CUSROR_OFF 0x0C
-    #define FORCE_AT_BEGINNING 0x80
+    #define PLACE_CUR_AT_BEGINE_OF_FIRST_LINE 0x80
+    #define PLACE_CUR_AT_BEGINE_OF_SECOND_LINE 0xC0
+    #define SECOND_ROW_START_OFFSET 0x40
     #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
     #define FUNCTION_SET 0b00111100
+    #define UNKNOWN_SHIT_CMD 0x33
     
-    #define LCD_OPERATION_MODE _8BIT_2L_MODE
+    #define LCD_OPERATION_MODE _4BIT_2L_MODE
 
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
@@ -414,7 +441,8 @@
      * start cursor position address is 0x80
      * row (2): line1 = 0x80 
      *        : line2 = 0x80+0x40
-     * col (16):  
+     * col (16): offset to get to the right column(0->16 : per each row)
+     * fun return : FUN_RETURN_STATUS to check for function return status
      */
-    void moveCursorToLocation(u8 /*row*/,u8 /*col*/);
+    FUN_RETURN_STATUS moveCursorToLocation(u8 /*row*/,u8 /*col*/);
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */
