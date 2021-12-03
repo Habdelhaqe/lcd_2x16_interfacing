@@ -106,10 +106,8 @@ FUN_RETURN_STATUS setPortPinInOut(u8 port_number ,
     return fn_return;
 }
 
-FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, u8 control_siganl_configuration ){
-    
-//    u8 REG_NAME = UN_IDENTIFIED,
-//       PIN_NUMBER = UN_IDENTIFIED;
+FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, 
+                                      u8 control_siganl_configuration ){
     
     FUN_RETURN_STATUS fn_return = NO_ERRORS;
 
@@ -315,15 +313,6 @@ FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, u8 control_siganl_conf
             fn_return=ERR;
     }
     
-    //PROGRAMMIN/CONFIGURATION/SETTING OF THE PORT PINS
-//    if(NO_ERRORS == fn_return){
-//        if(control_siganl_configuration){
-//            OUT_HIGH_ON_PIN(REG_NAME,PIN_NUMBER);
-//        }else{
-//            OUT_LOW_ON_PIN(REG_NAME,PIN_NUMBER);
-//        }
-//    }
-    
     return fn_return;
 } 
 
@@ -414,9 +403,6 @@ FUN_RETURN_STATUS outControlSignalThroughPortPin(u8 port_number ,
 
 FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number , 
                                               u8 control_signal_status){
-//    u8 REG_NAME = UN_IDENTIFIED,
-//       PIN_NUMBER  = UN_IDENTIFIED;
-    
     FUN_RETURN_STATUS fn_return = NO_ERRORS;
     
     switch(port_pin_number){
@@ -620,16 +606,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         default:
             fn_return=ERR;
     }
-    
-    //DRIVING SINAL THROUGH OUT THE PORT
-//    if(NO_ERRORS == fn_return){
-//        if(control_signal_status){
-//            OUT_HIGH_ON_PIN(REG_NAME,PIN_NUMBER);
-//        }else{
-//            OUT_LOW_ON_PIN(REG_NAME,PIN_NUMBER);
-//        }
-//    }
- 
+     
     return fn_return;
 }
 
@@ -764,3 +741,130 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
     
     return fun_ret_status_and_data;
 }
+
+//THIS CODE IS NOT WORKING!!!!!!
+//FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number , 
+//                                              u8 control_signal_status){
+//    //initialization of fun_ret_status_and_data 
+//    fun_ret_status_and_data.fun_return   = NO_ERRORS;
+//
+//    u8 REG_NAME = UN_IDENTIFIED,
+//       BIT_POS  = UN_IDENTIFIED;
+//    
+//    switch(port_pin_number){
+//
+//        case _PA_PIN0:  REG_NAME = PORTA ; BIT_POS = PIN0; break;
+//        case _PA_PIN1:  REG_NAME = PORTA ; BIT_POS = PIN1; break;
+//        case _PA_PIN2:  REG_NAME = PORTA ; BIT_POS = PIN2; break;
+//        case _PA_PIN3:  REG_NAME = PORTA ; BIT_POS = PIN3; break;
+//        case _PA_PIN4:  REG_NAME = PORTA ; BIT_POS = PIN4; break;
+//        case _PA_PIN5:  REG_NAME = PORTA ; BIT_POS = PIN5; break;
+//        case _PA_PIN6:  REG_NAME = PORTA ; BIT_POS = PIN6; break;
+//        case _PA_PIN7:  REG_NAME = PORTA ; BIT_POS = PIN7; break;
+//        
+//        case _PB_PIN0:  REG_NAME = PORTB ; BIT_POS = PIN0; break;
+//        case _PB_PIN1:  REG_NAME = PORTB ; BIT_POS = PIN1; break;
+//        case _PB_PIN2:  REG_NAME = PORTB ; BIT_POS = PIN2; break;
+//        case _PB_PIN3:  REG_NAME = PORTB ; BIT_POS = PIN3; break;
+//        case _PB_PIN4:  REG_NAME = PORTB ; BIT_POS = PIN4; break;
+//        case _PB_PIN5:  REG_NAME = PORTB ; BIT_POS = PIN5; break;
+//        case _PB_PIN6:  REG_NAME = PORTB ; BIT_POS = PIN6; break;
+//        case _PB_PIN7:  REG_NAME = PORTB ; BIT_POS = PIN7; break;
+//        
+//        case _PC_PIN0:  REG_NAME = PORTC ; BIT_POS = PIN0; break;
+//        case _PC_PIN1:  REG_NAME = PORTC ; BIT_POS = PIN1; break;
+//        case _PC_PIN2:  REG_NAME = PORTC ; BIT_POS = PIN2; break;
+//        case _PC_PIN3:  REG_NAME = PORTC ; BIT_POS = PIN3; break;
+//        case _PC_PIN4:  REG_NAME = PORTC ; BIT_POS = PIN4; break;
+//        case _PC_PIN5:  REG_NAME = PORTC ; BIT_POS = PIN5; break;
+//        case _PC_PIN6:  REG_NAME = PORTC ; BIT_POS = PIN6; break;
+//        case _PC_PIN7:  REG_NAME = PORTC ; BIT_POS = PIN7; break;
+//
+//        case _PD_PIN0:  REG_NAME = PORTD ; BIT_POS = PIN0; break;
+//        case _PD_PIN1:  REG_NAME = PORTD ; BIT_POS = PIN1; break;
+//        case _PD_PIN2:  REG_NAME = PORTD ; BIT_POS = PIN2; break;
+//        case _PD_PIN3:  REG_NAME = PORTD ; BIT_POS = PIN3; break;
+//        case _PD_PIN4:  REG_NAME = PORTD ; BIT_POS = PIN4; break;
+//        case _PD_PIN5:  REG_NAME = PORTD ; BIT_POS = PIN5; break;
+//        case _PD_PIN6:  REG_NAME = PORTD ; BIT_POS = PIN6; break;
+//        case _PD_PIN7:  REG_NAME = PORTD ; BIT_POS = PIN7; break;
+//        
+//        default:
+//            fun_ret_status_and_data.fun_return = ERR;
+//    }
+//    
+//    //Place Control Signal On The Selected Port Pin
+//    if(NO_ERRORS == fun_ret_status_and_data.fun_return ){
+//        if(control_signal_status){
+//            OUT_HIGH_ON_PIN(REG_NAME , BIT_POS);
+//        }else{
+//            OUT_LOW_ON_PIN(REG_NAME , BIT_POS);
+//        }
+//    }
+//    
+//    return fun_ret_status_and_data.fun_return;
+//}
+
+//THIS CODE DOESN'T CONFIGURE PORT PINS FOR O/P !!!!!!!!
+//FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, 
+//                                      u8 control_siganl_configuration ){
+//    
+//    //initialization of fun_ret_status_and_data 
+//    fun_ret_status_and_data.fun_return   = NO_ERRORS;
+//
+//    u8 REG_NAME = UN_IDENTIFIED,
+//       BIT_POS  = UN_IDENTIFIED;
+//    
+//    switch(port_pin_number){
+//
+//        case _PA_PIN0:  REG_NAME = DDRA ; BIT_POS = PIN0; break;
+//        case _PA_PIN1:  REG_NAME = DDRA ; BIT_POS = PIN1; break;
+//        case _PA_PIN2:  REG_NAME = DDRA ; BIT_POS = PIN2; break;
+//        case _PA_PIN3:  REG_NAME = DDRA ; BIT_POS = PIN3; break;
+//        case _PA_PIN4:  REG_NAME = DDRA ; BIT_POS = PIN4; break;
+//        case _PA_PIN5:  REG_NAME = DDRA ; BIT_POS = PIN5; break;
+//        case _PA_PIN6:  REG_NAME = DDRA ; BIT_POS = PIN6; break;
+//        case _PA_PIN7:  REG_NAME = DDRA ; BIT_POS = PIN7; break;
+//        
+//        case _PB_PIN0:  REG_NAME = DDRB ; BIT_POS = PIN0; break;
+//        case _PB_PIN1:  REG_NAME = DDRB ; BIT_POS = PIN1; break;
+//        case _PB_PIN2:  REG_NAME = DDRB ; BIT_POS = PIN2; break;
+//        case _PB_PIN3:  REG_NAME = DDRB ; BIT_POS = PIN3; break;
+//        case _PB_PIN4:  REG_NAME = DDRB ; BIT_POS = PIN4; break;
+//        case _PB_PIN5:  REG_NAME = DDRB ; BIT_POS = PIN5; break;
+//        case _PB_PIN6:  REG_NAME = DDRB ; BIT_POS = PIN6; break;
+//        case _PB_PIN7:  REG_NAME = DDRB ; BIT_POS = PIN7; break;
+//        
+//        case _PC_PIN0:  REG_NAME = DDRC ; BIT_POS = PIN0; break;
+//        case _PC_PIN1:  REG_NAME = DDRC ; BIT_POS = PIN1; break;
+//        case _PC_PIN2:  REG_NAME = DDRC ; BIT_POS = PIN2; break;
+//        case _PC_PIN3:  REG_NAME = DDRC ; BIT_POS = PIN3; break;
+//        case _PC_PIN4:  REG_NAME = DDRC ; BIT_POS = PIN4; break;
+//        case _PC_PIN5:  REG_NAME = DDRC ; BIT_POS = PIN5; break;
+//        case _PC_PIN6:  REG_NAME = DDRC ; BIT_POS = PIN6; break;
+//        case _PC_PIN7:  REG_NAME = DDRC ; BIT_POS = PIN7; break;
+//
+//        case _PD_PIN0:  REG_NAME = DDRD ; BIT_POS = PIN0; break;
+//        case _PD_PIN1:  REG_NAME = DDRD ; BIT_POS = PIN1; break;
+//        case _PD_PIN2:  REG_NAME = DDRD ; BIT_POS = PIN2; break;
+//        case _PD_PIN3:  REG_NAME = DDRD ; BIT_POS = PIN3; break;
+//        case _PD_PIN4:  REG_NAME = DDRD ; BIT_POS = PIN4; break;
+//        case _PD_PIN5:  REG_NAME = DDRD ; BIT_POS = PIN5; break;
+//        case _PD_PIN6:  REG_NAME = DDRD ; BIT_POS = PIN6; break;
+//        case _PD_PIN7:  REG_NAME = DDRD ; BIT_POS = PIN7; break;
+//        
+//        default:
+//            fun_ret_status_and_data.fun_return = ERR;
+//    }
+//    
+//    //PROGRAMMIN/CONFIGURATION/SETTING OF THE PORT PINS
+//    if(NO_ERRORS == fun_ret_status_and_data.fun_return){
+//        if(control_siganl_configuration){
+//            OUT_HIGH_ON_PIN(REG_NAME , BIT_POS);
+//        }else{
+//            OUT_LOW_ON_PIN(REG_NAME , BIT_POS);
+//        }
+//    }
+//    
+//    return fun_ret_status_and_data.fun_return;
+//}
