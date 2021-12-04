@@ -17,7 +17,8 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h \
- c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h
+ c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h \
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h
 
 atmega32a.h:
 
@@ -56,3 +57,5 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h:
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h:
+
+c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:

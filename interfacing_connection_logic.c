@@ -417,7 +417,7 @@ void generateLCDEnableControlPuls(void){
      //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
     
     //pulse:_____________/-High for 10 ms-\_____________________
-    writeControlSignalOnPortPin(LCD_EN,LOW);
+    //writeControlSignalOnPortPin(LCD_EN,LOW);
     writeControlSignalOnPortPin(LCD_EN,HIGH);
     _delay_ms(PULSE_DELAY);
     writeControlSignalOnPortPin(LCD_EN,LOW);
@@ -527,7 +527,7 @@ void displayCharacterOnLCD(u8 character_to_Display){
                 character_to_Display & MASK_UPPER_NIBBLE_BIT2); //BIT 6
         writeControlSignalOnPortPin(LCD_D7 , 
                 character_to_Display & MASK_UPPER_NIBBLE_BIT3); //BIT 7
-        
+                
 //        /*
 //         * initialization of higher bits/nibble of 
 //         * what ever port LCD data lines is connected to
