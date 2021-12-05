@@ -434,7 +434,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         case _PA_PIN4:  if(control_signal_status){
                             OUT_HIGH_ON_PIN(PORTA,PIN4);
                         }else{
-                            OUT_LOW_ON_PIN(PORTA,PIN5);
+                            OUT_LOW_ON_PIN(PORTA,PIN4);
                         } 
                         break;                        
         case _PA_PIN5:  if(control_signal_status){
@@ -483,7 +483,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         case _PB_PIN4:  if(control_signal_status){
                             OUT_HIGH_ON_PIN(PORTB,PIN4);
                         }else{
-                            OUT_LOW_ON_PIN(PORTB,PIN5);
+                            OUT_LOW_ON_PIN(PORTB,PIN4);
                         } 
                         break;                        
         case _PB_PIN5:  if(control_signal_status){
@@ -532,7 +532,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         case _PC_PIN4:  if(control_signal_status){
                             OUT_HIGH_ON_PIN(PORTC,PIN4);
                         }else{
-                            OUT_LOW_ON_PIN(PORTC,PIN5);
+                            OUT_LOW_ON_PIN(PORTC,PIN4);
                         } 
                         break;                        
         case _PC_PIN5:  if(control_signal_status){
@@ -581,7 +581,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
         case _PD_PIN4:  if(control_signal_status){
                             OUT_HIGH_ON_PIN(PORTD,PIN4);
                         }else{
-                            OUT_LOW_ON_PIN(PORTD,PIN5);
+                            OUT_LOW_ON_PIN(PORTD,PIN4);
                         } 
                         break;                        
         case _PD_PIN5:  if(control_signal_status){

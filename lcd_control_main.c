@@ -82,6 +82,7 @@ ISR(INT0_vect){
 int main(void) {
 
     u8 string[] = "In The Name Of ALLAH";
+    //u8 string[] = {NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR};
 
     //int my_id=9742;
     
@@ -96,13 +97,11 @@ int main(void) {
     initBTNS();
     
     //detect if initInterruptService is not a success
-    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
-        turnLEDOnOff(LED1,ON);
-    }
-    sei(); //SERG access
-
+//    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
+//        turnLEDOnOff(LED1,ON);
+//    }
+//    sei(); //SERG access
     
-    //displayCharacterOnLCD('a');
     
     //\c moveCursorToLocation(u8,u8) does not work with 4_bit Mode!!!!!!!
 //    if(ERR == moveCursorToLocation(LCD_ROW_COUNT,4)){

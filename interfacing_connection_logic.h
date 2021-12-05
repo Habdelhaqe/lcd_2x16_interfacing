@@ -6,13 +6,13 @@
  */
 
 #ifndef INTERFACING_CONNECTION_LOGIC_H
-    #define F_CPU 16000000UL
+    #define F_CPU 16000000UL // 16 Mhz clk
 
     #include "atmega32a.h"
     #include<util/delay.h>
     #include<stdlib.h>
 
-    #define PULSE_DELAY 300 //10ms for 16MHZ CLK    
+    #define PULSE_DELAY 1 //10ms for 16 Mhz clk
 
     #define	INTERFACING_CONNECTION_LOGIC_H
     
@@ -26,21 +26,22 @@
 
     #define OUTPUT HIGH
     #define INPUT  LOW
+    
+    #define BIT0 0
+    #define BIT1 1
+    #define BIT2 2
+    #define BIT3 3
+    #define BIT4 4
+    #define BIT5 5
+    #define BIT6 6
+    #define BIT7 7
 
     #define BTN_PRESSED   HIGH
     #define BTN_UNPRSSED  LOW
 
-//    #define BTN0 PIN3 //portB pin:0 IN
-//    #define BTN1 PIN4 //portD pin:6 IN
-//    #define BTN2 PIN5 //portD pin:2 IN
-
     #define BTN0 _PA_PIN7
     #define BTN1 _PB_PIN4
     #define BTN2 _PB_PIN5
-
-//    #define LED0 PIN2 //portC pin:2 OUT ON/OFF
-//    #define LED1 PIN7 //portC pin:7 OUT ON/OFF
-//    #define LED2 PIN3 //portD pin:3 OUT ON/OFF
 
     #define LED0 _PC_PIN0 
     #define LED1 _PC_PIN1
@@ -121,22 +122,14 @@
     #define LCD_D3 _PD_PIN3 
     #define LCD_PORT OUTD
     
+    //states for LCD_RS : configure REG accessing for passing a data/a command  
     #define CMD   LOW
     #define DATA  HIGH
+
+    //states for LCD_RW : configure flow of data to(Write)/from(READ) LCD module
     #define WRITE LOW
     #define READ  HIGH
     
-    #define MASK_LOWER_NIBBLE_BIT0 0x01
-    #define MASK_LOWER_NIBBLE_BIT1 0x02
-    #define MASK_LOWER_NIBBLE_BIT2 0x04
-    #define MASK_LOWER_NIBBLE_BIT3 0x08
-    
-    #define MASK_UPPER_NIBBLE_BIT0 0x10
-    #define MASK_UPPER_NIBBLE_BIT1 0x20
-    #define MASK_UPPER_NIBBLE_BIT2 0x40
-    #define MASK_UPPER_NIBBLE_BIT3 0x80
-
-
     //count starts from zero rows:0->1 , columns:0->15
     #define LCD_ROW_COUNT 1
     #define LCD_COLUMN_COUNT 15
@@ -387,6 +380,18 @@
     void displayCharacterOnLCD(u8 /*character data*/);
 
     /*
+     * wrapper function to test for case of shifting the character sent
+     *  to be displayed adding 1 (0b : 0001)  to the upper nibble and aslo
+     * to the lower nibble as i know that function : \c void commandLCD(u8)
+     * is working correctly and i'm sure that both functions : 
+     * \c void commandLCD(u8)
+     * \c void displayCharacterOnLCD(u8)
+     * had same Logic
+     */
+    FUN_RETURN_STATUS displayCharOrCommandLCD(u8 /*Data : char or command*/,
+                                 u8/*treat Data passed as char or command*/);
+    
+    /*
      * same as : FUN_RETURN_STATUS displayCharacterOnLCD(u8 character)
      * it's called inside the code for display character
      * Passing data(string) to LCD microcontroller for displaying
@@ -445,4 +450,5 @@
      * fun return : FUN_RETURN_STATUS to check for function return status
      */
     FUN_RETURN_STATUS moveCursorToLocation(u8 /*row*/,u8 /*col*/);
+    
 #endif	/* INTERFACING_CONNECTION_LOGIC_H */
