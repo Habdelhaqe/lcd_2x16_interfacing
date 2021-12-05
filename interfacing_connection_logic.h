@@ -23,9 +23,6 @@
     
     #define DECIMAL_RADIX 10
     #define BUFFER_MAX_SIZE 11 //8 bytes: 10 digit number + 1 null char
-
-    #define OUTPUT HIGH
-    #define INPUT  LOW
     
     #define BIT0 0
     #define BIT1 1
@@ -380,6 +377,10 @@
     void displayCharacterOnLCD(u8 /*character data*/);
 
     /*
+     * there is no need for this function now as the problem was in the
+     * PIN4 @ ALL PORTs in cases for checking selection of :
+     *  _PA_PIN4 , _PB_PIN4 , _PC_PIN4 , _PD_PIN4 
+     * \c FUN_RETURN_STATUS writeControlSignalOnPortPin(u8,u8)
      * wrapper function to test for case of shifting the character sent
      *  to be displayed adding 1 (0b : 0001)  to the upper nibble and aslo
      * to the lower nibble as i know that function : \c void commandLCD(u8)

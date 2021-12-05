@@ -19,6 +19,10 @@
     #define TRUE  1
     #define FALSE 0
     
+    //SIGNALLING DISCRIPTION AND STATUS
+    #define OUTPUT HIGH
+    #define INPUT  LOW
+
     //BIT ARITHIMETICS
     #define    SET_BIT(REG , BIT_LOCATION)     REG |= (HIGH<<BIT_LOCATION)
     #define  CLEAR_BIT(REG , BIT_LOCATION)     REG &= ~(HIGH<<BIT_LOCATION)

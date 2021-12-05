@@ -1,5 +1,5 @@
-build/default/production/lcd_control_main.o.d \
- build/default/production/lcd_control_main.o: lcd_control_main.c \
+build/default/production/phone_keypad.o.d \
+ build/default/production/phone_keypad.o: phone_keypad.c phone_keypad.h \
  atmega32a.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\io.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\sfr_defs.h \
@@ -12,14 +12,12 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\version.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\fuse.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h \
- common_types_defs.h interfacing_connection_logic.h \
+ common_types_defs.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h \
- c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h \
- c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h \
- c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h \
- phone_keypad.h \
- c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h
+
+phone_keypad.h:
 
 atmega32a.h:
 
@@ -47,18 +45,8 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h:
 
 common_types_defs.h:
 
-interfacing_connection_logic.h:
-
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h:
-
-c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h:
-
-c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h:
-
-phone_keypad.h:
-
-c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:

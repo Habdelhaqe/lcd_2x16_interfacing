@@ -7,8 +7,10 @@
 
 #include"atmega32a.h"
 #include"interfacing_connection_logic.h"
+#include"phone_keypad.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+
 #define KEEP_EXECUTING 1
 
 #define INTERRUPT_RISING_EDGE_MODE            3 //0x03 : 0b 0000 0011
@@ -81,7 +83,7 @@ ISR(INT0_vect){
 
 int main(void) {
 
-    u8 string[] = "In The Name Of ALLAH";
+    //u8 string[] = "In The Name Of ALLAH";
     //u8 string[] = {NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR};
 
     //int my_id=9742;
@@ -97,10 +99,10 @@ int main(void) {
     initBTNS();
     
     //detect if initInterruptService is not a success
-//    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
-//        turnLEDOnOff(LED1,ON);
-//    }
-//    sei(); //SERG access
+    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
+        turnLEDOnOff(LED1,ON);
+    }
+    sei(); //SERG access
     
     
     //\c moveCursorToLocation(u8,u8) does not work with 4_bit Mode!!!!!!!
@@ -108,23 +110,16 @@ int main(void) {
 //        turnLEDOnOff(LED0,ON);
 //    }
     
-    displayStringOnLCD(string);
+    //displayStringOnLCD(string);
     
 //    moveCursorToLocation(2,0);
 //    
 //    displayINTOnLCD(my_id);
-//    
-    //blinking light
-//    turnLEDOnOff(LED0,ON);
-//    turnLEDOnOff(LED1,ON);
-//    turnLEDOnOff(LED2,ON);
-//    for(u8 i = 0 ; i<11 ; i++){
-//        _delay_ms(200);
-//        turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
-//        turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
-//        turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
-//    }
     
+    initKeypad();
+    
+    u8 key;
+        
     while(KEEP_EXECUTING){
 
         if(BTN_PRESSED == isBTNPressed(BTN0).scanned_data){
@@ -146,10 +141,29 @@ int main(void) {
             turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
             turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
             turnLEDOnOff(LED2,ON==isLEDOnOrOFF(LED2).scanned_data ? OFF:ON );
-        }        
-       _delay_ms(500);
+        }
+        
+        key = getPressedKey();
+        
+        switch(key){
+            case KEYPAD_BTN0: displayCharacterOnLCD('0'); break;
+            case KEYPAD_BTN1: displayCharacterOnLCD('1'); break;
+            case KEYPAD_BTN2: displayCharacterOnLCD('2'); break;
+            case KEYPAD_BTN3: displayCharacterOnLCD('3'); break;
+            case KEYPAD_BTN4: displayCharacterOnLCD('4'); break;
+            case KEYPAD_BTN5: displayCharacterOnLCD('5'); break;
+            case KEYPAD_BTN6: displayCharacterOnLCD('6'); break;
+            case KEYPAD_BTN7: displayCharacterOnLCD('7'); break;
+            case KEYPAD_BTN8: displayCharacterOnLCD('8'); break;
+            case KEYPAD_BTN9: displayCharacterOnLCD('9'); break;            
+            case KEYPAD_BTN_STAR: displayCharacterOnLCD('*'); break;
+            case KEYPAD_BTN_POUND: displayCharacterOnLCD('#'); break;
+            default:
+                //nothing is pressed
+                break;
+        }
+       _delay_ms(100);
     }
-    
 }
 
 FUN_RETURN_STATUS initInterruptService(char interrupt_number 

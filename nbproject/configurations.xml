@@ -7,6 +7,7 @@
       <itemPath>common_types_defs.h</itemPath>
       <itemPath>atmega32a.h</itemPath>
       <itemPath>interfacing_connection_logic.h</itemPath>
+      <itemPath>phone_keypad.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -18,6 +19,7 @@
       <itemPath>lcd_control_main.c</itemPath>
       <itemPath>atemga32a.c</itemPath>
       <itemPath>interfacing_connection_logic.c</itemPath>
+      <itemPath>phone_keypad.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
