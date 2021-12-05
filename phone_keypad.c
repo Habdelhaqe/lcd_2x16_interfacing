@@ -2,6 +2,7 @@
 #include <util/delay.h>
 
 void initKeypad(void){
+    //IGNORING THE ERROR RETURNED CAUSE I'M CALLING THE SHOOTS
     //program/configure connection pins
     programPortPinInOut(KEYPAD_A_PIN , INPUT);
     programPortPinInOut(KEYPAD_B_PIN , INPUT);
@@ -13,14 +14,28 @@ void initKeypad(void){
     programPortPinInOut(KEYPAD_3_PIN , OUTPUT);       
 }
 
-void driveBiasSiganlThroughKeypad(u8 keypad_1_siganl ,
+FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8 keypad_1_siganl ,
                                   u8 keypad_2_siganl ,
                                   u8 keypad_3_siganl){
-   //IGNORING THE ERROR RETURNED CAUSE I'M CALLING THE SHOOTS
-   //drive bias signal (HIGH) on : KEYPAD_1_PIN , KEYPAD_2_PIN ,KEYPAD_3_PIN
-   writeControlSignalOnPortPin(KEYPAD_1_PIN , keypad_1_siganl ? HIGH : LOW);
-   writeControlSignalOnPortPin(KEYPAD_2_PIN , keypad_2_siganl ? HIGH : LOW);
-   writeControlSignalOnPortPin(KEYPAD_3_PIN , keypad_3_siganl ? HIGH : LOW);
+    //drive bias signal (HIGH) on : KEYPAD_1_PIN , KEYPAD_2_PIN ,KEYPAD_3_PIN
+    
+    FUN_RETURN_STATUS err_checker = NO_ERRORS;
+    
+    if( (HIGH == keypad_1_siganl && HIGH == keypad_2_siganl) ||
+           (HIGH == keypad_1_siganl && HIGH == keypad_3_siganl) || 
+                (HIGH == keypad_2_siganl && HIGH == keypad_3_siganl) ){
+        err_checker = ERR;
+    }
+    
+    if(NO_ERRORS == err_checker){
+        //IGNORING THE ERROR RETURNED CAUSE I'M CALLING THE SHOOTS
+        writeControlSignalOnPortPin(KEYPAD_1_PIN , keypad_1_siganl ? HIGH : LOW);
+        writeControlSignalOnPortPin(KEYPAD_2_PIN , keypad_2_siganl ? HIGH : LOW);
+        writeControlSignalOnPortPin(KEYPAD_3_PIN , keypad_3_siganl ? HIGH : LOW);
+    }else{
+        //what to do with the idiot user except to report back to the caller
+    }
+    return err_checker;
 }
 
 u8 getPressedKey(void){

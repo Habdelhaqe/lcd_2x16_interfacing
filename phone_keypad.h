@@ -28,11 +28,46 @@
     //-------------------------------------------------------------------------
     
     #define KEY_OFFSET 3
-
+    
+    /*
+     * program/configure the connection pins and ports on Microcontroller
+     * 
+     * 4 lines/rows i/p to Microcontroller for checking which line/row has
+     * a HIGH signal on it
+     * KEYPAD_A_PIN _PC_PIN4 // LINE A i/p to Microcontroller BTNS 1,2,3 
+     * KEYPAD_B_PIN _PC_PIN5 // LINE B i/p to Microcontroller BTNS 4,5,6
+     * KEYPAD_C_PIN _PC_PIN6 // LINE C i/p to Microcontroller BTNS 7,8,9
+     * KEYPAD_D_PIN _PC_PIN7 // LINE D i/p to Microcontroller BTNS *,0,#
+     * 
+     * 3 columns o/p from Microcontroller for checking which button on the
+     * selected column passing a HIGH signal to it
+     * KEYPAD_1_PIN _PA_PIN4 // COL 1 o/p From MicroController BTNS 1,4,7,*
+     * KEYPAD_2_PIN _PA_PIN5 // COL 2 o/p From MicroController BTNS 2,5,8,0
+     * KEYPAD_3_PIN _PA_PIN6 // COL 3 o/p From MicroController BTNS 3,6,7,#
+     * 
+     */
     void initKeypad(void);
     
-    void driveBiasSiganlThroughKeypad(u8 ,u8 ,u8);
+    /*
+     * select a column via driving a HIGH signal Through one column and 
+     * LOW on the other 2 only 1 should be HIGH
+     * FUN_RETURN_STATUS is to report back the passing of 2/3 HIGH signals
+     * passing to the function
+     */
+    FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8 /*DRIVING SINAL THROUGH COLUMN 1*/,
+                                      u8 /*DRIVING SINAL THROUGH COLUMN 2*/,
+                                      u8 /*DRIVING SINAL THROUGH COLUMN 3*/);
     
+    /*
+     * finding out which key is pressed if any via using function
+     * \c FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8,u8,u8);
+     * to drive a signal through each column of the keypad and then 
+     * got through each line/row checking for a HIGH signal passing through it
+     * function returns the key pressed indicator:
+     *  KEYPAD_BTNx where x:0->9 along with 
+     *  KEYPAD_BTN_STAR for * AND KEYPAD_BTN_POUND for #
+     * if no key is pressed then UN_IDENTIFIED is returned
+     */
     u8 getPressedKey(void);
     
 #endif
