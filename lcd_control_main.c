@@ -8,6 +8,7 @@
 #include"atmega32a.h"
 #include"interfacing_connection_logic.h"
 #include"phone_keypad.h"
+#include"interrupt_configuration.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -17,50 +18,6 @@
 #define INTERRUPT_FALLING_EDGE_MODE           2 //0x02 : 0b 0000 0010
 #define INTERRUPT_ANY_LOGICSL_CHANGE_MODE     1 //0x01 : 0b 0000 0001
 #define INTERRUPT_LOW_LEVEL_MODE              0 //0x00 : 0b 0000 0000
-
-/*
- * init Interrupt Service configuration through
- * accessing register MCUCR For handling INT0 & INT1 CONFIGURATIONS ON BITS
- * 
- * X : DON'T CARE
- * 
- * INT0 : BIT 1 -> ISC01 , BIT 0 -> ISC00
- *      INTERRUPT_RISING_EDGE_MODE : 0b XXXX XX11
- *      INTERRUPT_FALLING_EDGE_MODE : 0b XXXX XX10
- *      INTERRUPT_ANY_LOGICSL_CHANGE_MODE: 0b XXXX XXX1
- *      INTERRUPT_LOW_LEVEL_MODE : 0b XXXX XX00
- * 
- * INT1 : BIT 3 -> ISC11 , BIT 2 -> ISC10 (same as 
- *      INTO but values are shifted right by 2)
- *      INTERRUPT_RISING_EDGE_MODE : 0b XXXX 11XX
- *      INTERRUPT_FALLING_EDGE_MODE : 0b XXXX 10XX
- *      INTERRUPT_ANY_LOGICSL_CHANGE_MODE: 0b XXXX 01XX
- *      INTERRUPT_LOW_LEVEL_MODE : 0b XXXX 00XX
- * 
- * accessing register MCUCSR For handling INT2
- * INT2 : BIT 6 -> ISC2
- *      INTERRUPT_RISING_EDGE_MODE : 0b X1XX XXXX
- *      INTERRUPT_FALLING_EDGE_MODE : 0b X0XX XXXX
- *
- * ENABLE/DISBALE the interrupt service controller/monitor through register 
- * GICR -> HIGH : ENABLE , LOW : DISABLE
- *  
- * GICR :  BIT 7 -> INT1 , BIT 6(ISC2==6) -> INT0 , BIT 5 -> INT2
- *
- * ENABLE/DISABLE THE GLOBAL interrupt service controller/monitor through
- * SREG ON BIT 7 -> I FLAG/BIT done via abstraction macros 
- *          <avr.interrupt.h>SEI:sei() for ENABLE  INTERRUPT : I = HIGH
- *          <avr.interrupt.h>SEI:sei() for DISABLE INTERRUPT : I = LOW 
- *                  
- * FUN ARGUMENT : -select external interrupt number 
- *                -select which mode of interrupt
- *                        INTERRUPT_RISING_EDGE_MODE 
- *                        INTERRUPT_FALLING_EDGE_MODE 
- *                        INTERRUPT_ANY_LOGICSL_CHANGE_MODE
- *                        INTERRUPT_LOW_LEVEL_MODE
- * fun return : FUN_RETURN_STATUS to check for function return status
- */         
-FUN_RETURN_STATUS initInterruptService(char , u8);
 
 /*
  * external interrupt initiated on INT0
@@ -78,6 +35,14 @@ ISR(INT0_vect){
             turnLEDOnOff(LED1,ON==isLEDOnOrOFF(LED1).scanned_data ? OFF:ON );
             turnLEDOnOff(LED0,ON==isLEDOnOrOFF(LED0).scanned_data ? OFF:ON );
         }
+    
+}
+
+ISR(INT1_vect){
+    
+}
+
+ISR(INT2_vect){
     
 }
 
@@ -164,43 +129,4 @@ int main(void) {
         }
        _delay_ms(100);
     }
-}
-
-FUN_RETURN_STATUS initInterruptService(char interrupt_number 
-                                        , u8 interrupt_mode){
-    
-    FUN_RETURN_STATUS err_check_value = NO_ERRORS;
-    
-    if(interrupt_mode > INTERRUPT_RISING_EDGE_MODE || 
-            (interrupt_number != INT0 && 
-                interrupt_number != INT1 &&
-                    interrupt_number != INT2) ){
-    
-        err_check_value = ERR;
-    
-    }else{
-       
-        switch(interrupt_number){
-            
-            case INT0 :
-                MCUCR |= interrupt_mode;
-                break;
-            
-            case INT1 :    
-                MCUCR |= interrupt_mode<<2;
-                break;
-           
-            case INT2 :
-                MCUCSR |= interrupt_mode == INTERRUPT_RISING_EDGE_MODE 
-                        ? HIGH : LOW<< ISC2;
-                break;
-                
-            default:
-                    err_check_value = ERR;
-        }
-        
-        GICR |= HIGH<<interrupt_number;  
-    }
-    
-    return err_check_value;
 }

@@ -8,6 +8,8 @@
       <itemPath>atmega32a.h</itemPath>
       <itemPath>interfacing_connection_logic.h</itemPath>
       <itemPath>phone_keypad.h</itemPath>
+      <itemPath>interrupt_configuration.h</itemPath>
+      <itemPath>adc_interfacing.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -20,6 +22,8 @@
       <itemPath>atemga32a.c</itemPath>
       <itemPath>interfacing_connection_logic.c</itemPath>
       <itemPath>phone_keypad.c</itemPath>
+      <itemPath>interrupt_configuration.c</itemPath>
+      <itemPath>adc_interfacing.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

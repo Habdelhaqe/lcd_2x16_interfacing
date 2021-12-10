@@ -36,5 +36,6 @@
     //#define    GET_BIT(REG , BIT_LOCATION)     REG &= HIGH<<BIT_LOCATION
     
     typedef unsigned char u8;
-    
+    typedef unsigned short u16;
+    typedef   signed short s16;
 #endif	/* COMMON_TYPES_DEFS_H */

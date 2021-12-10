@@ -31,7 +31,6 @@
 //    #define IOB DDRB 
 //    #define IOC DDRC
 //    #define IOD DDRC
-
     #define IOA 0
     #define IOB 1
     #define IOC 2
@@ -49,6 +48,12 @@
     #define INC 2
     #define IND 3
     
+    //renaming ADMUX , ADCSRA , SFIOR
+    #define _ADMUX  4
+    #define _ADCSRA 5
+    #define _SFIOR  6
+
+
     //port pins layout
     //PORTA
     #define _PA_PIN0 0
@@ -87,6 +92,36 @@
     #define _PD_PIN6 30
     #define _PD_PIN7 31
     
+
+    //ADC PINS LAYOUT
+    //ADMUX
+    #define ADMUX_MUX0  32
+    #define ADMUX_MUX1  33
+    #define ADMUX_MUX2  34
+    #define ADMUX_MUX3  35
+    #define ADMUX_MUX4  36
+    #define ADMUX_ADLAR 37
+    #define ADMUX_REFS0 38
+    #define ADMUX_REFS1 39
+    //ADCSRA
+    #define ADCSRA_ADPS0 40
+    #define ADCSRA_ADPS1 41
+    #define ADCSRA_ADPS2 42
+    #define ADCSRA_ADIE  43
+    #define ADCSRA_ADIF  44
+    #define ADCSRA_ADATE 45
+    #define ADCSRA_ADSC  46
+    #define ADCSRA_ADEN  47
+    //SFIOR
+    #define SFIOR_PSR10     48
+    #define SFIOR_PSR2      49
+    #define SFIOR_PUD       50
+    #define SFIOR_ACME      51
+    #define SFIOR_RESERVED  52
+    #define SFIOR_ADTS0     53
+    #define SFIOR_ADTS1     54
+    #define SFIOR_ADTS2     55
+
     #define UN_IDENTIFIED 0xFF
 
     #define ALL_PINS_CONFIG_OUT 0xFF
@@ -98,6 +133,14 @@
     #define OUT_HIGH_ON_PIN(PORT , PIN)     SET_BIT(PORT , PIN)
     #define OUT_LOW_ON_PIN(PORT , PIN)      CLEAR_BIT(PORT , PIN)
     #define SCAN_SIGANL_ON_PIN(PORT , PIN)  GET_BIT(PORT , PIN)
+    
+    #define OUT_CONDITIONED_SIGNAL_ON_PIN(PORT ,PIN , H_OR_L) H_OR_L? SET_BIT(PORT ,PIN) : CLEAR_BIT(PORT ,PIN) 
+
+    #define   OUT_DATA_ON_REG_KEEP_STATES(REG , DATA)   REG |= DATA
+    #define OUT_DATA_ON_REG_CHANGE_STATES(REG , DATA)   REG &= DATA
+    
+    #define  SHIFT_REG_DATA_LEFT(REG , SHIFT_BY)    REG <<= SHIFT_BY
+    #define SHIFT_REG_DATA_RIGHT(REG , SHIFT_BY)    REG >>= SHIFT_BY
 
     typedef enum FUN_RETURN_STATUS{
         NO_ERRORS,
