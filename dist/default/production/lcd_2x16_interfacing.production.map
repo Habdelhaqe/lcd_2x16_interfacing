@@ -59,28 +59,30 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/default/production/adc_interfacing.o
  .data          0x0000000000000000        0x0 build/default/production/adc_interfacing.o
  .bss           0x0000000000000000        0x0 build/default/production/adc_interfacing.o
- .text.startConversionAndReturnConversionOutput
-                0x0000000000000000       0x92 build/default/production/adc_interfacing.o
+ .text.onConversionComplete
+                0x0000000000000000       0x38 build/default/production/adc_interfacing.o
  .text.checkForSelectedChannel
                 0x0000000000000000        0xc build/default/production/adc_interfacing.o
  .text.checkForSelectedVoltage
-                0x0000000000000000       0x16 build/default/production/adc_interfacing.o
+                0x0000000000000000       0x14 build/default/production/adc_interfacing.o
  .text.initADCInternalCircuitry
-                0x0000000000000000       0x88 build/default/production/adc_interfacing.o
+                0x0000000000000000       0x80 build/default/production/adc_interfacing.o
  .text.checkForSelectedFrequency
                 0x0000000000000000        0xc build/default/production/adc_interfacing.o
  .text.checkForSelectedConversionMode
-                0x0000000000000000        0xc build/default/production/adc_interfacing.o
- .debug_info    0x0000000000000000      0x6e2 build/default/production/adc_interfacing.o
+                0x0000000000000000       0x14 build/default/production/adc_interfacing.o
+ .text.onstartConversion
+                0x0000000000000000       0x32 build/default/production/adc_interfacing.o
+ .debug_info    0x0000000000000000      0x64e build/default/production/adc_interfacing.o
  .debug_abbrev  0x0000000000000000      0x154 build/default/production/adc_interfacing.o
- .debug_loc     0x0000000000000000      0x33c build/default/production/adc_interfacing.o
+ .debug_loc     0x0000000000000000      0x302 build/default/production/adc_interfacing.o
  .debug_aranges
-                0x0000000000000000       0x48 build/default/production/adc_interfacing.o
- .debug_ranges  0x0000000000000000       0x38 build/default/production/adc_interfacing.o
- .debug_line    0x0000000000000000      0x20b build/default/production/adc_interfacing.o
+                0x0000000000000000       0x50 build/default/production/adc_interfacing.o
+ .debug_ranges  0x0000000000000000       0x40 build/default/production/adc_interfacing.o
+ .debug_line    0x0000000000000000      0x20e build/default/production/adc_interfacing.o
  .debug_str     0x0000000000000000       0x5f build/default/production/adc_interfacing.o
  .comment       0x0000000000000000       0x30 build/default/production/adc_interfacing.o
- .debug_frame   0x0000000000000000       0x90 build/default/production/adc_interfacing.o
+ .debug_frame   0x0000000000000000       0xa0 build/default/production/adc_interfacing.o
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_exit.o)

@@ -138,18 +138,26 @@
 
     #define   OUT_DATA_ON_REG_KEEP_STATES(REG , DATA)   REG |= DATA
     #define OUT_DATA_ON_REG_CHANGE_STATES(REG , DATA)   REG &= DATA
-    
+
+    #define MASK_8_BIT_REG(REG , _8_BITS_MASK) (REG) & (_8_BITS_MASK)
+    #define MASK_8_BIT_REG_KEEP(REG , _8_BITS_MASK) REG = MASK_8_BIT_REG(REG , _8_BITS_MASK)
+
+    #define COMBINE_8_BIT_REG_W_DATA(REG , _8_BITS_DATA) (REG) | (_8_BITS_DATA)
+    #define COMBINE_8_BIT_REG_W_DATA_KEEP(REG , _8_BITS_DATA) REG = COMBINE_8_BIT_REG_W_DATA(REG , _8_BITS_DATA)
+
     #define  SHIFT_REG_DATA_LEFT(REG , SHIFT_BY)    REG <<= SHIFT_BY
     #define SHIFT_REG_DATA_RIGHT(REG , SHIFT_BY)    REG >>= SHIFT_BY
 
+    #define  SHIFT_REG_DATA_LEFT_NO_KEEP(REG , SHIFT_BY)    REG << SHIFT_BY
+    #define SHIFT_REG_DATA_RIGHT_NO_KEEP(REG , SHIFT_BY)    REG >> SHIFT_BY
+
     typedef enum FUN_RETURN_STATUS{
-        NO_ERRORS,
-        ERR_WRONG_PORT_NUMBER,
-        ERR_WRONG_PIN_NUMBER,
-        ERR        
+        NO_ERRORS, //0
+        ERR_WRONG_PORT_NUMBER, //1
+        ERR_WRONG_PIN_NUMBER, //2
+        ERR //3        
     }FUN_RETURN_STATUS;
-        
-    
+            
     typedef struct scan_fun_return{
         FUN_RETURN_STATUS fun_return;
         u8 scanned_data;

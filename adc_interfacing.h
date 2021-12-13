@@ -56,6 +56,7 @@
     #define ADC_VOLTAGE_0V_GND                  31 //       N/A        11 111  N/A
 
     #define   CHANNEL_SECUIRTY_MASK 0x1F //0b 0001 1111
+    #define   VOLTAGE_SECUIRTY_MASK 0xC0 //0b 1100 0000
     #define FREQUENCY_SECUIRTY_MASK 0x07 //0b 0000 0111
 
     /*Bit        7     6     5    4    3     2   1     0
@@ -74,20 +75,24 @@
      *               OR THE VOLTAGE COMING THROUGH THE UPOVE MUX ALLOW TO PASS}
      */
     //ADMUX {REFS1:0 , REFS0:0} AREF, Internal Vref turned off
-    #define VOLTAGE_AREF 0 
+    #define VOLTAGE_AREF 			 0x00 // 0>>higer bits 7,6 => 00 00 0000
     //ADMUX {REFS1:0 , REFS0:1} AVCC with external capacitor at AREF pin
-    #define VOLTAGE_AVCC 2
+    #define VOLTAGE_AVCC 			 0x80 // 2>>higer bits 7,6 => 10 00 0000 
     //ADMUX {REFS1:1 , REFS0:1} Internal 2.56V Voltage Reference with external capacitor at AREF pin
-    #define VOLTAGE_Internal_2_56_V  3
+    #define VOLTAGE_Internal_2_56_V  0xC0 // 3>>higer bits 7,6 => 11 00 0000
     //ADMUX {REFS1:1 , REFS0:0} NO USE TILL NOW
-    //#define VOLATGE_RESERVED 1 
+    #define VOLATGE_RESERVED 		 0x40 // 1>>higer bits 7,6 => 01 00 0000
    
+	#define LEFT_ADJUST  0x20 // 1>>higer bits 5 => 00 1 0 0000
+	#define RIGHT_ADJUST 0x00 // 0>>higer bits 5 => 00 0 0 0000
+
     /*
      * Bit          7    6    5     4    3    2     1     0
      * ADCSRA     ADEN ADSC ADATE ADIF ADIE ADPS2 ADPS1 ADPS0 
      * Read/Write  R/W  R/W  R/W   R/W  R/W  R/W   R/W   R/W
      * INIT Value   0    0    0     0    0    0     0     0
      */
+    #define ADC_ENABLE_AND_INTERRUPT_ENABLE 0x88 // ob 1000 1000
 
     /*
      * sampling frequency or the controlling frequency of the entire ADC with 
@@ -118,18 +123,23 @@
      * INIT Value   0     0     0   0   0   0    0    0
      */
      
-    
-    #define FREE_RUNNING_MODE             0
-    #define ANALOG_COMPARATOR_MODE        1
-    #define EXTERNAL_INTERRUPT_REQUEST    2
-    #define TIMER_COUNTER_0_COMAPRE_MATCH 3
-    #define TIMER_COUNTER_0_OVER_FLOW     4
-    #define TIMER_COUNTER_1_COMAPRE_MATCH 5
-    #define TIMER_COUNTER_1_OVER_FLOW     6
-    #define TIMER_COUNTER_1_CAPTURE_EVENT 7
+    #define FREE_RUNNING_MODE             0x00 // 0>>higer bits 7:5 => 000 0 0000
+    #define ANALOG_COMPARATOR_MODE        0x20 // 1>>higer bits 7:5 => 001 0 0000
+    #define EXTERNAL_INTERRUPT_REQUEST    0x40 // 2>>higer bits 7:5 => 010 0 0000
+    #define TIMER_COUNTER_0_COMAPRE_MATCH 0x60 // 3>>higer bits 7:5 => 011 0 0000
+    #define TIMER_COUNTER_0_OVER_FLOW     0x80 // 4>>higer bits 7:5 => 100 0 0000
+    #define TIMER_COUNTER_1_COMAPRE_MATCH 0xA0 // 5>>higer bits 7:5 => 101 0 0000
+    #define TIMER_COUNTER_1_OVER_FLOW     0xC0 // 6>>higer bits 7:5 => 110 0 0000
+    #define TIMER_COUNTER_1_CAPTURE_EVENT 0xE0 // 7>>higer bits 7:5 => 111 0 0000
+    //THIS VALUE LOGIACLLY TRUE BUT CAN'T PASS THE RESERVED_BIT_4_NUMBER CHECK
+    //#define CONVERSION_MANUAL_TRIGGER     0x0F // 7>>higer bits 7:5 => 111 1 0000
+    #define CONVERSION_MANUAL_TRIGGER     0x0F // 7>>higer bits 7:5 => 111 1 0000
 
-    #define CONVERSION_MANUAL_TRIGGER    8
     #define ERR_SELECTING_CONVERSION_MODE 0xFD00
+    
+    #define AUTO_TRIGER_SECUIRTY_MASK 0xE0 //0b 1110 0000
+    #define RESERVED_BIT_4_CLEAR_MASK 0xEF //0b 1110 111
+	#define RESERVED_BIT_4_NUMBER     PIN4  
 
     /*
      * initialize ADC internal circuitry to the desired logic levels
@@ -152,6 +162,7 @@
      */
     FUN_RETURN_STATUS initADCInternalCircuitry(u8 /*what channel signal on*/ ,
                                                u8 /*what voltage signal level*/,
+                                               u8 /*left or right adjust*/,
                                                u8 /*what sampling frequency*/);
     
     FUN_RETURN_STATUS checkForSelectedChannel(u8 /*selected_channel*/);
@@ -166,7 +177,13 @@
      * start converting the ANALOG signal to DGITAL representation selecting 
      * The operation mode manual/automatic conversion
      */
-    s16 startConversionAndReturnConversionOutput(u8 /*auto_manual_mode*/);
-        
+    FUN_RETURN_STATUS onStartConversion(u8 /*auto_manual_mode*/);
+    
+    /*
+     * optain the o/p of the ADC through 2 REGs
+     * ADCH ADCL
+     */
+    s16 onConversionComplete(void);
+
 #endif	/* ADC_INTERFACING_H */
 
