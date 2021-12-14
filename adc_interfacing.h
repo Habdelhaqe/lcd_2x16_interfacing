@@ -177,23 +177,54 @@
      * on ADMUX
      * configure the channel and mode(single/differntial) 
      *  @select_channel_and_mode Masked with 0x1F
+     *  "If these bits are changed during a conversion, the change will not go 
+     *      in effect until this conversion is complete (ADIF in ADCSRA is set)"
+     * 
      * configure voltage ref
      *  @select_voltage_ref Masked with 0xC0
+     *  "If these bits are changed during a conversion, the change will not go 
+     *     in effect until this conversion is complete (ADIF in ADCSRA is set)"
+     * 
      * configure left or right
      *  @select_left_or_right_adjustment Masked with 0x20
-     *
+     *  "Changing the ADLAR bit will affect the ADC Data Register immediately, 
+     *     regardless of any ongoing conversions"
+     * 
      * on ADCSRA
      * configure the ADC to work in first place = ENABLE
-     *  SET BIT7=ADEN
+     *  SET ADEN(BIT7)
+     *  "Turning the ADC off while a conversion is in progress, will 
+     *      terminate this conversion."
+     * 
      * configure interrupt service of ADC = enable it to signal 
-     *  "COMPLETE CONVERSION" set BIT3=ADIE
+     *  "COMPLETE CONVERSION" set ADIE(BIT3)
+     * 
      * configure ADC_clock/latency of conversion process
      *  ADPS2 ADPS1 ADPS0 BITS 2,1,0
-     * left out BITS :
-     *      6  ADSC STARTING CONVERSION PROCESS
-     *      5  ADTE AUTO TRIGGER ENABLE => you need with it SFIOR configured
-     *      4  ADIF should Report back  "COMPLETE CONVERSION INTERRUPT"
      * 
+     * left out BITS :
+     * 
+     *      6 : ADSC STARTING CONVERSION PROCESS
+     *          "in Single Conversion mode, write this bit to one to start each 
+     *           conversion. 
+     *           In Free Running Mode, write this bit to one to start the first 
+     *           conversion. 
+     *           The first conversion after ADSC has been written after the ADC 
+     *           has been enabled, or if ADSC is written at the same time as 
+     *           the ADC is enabled, will take 25 ADC clock cycles instead of 
+     *           the normal13. 
+     *           This first conversion performs initialization of the ADC.
+     *           ADSC will read as one as long as a conversion is in progress. 
+     *           When the conversion is complete, it returns to zero.
+     *           Writing zero to this bit has no effect"
+     * 
+     *      5 : ADTE AUTO TRIGGER ENABLE => you need with it SFIOR configured
+     * 
+     *      4 : ADIF should Report back  "COMPLETE CONVERSION INTERRUPT"
+     *         "ADIF is cleared by hardware when executing the corresponding 
+     *          interrupt handling vector.
+     *          Beware that if doing a Read-Modify-Write on ADCSRA, a pending 
+     *          interrupt can be disabled"
      * note: (ADIE(1) & ADIE(1)) => INTERRUPT SERVICE OF ADC IS TRIGGERED 
      *  ISR(ADC_vect) is called
      * 
@@ -203,7 +234,6 @@
      *      @checkForSelectedFrequency
      * 
      */
-
     void onInitADC(u8 select_channel_and_mode ,u8 select_voltage_ref ,
                    u8 select_left_or_right_adjustement ,
                    u8 select_input_source_frequency);
@@ -250,6 +280,16 @@
      *      ADCH(BITS 1,2) ADCL(ALL BITS)
      * left adjustment : ADLAR is set (ADMUX)
      *      ADCH(ALL BITS) ADCL(BITS 7,6)
+     * 
+     * "When ADCL is read, the ADC Data Register is not updated until ADCH is 
+     *  read. 
+     *  Consequently, if the result is left adjusted and no more than 8-bit 
+     *  precision is required, it is sufficient to read ADCH. 
+     *  Otherwise, ADCL must be read first, then ADCH.
+     *  The ADLAR bit in ADMUX, and the MUXn bits in ADMUX affect the way 
+     *  the result is read from the registers. 
+     *  If ADLAR is set, the result is left adjusted. 
+     *  If ADLAR is cleared (default), the result is right adjusted."
      */
     s16 onConversionComplete(void); 
     

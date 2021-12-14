@@ -134,7 +134,10 @@
     #define OUT_LOW_ON_PIN(PORT , PIN)      CLEAR_BIT(PORT , PIN)
     #define SCAN_SIGANL_ON_PIN(PORT , PIN)  GET_BIT(PORT , PIN)
     
-    #define OUT_CONDITIONED_SIGNAL_ON_PIN(PORT ,PIN , H_OR_L) H_OR_L? SET_BIT(PORT ,PIN) : CLEAR_BIT(PORT ,PIN) 
+    #define OUT_CONDITIONED_SIGNAL_ON_PIN(PORT ,PIN , H_OR_L) if(H_OR_L){\
+                                                                 SET_BIT(PORT ,PIN);\
+                                                                 }else{\
+                                                                 CLEAR_BIT(PORT ,PIN);} 
 
     #define   OUT_DATA_ON_REG_KEEP_STATES(REG , DATA)   REG |= DATA
     #define OUT_DATA_ON_REG_CHANGE_STATES(REG , DATA)   REG &= DATA

@@ -289,10 +289,10 @@ s16 onConversionComplete(void){
 //        *((u8 *)(&conversion_result)+1) = ADCH;        
     }else{
         //right adjustment case
-        conversion_result = ADCL | (ADCH << ADLAR_ADCH_SHIFT);
+//        conversion_result = ADCL | (ADCH << ADLAR_ADCH_SHIFT);
         //safer may be faster
-//        *(u8 *)(&conversion_result) = ADCL;  
-//        *((u8 *)(&conversion_result)+1) = ADCH;        
+        *(u8 *)(&conversion_result) = ADCL;  
+        *((u8 *)(&conversion_result)+1) = ADCH;        
     }    
     return conversion_result;
 }

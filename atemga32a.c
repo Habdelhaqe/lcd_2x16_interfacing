@@ -846,8 +846,8 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
     //initialization of fun_ret_status_and_data 
     fun_ret_status_and_data.fun_return   = NO_ERRORS;
 
-    u8 REG_NAME = UN_IDENTIFIED,
-       BIT_POS  = UN_IDENTIFIED;
+    //u8 REG_NAME = UN_IDENTIFIED;
+    u8  BIT_POS = UN_IDENTIFIED;
     
     /*
      * better approach instead of switch case latency no need for: 
@@ -862,140 +862,140 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
      *  #define _SFIOR  6
      */
      
-//    BIT_POS = port_pin_number;
-//    if(_PA_PIN0 <= port_pin_number && _PA_PIN7 >= port_pin_number){
+    BIT_POS = port_pin_number;
+    if(_PA_PIN0 <= port_pin_number && _PA_PIN7 >= port_pin_number){
+        
+        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTA , BIT_POS, control_signal_status);
+    
+    }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
+    
+        BIT_POS -= _PB_PIN0 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTB , BIT_POS, control_signal_status);
+    
+    }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
+    
+        BIT_POS -=_PC_PIN0 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTC , BIT_POS, control_signal_status);
+    
+    }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
+    
+        BIT_POS -=_PD_PIN0 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTD , BIT_POS, control_signal_status);
+    
+    }else if(ADMUX_MUX0 <= port_pin_number && ADMUX_REFS1 >= port_pin_number){
+    
+        BIT_POS -= ADMUX_MUX0 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(ADMUX , BIT_POS, control_signal_status);
+    
+    }else if(ADCSRA_ADPS0 <= port_pin_number && ADCSRA_ADEN >= port_pin_number){
+    
+        BIT_POS -= ADCSRA_ADPS0 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(ADCSRA , BIT_POS, control_signal_status);
+    
+    }else if(SFIOR_PSR10 <= port_pin_number && SFIOR_ADTS2 >= port_pin_number){
+    
+        BIT_POS -= SFIOR_PSR10 ;
+        OUT_CONDITIONED_SIGNAL_ON_PIN(SFIOR , BIT_POS, control_signal_status);
+    
+    }else{
+        fun_ret_status_and_data.fun_return = ERR;
+    }
+    
+//    switch(port_pin_number){
+//
+//        case _PA_PIN0:  REG_NAME = OUTA ; BIT_POS = PIN0; break;
+//        case _PA_PIN1:  REG_NAME = OUTA ; BIT_POS = PIN1; break;
+//        case _PA_PIN2:  REG_NAME = OUTA ; BIT_POS = PIN2; break;
+//        case _PA_PIN3:  REG_NAME = OUTA ; BIT_POS = PIN3; break;
+//        case _PA_PIN4:  REG_NAME = OUTA ; BIT_POS = PIN4; break;
+//        case _PA_PIN5:  REG_NAME = OUTA ; BIT_POS = PIN5; break;
+//        case _PA_PIN6:  REG_NAME = OUTA ; BIT_POS = PIN6; break;
+//        case _PA_PIN7:  REG_NAME = OUTA ; BIT_POS = PIN7; break;
 //        
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTA , BIT_POS, control_signal_status);
-//    
-//    }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
-//    
-//        BIT_POS -= _PB_PIN0 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTB , BIT_POS, control_signal_status);
-//    
-//    }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
-//    
-//        BIT_POS -=_PC_PIN0 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTC , BIT_POS, control_signal_status);
-//    
-//    }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
-//    
-//        BIT_POS -=_PD_PIN0 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(PORTD , BIT_POS, control_signal_status);
-//    
-//    }else if(ADMUX_MUX0 <= port_pin_number && ADMUX_REFS1 >= port_pin_number){
-//    
-//        BIT_POS -= ADMUX_MUX0 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(ADMUX , BIT_POS, control_signal_status);
-//    
-//    }else if(ADCSRA_ADPS0 <= port_pin_number && ADCSRA_ADEN >= port_pin_number){
-//    
-//        BIT_POS -= ADCSRA_ADPS0 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(ADCSRA , BIT_POS, control_signal_status);
-//    
-//    }else if(SFIOR_PSR10 <= port_pin_number && SFIOR_ADTS2 >= port_pin_number){
-//    
-//        BIT_POS -= SFIOR_PSR10 ;
-//        OUT_CONDITIONED_SIGNAL_ON_PIN(SFIOR , BIT_POS, control_signal_status);
-//    
-//    }else{
-//        fun_ret_status_and_data.fun_return = ERR;
+//        case _PB_PIN0:  REG_NAME = OUTB ; BIT_POS = PIN0; break;
+//        case _PB_PIN1:  REG_NAME = OUTB ; BIT_POS = PIN1; break;
+//        case _PB_PIN2:  REG_NAME = OUTB ; BIT_POS = PIN2; break;
+//        case _PB_PIN3:  REG_NAME = OUTB ; BIT_POS = PIN3; break;
+//        case _PB_PIN4:  REG_NAME = OUTB ; BIT_POS = PIN4; break;
+//        case _PB_PIN5:  REG_NAME = OUTB ; BIT_POS = PIN5; break;
+//        case _PB_PIN6:  REG_NAME = OUTB ; BIT_POS = PIN6; break;
+//        case _PB_PIN7:  REG_NAME = OUTB ; BIT_POS = PIN7; break;
+//        
+//        case _PC_PIN0:  REG_NAME = OUTC ; BIT_POS = PIN0; break;
+//        case _PC_PIN1:  REG_NAME = OUTC ; BIT_POS = PIN1; break;
+//        case _PC_PIN2:  REG_NAME = OUTC ; BIT_POS = PIN2; break;
+//        case _PC_PIN3:  REG_NAME = OUTC ; BIT_POS = PIN3; break;
+//        case _PC_PIN4:  REG_NAME = OUTC ; BIT_POS = PIN4; break;
+//        case _PC_PIN5:  REG_NAME = OUTC ; BIT_POS = PIN5; break;
+//        case _PC_PIN6:  REG_NAME = OUTC ; BIT_POS = PIN6; break;
+//        case _PC_PIN7:  REG_NAME = OUTC ; BIT_POS = PIN7; break;
+//
+//        case _PD_PIN0:  REG_NAME = OUTD ; BIT_POS = PIN0; break;
+//        case _PD_PIN1:  REG_NAME = OUTD ; BIT_POS = PIN1; break;
+//        case _PD_PIN2:  REG_NAME = OUTD ; BIT_POS = PIN2; break;
+//        case _PD_PIN3:  REG_NAME = OUTD ; BIT_POS = PIN3; break;
+//        case _PD_PIN4:  REG_NAME = OUTD ; BIT_POS = PIN4; break;
+//        case _PD_PIN5:  REG_NAME = OUTD ; BIT_POS = PIN5; break;
+//        case _PD_PIN6:  REG_NAME = OUTD ; BIT_POS = PIN6; break;
+//        case _PD_PIN7:  REG_NAME = OUTD ; BIT_POS = PIN7; break;
+//        
+//        case ADMUX_MUX0 : REG_NAME = _ADMUX ; BIT_POS = MUX0  ; break;
+//        case ADMUX_MUX1 : REG_NAME = _ADMUX ; BIT_POS = MUX1  ; break;
+//        case ADMUX_MUX2 : REG_NAME = _ADMUX ; BIT_POS = MUX2  ; break;
+//        case ADMUX_MUX3 : REG_NAME = _ADMUX ; BIT_POS = MUX3  ; break;
+//        case ADMUX_MUX4 : REG_NAME = _ADMUX ; BIT_POS = MUX4  ; break;
+//        case ADMUX_ADLAR: REG_NAME = _ADMUX ; BIT_POS = ADLAR ; break;
+//        case ADMUX_REFS0: REG_NAME = _ADMUX ; BIT_POS = REFS0 ; break;
+//        case ADMUX_REFS1: REG_NAME = _ADMUX ; BIT_POS = REFS1 ; break;
+//        
+//        case ADCSRA_ADPS0: REG_NAME = _ADCSRA ; BIT_POS = ADPS0 ; break;
+//        case ADCSRA_ADPS1: REG_NAME = _ADCSRA ; BIT_POS = ADPS1 ; break;
+//        case ADCSRA_ADPS2: REG_NAME = _ADCSRA ; BIT_POS = ADPS2 ; break;
+//        case ADCSRA_ADIE : REG_NAME = _ADCSRA ; BIT_POS = ADIE  ; break;
+//        case ADCSRA_ADIF : REG_NAME = _ADCSRA ; BIT_POS = ADIF  ; break;
+//        case ADCSRA_ADATE: REG_NAME = _ADCSRA ; BIT_POS = ADATE ; break;
+//        case ADCSRA_ADSC : REG_NAME = _ADCSRA ; BIT_POS = ADSC  ; break;
+//        case ADCSRA_ADEN : REG_NAME = _ADCSRA ; BIT_POS = ADEN  ; break;
+//        
+//        case SFIOR_PSR10    : REG_NAME = _SFIOR ; BIT_POS = PSR10 ; break;
+//        case SFIOR_PSR2     : REG_NAME = _SFIOR ; BIT_POS = PSR2  ; break;
+//        case SFIOR_PUD      : REG_NAME = _SFIOR ; BIT_POS = PUD   ; break;
+//        case SFIOR_ACME     : REG_NAME = _SFIOR ; BIT_POS = ACME  ; break;
+//        case SFIOR_RESERVED : REG_NAME = _SFIOR ; BIT_POS = PIN4  ; break;
+//        case SFIOR_ADTS0    : REG_NAME = _SFIOR ; BIT_POS = ADTS0 ; break;
+//        case SFIOR_ADTS1    : REG_NAME = _SFIOR ; BIT_POS = ADTS1 ; break;
+//        case SFIOR_ADTS2    : REG_NAME = _SFIOR ; BIT_POS = ADTS2 ; break;
+//
+//        default:
+//            fun_ret_status_and_data.fun_return = ERR;
 //    }
-    
-    switch(port_pin_number){
-
-        case _PA_PIN0:  REG_NAME = OUTA ; BIT_POS = PIN0; break;
-        case _PA_PIN1:  REG_NAME = OUTA ; BIT_POS = PIN1; break;
-        case _PA_PIN2:  REG_NAME = OUTA ; BIT_POS = PIN2; break;
-        case _PA_PIN3:  REG_NAME = OUTA ; BIT_POS = PIN3; break;
-        case _PA_PIN4:  REG_NAME = OUTA ; BIT_POS = PIN4; break;
-        case _PA_PIN5:  REG_NAME = OUTA ; BIT_POS = PIN5; break;
-        case _PA_PIN6:  REG_NAME = OUTA ; BIT_POS = PIN6; break;
-        case _PA_PIN7:  REG_NAME = OUTA ; BIT_POS = PIN7; break;
-        
-        case _PB_PIN0:  REG_NAME = OUTB ; BIT_POS = PIN0; break;
-        case _PB_PIN1:  REG_NAME = OUTB ; BIT_POS = PIN1; break;
-        case _PB_PIN2:  REG_NAME = OUTB ; BIT_POS = PIN2; break;
-        case _PB_PIN3:  REG_NAME = OUTB ; BIT_POS = PIN3; break;
-        case _PB_PIN4:  REG_NAME = OUTB ; BIT_POS = PIN4; break;
-        case _PB_PIN5:  REG_NAME = OUTB ; BIT_POS = PIN5; break;
-        case _PB_PIN6:  REG_NAME = OUTB ; BIT_POS = PIN6; break;
-        case _PB_PIN7:  REG_NAME = OUTB ; BIT_POS = PIN7; break;
-        
-        case _PC_PIN0:  REG_NAME = OUTC ; BIT_POS = PIN0; break;
-        case _PC_PIN1:  REG_NAME = OUTC ; BIT_POS = PIN1; break;
-        case _PC_PIN2:  REG_NAME = OUTC ; BIT_POS = PIN2; break;
-        case _PC_PIN3:  REG_NAME = OUTC ; BIT_POS = PIN3; break;
-        case _PC_PIN4:  REG_NAME = OUTC ; BIT_POS = PIN4; break;
-        case _PC_PIN5:  REG_NAME = OUTC ; BIT_POS = PIN5; break;
-        case _PC_PIN6:  REG_NAME = OUTC ; BIT_POS = PIN6; break;
-        case _PC_PIN7:  REG_NAME = OUTC ; BIT_POS = PIN7; break;
-
-        case _PD_PIN0:  REG_NAME = OUTD ; BIT_POS = PIN0; break;
-        case _PD_PIN1:  REG_NAME = OUTD ; BIT_POS = PIN1; break;
-        case _PD_PIN2:  REG_NAME = OUTD ; BIT_POS = PIN2; break;
-        case _PD_PIN3:  REG_NAME = OUTD ; BIT_POS = PIN3; break;
-        case _PD_PIN4:  REG_NAME = OUTD ; BIT_POS = PIN4; break;
-        case _PD_PIN5:  REG_NAME = OUTD ; BIT_POS = PIN5; break;
-        case _PD_PIN6:  REG_NAME = OUTD ; BIT_POS = PIN6; break;
-        case _PD_PIN7:  REG_NAME = OUTD ; BIT_POS = PIN7; break;
-        
-        case ADMUX_MUX0 : REG_NAME = _ADMUX ; BIT_POS = MUX0  ; break;
-        case ADMUX_MUX1 : REG_NAME = _ADMUX ; BIT_POS = MUX1  ; break;
-        case ADMUX_MUX2 : REG_NAME = _ADMUX ; BIT_POS = MUX2  ; break;
-        case ADMUX_MUX3 : REG_NAME = _ADMUX ; BIT_POS = MUX3  ; break;
-        case ADMUX_MUX4 : REG_NAME = _ADMUX ; BIT_POS = MUX4  ; break;
-        case ADMUX_ADLAR: REG_NAME = _ADMUX ; BIT_POS = ADLAR ; break;
-        case ADMUX_REFS0: REG_NAME = _ADMUX ; BIT_POS = REFS0 ; break;
-        case ADMUX_REFS1: REG_NAME = _ADMUX ; BIT_POS = REFS1 ; break;
-        
-        case ADCSRA_ADPS0: REG_NAME = _ADCSRA ; BIT_POS = ADPS0 ; break;
-        case ADCSRA_ADPS1: REG_NAME = _ADCSRA ; BIT_POS = ADPS1 ; break;
-        case ADCSRA_ADPS2: REG_NAME = _ADCSRA ; BIT_POS = ADPS2 ; break;
-        case ADCSRA_ADIE : REG_NAME = _ADCSRA ; BIT_POS = ADIE  ; break;
-        case ADCSRA_ADIF : REG_NAME = _ADCSRA ; BIT_POS = ADIF  ; break;
-        case ADCSRA_ADATE: REG_NAME = _ADCSRA ; BIT_POS = ADATE ; break;
-        case ADCSRA_ADSC : REG_NAME = _ADCSRA ; BIT_POS = ADSC  ; break;
-        case ADCSRA_ADEN : REG_NAME = _ADCSRA ; BIT_POS = ADEN  ; break;
-        
-        case SFIOR_PSR10    : REG_NAME = _SFIOR ; BIT_POS = PSR10 ; break;
-        case SFIOR_PSR2     : REG_NAME = _SFIOR ; BIT_POS = PSR2  ; break;
-        case SFIOR_PUD      : REG_NAME = _SFIOR ; BIT_POS = PUD   ; break;
-        case SFIOR_ACME     : REG_NAME = _SFIOR ; BIT_POS = ACME  ; break;
-        case SFIOR_RESERVED : REG_NAME = _SFIOR ; BIT_POS = PIN4  ; break;
-        case SFIOR_ADTS0    : REG_NAME = _SFIOR ; BIT_POS = ADTS0 ; break;
-        case SFIOR_ADTS1    : REG_NAME = _SFIOR ; BIT_POS = ADTS1 ; break;
-        case SFIOR_ADTS2    : REG_NAME = _SFIOR ; BIT_POS = ADTS2 ; break;
-
-        default:
-            fun_ret_status_and_data.fun_return = ERR;
-    }
-    
-    //Place Control Signal On The Selected Port Pin
-    if(NO_ERRORS == fun_ret_status_and_data.fun_return ){
-        //no check further for REG_NAME for wrong register number is needed 
-        if(control_signal_status){
-            switch(REG_NAME){
-                case OUTA : OUT_HIGH_ON_PIN(PORTA , BIT_POS); break;
-                case OUTB : OUT_HIGH_ON_PIN(PORTB , BIT_POS); break;
-                case OUTC : OUT_HIGH_ON_PIN(PORTC , BIT_POS); break;
-                case OUTD : OUT_HIGH_ON_PIN(PORTD , BIT_POS); break;
-                case _SFIOR: OUT_HIGH_ON_PIN(SFIOR , BIT_POS); break;
-                case _ADMUX: OUT_HIGH_ON_PIN(ADMUX , BIT_POS); break;
-                case _ADCSRA: OUT_HIGH_ON_PIN(ADCSRA , BIT_POS);
-            }
-        }else{
-            switch(REG_NAME){
-                case OUTA : OUT_LOW_ON_PIN(PORTA , BIT_POS); break;
-                case OUTB : OUT_LOW_ON_PIN(PORTB , BIT_POS); break;
-                case OUTC : OUT_LOW_ON_PIN(PORTC , BIT_POS); break;
-                case OUTD : OUT_LOW_ON_PIN(PORTD , BIT_POS); break;
-                case _SFIOR: OUT_LOW_ON_PIN(SFIOR , BIT_POS); break;
-                case _ADMUX: OUT_LOW_ON_PIN(ADMUX , BIT_POS); break;
-                case _ADCSRA: OUT_LOW_ON_PIN(ADCSRA , BIT_POS);
-            }
-        }
-    }
-    
+//    
+//    //Place Control Signal On The Selected Port Pin
+//    if(NO_ERRORS == fun_ret_status_and_data.fun_return ){
+//        //no check further for REG_NAME for wrong register number is needed 
+//        if(control_signal_status){
+//            switch(REG_NAME){
+//                case OUTA : OUT_HIGH_ON_PIN(PORTA , BIT_POS); break;
+//                case OUTB : OUT_HIGH_ON_PIN(PORTB , BIT_POS); break;
+//                case OUTC : OUT_HIGH_ON_PIN(PORTC , BIT_POS); break;
+//                case OUTD : OUT_HIGH_ON_PIN(PORTD , BIT_POS); break;
+//                case _SFIOR: OUT_HIGH_ON_PIN(SFIOR , BIT_POS); break;
+//                case _ADMUX: OUT_HIGH_ON_PIN(ADMUX , BIT_POS); break;
+//                case _ADCSRA: OUT_HIGH_ON_PIN(ADCSRA , BIT_POS);
+//            }
+//        }else{
+//            switch(REG_NAME){
+//                case OUTA : OUT_LOW_ON_PIN(PORTA , BIT_POS); break;
+//                case OUTB : OUT_LOW_ON_PIN(PORTB , BIT_POS); break;
+//                case OUTC : OUT_LOW_ON_PIN(PORTC , BIT_POS); break;
+//                case OUTD : OUT_LOW_ON_PIN(PORTD , BIT_POS); break;
+//                case _SFIOR: OUT_LOW_ON_PIN(SFIOR , BIT_POS); break;
+//                case _ADMUX: OUT_LOW_ON_PIN(ADMUX , BIT_POS); break;
+//                case _ADCSRA: OUT_LOW_ON_PIN(ADCSRA , BIT_POS);
+//            }
+//        }
+//    }
+//    
     return fun_ret_status_and_data.fun_return;
 }
 
