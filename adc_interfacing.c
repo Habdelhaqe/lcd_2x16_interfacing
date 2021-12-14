@@ -1,4 +1,5 @@
 #include"adc_interfacing.h"
+#include "interfacing_connection_logic.h"
 
 extern scan_fun_return fun_ret_status_and_data;
 
@@ -116,9 +117,39 @@ FUN_RETURN_STATUS initADCInternalCircuitry(u8 which_ch_mode ,
     return ERR_CHECKER;
 }
 
-FUN_RETURN_STATUS onStartConversion(u8 auto_manual_mode){
+ void onInitADC(u8 select_channel_and_mode ,
+                u8 select_voltage_ref ,
+                u8 select_left_or_right_adjustment ,
+                u8 select_input_source_frequency){
+     
+//    displayINTOnLCD((int)ADCSRA);
+//    _delay_ms(1000);
+
+    ADCSRA = 0x88 | (select_input_source_frequency & FREQUENCY_SECUIRTY_MASK);
+
+//    displayINTOnLCD((int)ADCSRA);
+//    _delay_ms(1000);
+
+//    displayINTOnLCD((int)ADMUX);
+//    _delay_ms(1000);
+
+    ADMUX = (select_channel_and_mode & CHANNEL_SECUIRTY_MASK) 
+                            |
+            (select_left_or_right_adjustment & LEFT_RIGHT_SECUIRTY_MASK)
+                            |
+            (select_voltage_ref & VOLTAGE_SECUIRTY_MASK);
+
+//    displayINTOnLCD((int)ADMUX);
+//    _delay_ms(1000);
+    
+    //ADC is  ready for accepting Conversion requests
+ }
+   
+FUN_RETURN_STATUS startConversion(u8 auto_manual_mode){
         
     ERR_CHECKER = checkForSelectedConversionMode(auto_manual_mode);
+    displayCharacterOnLCD('S');
+    _delay_ms(100);
     
     if(!ERR_CHECKER){
         
@@ -134,7 +165,7 @@ FUN_RETURN_STATUS onStartConversion(u8 auto_manual_mode){
         //grade against studio who/it manipulates SFIOR manually
         CLEAR_BIT ( SFIOR , RESERVED_BIT_4_NUMBER);
 
-        if(CONVERSION_MANUAL_TRIGGER != auto_manual_mode){
+        if(SINGLE_CONVERSION_MODE != auto_manual_mode){
             
             //THIS CODE CONFIGURES PIN BY PIN SO TOO MANY CYCLES WASTED
 //            writeControlSignalOnPortPin(SFIOR_ADTS0 , 
@@ -162,30 +193,55 @@ FUN_RETURN_STATUS onStartConversion(u8 auto_manual_mode){
     return ERR_CHECKER;
 }
 
-s16 onConversionComplete(void){
+void onStartConversion(u8 select_auto_or_manual_trigger){
+
+//    displayINTOnLCD((int)ADCSRA);
+//    _delay_ms(1000);
+
+    if(SINGLE_CONVERSION_MODE == select_auto_or_manual_trigger){
+        //Set BIT6 ADSC OF ADCSRA and BIT5 ADTE is Cleared 
+        ADCSRA |= START_MANUAL_CONVERSION_PROCESS;
+    }else{
+        //Set BIT6 ADSC OF ADCSRA and Set BIT5 ADTE
+        ADCSRA |= START_AUTO_CONVERSION_PROCESS;
+        /*
+         * configure SFIOR :TRIGGER SELECT source (Sampling Frequency)
+         *  Bit7 : ADTS2
+         *  Bit6 : ADTS1
+         *  Bit5 : ADTS0
+         *  Bit4 : Reserved must be rest/cleared
+         *  Bits3:0 is rest/cleared for now!!!!
+         */
+        SFIOR = select_auto_or_manual_trigger & AUTO_TRIGER_SECUIRTY_MASK;
+    }
+//    displayINTOnLCD((int)ADCSRA);
+//    _delay_ms(1000);
+}
+
+s16 conversionComplete(void){
 
     s16 adc_conversion_output;
     
     //find out if user chose left/right adjust scanning the ADMUX:ADLAR PIN
     fun_ret_status_and_data 
                = scanControlPassingThroughPortPin(ADMUX_ADLAR);
-    
+        
     if(!ERR_CHECKER){
         if(SCANNED_DATA == HIGH){
             //ADLAR IS SET left adjusted data
 //           OUT_DATA_ON_REG_KEEP_STATES( adc_conversion_output , 
 //                    ( OUT_DATA_ON_REG_KEEP_STATES( adc_conversion_output 
-//                       , (SHIFT_REG_DATA_LEFT(ADCL , ADLAR_ADCL_SHIFT))) ) );
+//                       , (SHIFT_REG_DATA_LEFT(ADCL , SHIFT_ADCL_FOR_LEFT_ADJUST))) ) );
 
-//            adc_conversion_output = (ADCL << ADLAR_ADCL_SHIFT ) 
+//            adc_conversion_output = (ADCL << SHIFT_ADCL_FOR_LEFT_ADJUST ) 
 //                                            | 
 //                                    (ADCH << ADLAR_ADCH_SHIFT);
 
             //ADLAR IS SET left adjusted data
-			//CASTING IS A MUST!!! IN (u8)(SHIFT_REG_DATA_LEFT_NO_KEEP(ADCL , ADLAR_ADCL_SHIFT)) 
+			//CASTING IS A MUST!!! IN (u8)(SHIFT_REG_DATA_LEFT_NO_KEEP(ADCL , SHIFT_ADCL_FOR_LEFT_ADJUST)) 
             adc_conversion_output = 
                     COMBINE_8_BIT_REG_W_DATA(
-                        (u8)(SHIFT_REG_DATA_LEFT_NO_KEEP(ADCL , ADLAR_ADCL_SHIFT)) 
+                        (u8)(SHIFT_REG_DATA_LEFT_NO_KEEP(ADCL , SHIFT_ADCL_FOR_LEFT_ADJUST)) 
                                 ,
                         (SHIFT_REG_DATA_LEFT_NO_KEEP(ADCH , ADLAR_ADCH_SHIFT)) 
                     );
@@ -215,9 +271,65 @@ s16 onConversionComplete(void){
          */
         adc_conversion_output = ERR_SELECTING_CONVERSION_MODE;
     }
+    //return 0x03;
     return adc_conversion_output;
 }
 
+s16 onConversionComplete(void){
+    s16 conversion_result;
+    //find out left or right adjust is set through scanning ADMUX : ADLAR
+    if(GET_BIT(ADMUX , ADLAR)){
+        //left adjustment case
+        conversion_result = 
+                (ADCL << SHIFT_ADCL_FOR_LEFT_ADJUST) 
+                            | 
+                (ADCH << ADLAR_ADCH_SHIFT);
+        //safer may be faster
+//        *(u8 *)(&conversion_result) = (ADCL << SHIFT_ADCL_FOR_LEFT_ADJUST);  
+//        *((u8 *)(&conversion_result)+1) = ADCH;        
+    }else{
+        //right adjustment case
+        conversion_result = ADCL | (ADCH << ADLAR_ADCH_SHIFT);
+        //safer may be faster
+//        *(u8 *)(&conversion_result) = ADCL;  
+//        *((u8 *)(&conversion_result)+1) = ADCH;        
+    }    
+    return conversion_result;
+}
+
+s16 onConversionCompleteUsingPolling(void){
+    displayCharacterOnLCD('c');
+    _delay_ms(300);
+    
+    s16 adc_conversion_output;
+    
+    //neglect err check cause i am calling the shoots
+    while((ADCSRA & (HIGH<<ADIF)) == LOW ){
+        displayCharacterOnLCD('W');
+    };
+    
+    //find out if user chose left/right adjust scanning the ADMUX:ADLAR PIN
+    if(HIGH == scanControlPassingThroughPortPin(ADMUX_ADLAR).scanned_data){
+            //ADLAR IS SET left adjusted data
+            adc_conversion_output = 
+                    COMBINE_8_BIT_REG_W_DATA(
+                        (u8)(SHIFT_REG_DATA_LEFT_NO_KEEP(ADCL , SHIFT_ADCL_FOR_LEFT_ADJUST)) 
+                                ,
+                        (SHIFT_REG_DATA_LEFT_NO_KEEP(ADCH , ADLAR_ADCH_SHIFT)) 
+                    );
+    }else{
+            //ADLAR IS CLEARED right adjusted data
+            adc_conversion_output = 
+                    COMBINE_8_BIT_REG_W_DATA(
+                        ADCL 
+                            ,
+                        (SHIFT_REG_DATA_LEFT_NO_KEEP(ADCH , ADLAR_ADCH_SHIFT)) 
+                    );            
+    }
+        
+    return adc_conversion_output;
+}
+ 
 FUN_RETURN_STATUS checkForSelectedChannel(u8 selected_channel){
     return ADC_VOLTAGE_0V_GND >= selected_channel && 
                  ADC_CHANNEL0 <= selected_channel  ? NO_ERRORS : ERR;
@@ -261,7 +373,7 @@ FUN_RETURN_STATUS checkForSelectedConversionMode(u8 selected_conversion_mode){
      * #define TIMER_COUNTER_1_COMAPRE_MATCH 0xA0 
      * #define TIMER_COUNTER_1_OVER_FLOW     0xC0 
      * #define TIMER_COUNTER_1_CAPTURE_EVENT 0xE0 
-     * #define CONVERSION_MANUAL_TRIGGER     0x0F 
+     * #define SINGLE_CONVERSION_MODE     0x0F 
      */
     return (~GET_BIT(selected_conversion_mode , RESERVED_BIT_4_NUMBER)) &&  
 		   TIMER_COUNTER_1_CAPTURE_EVENT >= selected_conversion_mode && 

@@ -18,7 +18,7 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h \
  c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h \
- phone_keypad.h interrupt_configuration.h \
+ phone_keypad.h interrupt_configuration.h adc_interfacing.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h
 
 atmega32a.h:
@@ -62,5 +62,7 @@ c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h:
 phone_keypad.h:
 
 interrupt_configuration.h:
+
+adc_interfacing.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:

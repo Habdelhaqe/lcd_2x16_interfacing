@@ -55,9 +55,17 @@
     #define ADC_VOLTAGE_1_22V_VBG               30 //       N/A        11 110  N/A
     #define ADC_VOLTAGE_0V_GND                  31 //       N/A        11 111  N/A
 
-    #define   CHANNEL_SECUIRTY_MASK 0x1F //0b 0001 1111
-    #define   VOLTAGE_SECUIRTY_MASK 0xC0 //0b 1100 0000
-    #define FREQUENCY_SECUIRTY_MASK 0x07 //0b 0000 0111
+    #define    CHANNEL_SECUIRTY_MASK 0x1F //0b 0001 1111
+    #define    VOLTAGE_SECUIRTY_MASK 0xC0 //0b 1100 0000
+    #define LEFT_RIGHT_SECUIRTY_MASK 0x20 //0b 0010 0000
+    #define  FREQUENCY_SECUIRTY_MASK 0x07 //0b 0000 0111
+
+    #define START_MANUAL_CONVERSION_PROCESS 0x40 //0b 0100 0000
+    #define   START_AUTO_CONVERSION_PROCESS 0x60 //0b 0110 0000
+
+    #define  ADC_ENABLE_SET_AUTO_TRIGGER_OFF 0x88 //0b 1000 1000
+    #define          ADC_SET_AUTO_TRIGGER_ON 0x20 //0b 0010 1000
+
 
     /*Bit        7     6     5    4    3     2   1     0
      *ADMUX    REFS1 REFS0 ADLAR MUX4 MUX3 MUX2 MUX1 MUX0
@@ -66,7 +74,7 @@
     /*TAKING ADCH BIT1 BIT0 PLACING IT @ BIT9 BIT8 OF THE SECOND BYTE*/
     #define ADLAR_ADCH_SHIFT 8 
     /*TAKING ADCL BIT1 BIT0 PLACING IT @ BIT7 BIT6 OF THE FIRST BYTE*/
-    #define ADLAR_ADCL_SHIFT 6 
+    #define SHIFT_ADCL_FOR_LEFT_ADJUST 6 
 
     /*
      * supported REF Voltages 
@@ -77,11 +85,11 @@
     //ADMUX {REFS1:0 , REFS0:0} AREF, Internal Vref turned off
     #define VOLTAGE_AREF 			 0x00 // 0>>higer bits 7,6 => 00 00 0000
     //ADMUX {REFS1:0 , REFS0:1} AVCC with external capacitor at AREF pin
-    #define VOLTAGE_AVCC 			 0x80 // 2>>higer bits 7,6 => 10 00 0000 
+    #define VOLTAGE_AVCC 			 0x40 // 2>>higer bits 7,6 => 01 00 0000 
     //ADMUX {REFS1:1 , REFS0:1} Internal 2.56V Voltage Reference with external capacitor at AREF pin
     #define VOLTAGE_Internal_2_56_V  0xC0 // 3>>higer bits 7,6 => 11 00 0000
     //ADMUX {REFS1:1 , REFS0:0} NO USE TILL NOW
-    #define VOLATGE_RESERVED 		 0x40 // 1>>higer bits 7,6 => 01 00 0000
+    #define VOLATGE_RESERVED 		 0x80 // 1>>higer bits 7,6 => 10 00 0000
    
 	#define LEFT_ADJUST  0x20 // 1>>higer bits 5 => 00 1 0 0000
 	#define RIGHT_ADJUST 0x00 // 0>>higer bits 5 => 00 0 0 0000
@@ -123,17 +131,17 @@
      * INIT Value   0     0     0   0   0   0    0    0
      */
      
-    #define FREE_RUNNING_MODE             0x00 // 0>>higer bits 7:5 => 000 0 0000
-    #define ANALOG_COMPARATOR_MODE        0x20 // 1>>higer bits 7:5 => 001 0 0000
-    #define EXTERNAL_INTERRUPT_REQUEST    0x40 // 2>>higer bits 7:5 => 010 0 0000
-    #define TIMER_COUNTER_0_COMAPRE_MATCH 0x60 // 3>>higer bits 7:5 => 011 0 0000
-    #define TIMER_COUNTER_0_OVER_FLOW     0x80 // 4>>higer bits 7:5 => 100 0 0000
-    #define TIMER_COUNTER_1_COMAPRE_MATCH 0xA0 // 5>>higer bits 7:5 => 101 0 0000
-    #define TIMER_COUNTER_1_OVER_FLOW     0xC0 // 6>>higer bits 7:5 => 110 0 0000
-    #define TIMER_COUNTER_1_CAPTURE_EVENT 0xE0 // 7>>higer bits 7:5 => 111 0 0000
+    #define FREE_RUNNING_MODE             0x00 // 0>>higher bits 7:5 => 000 0 0000
+    #define ANALOG_COMPARATOR_MODE        0x20 // 1>>higher bits 7:5 => 001 0 0000
+    #define EXTERNAL_INTERRUPT_REQUEST    0x40 // 2>>higher bits 7:5 => 010 0 0000
+    #define TIMER_COUNTER_0_COMAPRE_MATCH 0x60 // 3>>higher bits 7:5 => 011 0 0000
+    #define TIMER_COUNTER_0_OVER_FLOW     0x80 // 4>>higher bits 7:5 => 100 0 0000
+    #define TIMER_COUNTER_1_COMAPRE_MATCH 0xA0 // 5>>higher bits 7:5 => 101 0 0000
+    #define TIMER_COUNTER_1_OVER_FLOW     0xC0 // 6>>higher bits 7:5 => 110 0 0000
+    #define TIMER_COUNTER_1_CAPTURE_EVENT 0xE0 // 7>>higher  bits 7:5 => 111 0 0000
     //THIS VALUE LOGIACLLY TRUE BUT CAN'T PASS THE RESERVED_BIT_4_NUMBER CHECK
-    //#define CONVERSION_MANUAL_TRIGGER     0x0F // 7>>higer bits 7:5 => 111 1 0000
-    #define CONVERSION_MANUAL_TRIGGER     0x0F // 7>>higer bits 7:5 => 111 1 0000
+    //#define      SINGLE_CONVERSION_MODE 0x0F // 7>>higher  bits 7:5 => 111 1 0000
+    #define        SINGLE_CONVERSION_MODE 0x0F // 7>>higher bits 7:5 => 111 1 0000
 
     #define ERR_SELECTING_CONVERSION_MODE 0xFD00
     
@@ -159,31 +167,93 @@
      *  receive Interrupt flag on the ADIF
      *  enable for Interrupt through ADIE
      *  the ADIF and ADIE goes through AND Gate To Trigger Interrupt or not
+     * 
      */
-    FUN_RETURN_STATUS initADCInternalCircuitry(u8 /*what channel signal on*/ ,
-                                               u8 /*what voltage signal level*/,
-                                               u8 /*left or right adjust*/,
-                                               u8 /*what sampling frequency*/);
-    
-    FUN_RETURN_STATUS checkForSelectedChannel(u8 /*selected_channel*/);
-    
-    FUN_RETURN_STATUS checkForSelectedVoltage(u8 /*selected_voltage*/);
+    FUN_RETURN_STATUS initADCInternalCircuitry(u8 which_ch_mode /*what channel signal on*/ ,
+                                               u8 voltage_ref /*what voltage signal level*/,
+                                               u8 left_adjust/*left or right adjust*/,
+                                               u8 sampling_freq/*what sampling frequency*/);
+    /*
+     * on ADMUX
+     * configure the channel and mode(single/differntial) 
+     *  @select_channel_and_mode Masked with 0x1F
+     * configure voltage ref
+     *  @select_voltage_ref Masked with 0xC0
+     * configure left or right
+     *  @select_left_or_right_adjustment Masked with 0x20
+     *
+     * on ADCSRA
+     * configure the ADC to work in first place = ENABLE
+     *  SET BIT7=ADEN
+     * configure interrupt service of ADC = enable it to signal 
+     *  "COMPLETE CONVERSION" set BIT3=ADIE
+     * configure ADC_clock/latency of conversion process
+     *  ADPS2 ADPS1 ADPS0 BITS 2,1,0
+     * left out BITS :
+     *      6  ADSC STARTING CONVERSION PROCESS
+     *      5  ADTE AUTO TRIGGER ENABLE => you need with it SFIOR configured
+     *      4  ADIF should Report back  "COMPLETE CONVERSION INTERRUPT"
+     * 
+     * note: (ADIE(1) & ADIE(1)) => INTERRUPT SERVICE OF ADC IS TRIGGERED 
+     *  ISR(ADC_vect) is called
+     * 
+     * there is no need for any kind of check to be done :
+     *      @checkForSelectedChannel
+     *      @checkForSelectedVoltage
+     *      @checkForSelectedFrequency
+     * 
+     */
 
-    FUN_RETURN_STATUS checkForSelectedFrequency(u8 /*selected_frequency*/);
+    void onInitADC(u8 select_channel_and_mode ,u8 select_voltage_ref ,
+                   u8 select_left_or_right_adjustement ,
+                   u8 select_input_source_frequency);
     
-    FUN_RETURN_STATUS checkForSelectedConversionMode(u8 /*selected_conversion_mode*/);
+    FUN_RETURN_STATUS checkForSelectedChannel(u8 selected_channel);
+    
+    FUN_RETURN_STATUS checkForSelectedVoltage(u8 selected_voltage);
+
+    FUN_RETURN_STATUS checkForSelectedFrequency(u8 selected_input_source_frequency);
+    
+    FUN_RETURN_STATUS checkForSelectedConversionMode(u8 selected_conversion_mode);
 
     /*
      * start converting the ANALOG signal to DGITAL representation selecting 
      * The operation mode manual/automatic conversion
      */
-    FUN_RETURN_STATUS onStartConversion(u8 /*auto_manual_mode*/);
+    FUN_RETURN_STATUS startConversion(u8 auto_manual_mode);
+    
+    /* in case of Single Conversion mode AKA manual trigger
+     *      Set BIT6 ADSC OF ADCSRA and BIT5 ADTE is Cleared
+     * in case of Auto Triggered Conversion trigger mode AKA auto trigger
+     *      Set BIT6 ADSC OF ADCSRA and Set BIT5 ADTE  
+     *      configure SFIOR :TRIGGER SELECT source (Sampling Frequency)
+     *          Bit7 : ADTS2
+     *          Bit6 : ADTS1
+     *          Bit5 : ADTS0
+     *          Bit4 : Reserved must be rest/cleared
+     *          Bits3:0 is rest/cleared for now!!!!
+     *      auto_manual_mode Masked with 0xE0
+    */
+    void onStartConversion(u8 auto_manual_mode);
     
     /*
-     * optain the o/p of the ADC through 2 REGs
+     * obtain the o/p of the ADC through 2 REGs
      * ADCH ADCL
      */
-    s16 onConversionComplete(void);
-
+    s16 conversionComplete(void);
+    
+    /*
+     * ADC conversion is of 10 BITS precession so signed short AKA s16 is 
+     * suitable to represent the result available through :
+     *      ADCH , ADCL
+     * right adjustment : ADLAR is rest/cleared (ADMUX)
+     *      ADCH(BITS 1,2) ADCL(ALL BITS)
+     * left adjustment : ADLAR is set (ADMUX)
+     *      ADCH(ALL BITS) ADCL(BITS 7,6)
+     */
+    s16 onConversionComplete(void); 
+    
+    s16 onConversionCompleteUsingPolling(void);
+    
 #endif	/* ADC_INTERFACING_H */
 

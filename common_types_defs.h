@@ -27,7 +27,7 @@
     #define    SET_BIT(REG , BIT_LOCATION)     REG |= (HIGH<<BIT_LOCATION)
     #define  CLEAR_BIT(REG , BIT_LOCATION)     REG &= ~(HIGH<<BIT_LOCATION)
     #define TOGGLE_BIT(REG , BIT_LOCATION)     REG ^= (HIGH<<BIT_LOCATION)
-    #define    GET_BIT(REG , BIT_LOCATION)     REG & HIGH<<BIT_LOCATION ? HIGH : LOW
+    #define    GET_BIT(REG , BIT_LOCATION)     REG & (HIGH<<BIT_LOCATION)
     /*
      * this is not wright to do cause you don't want to modify or change
      * the register value you want to read a specific bit either to be
