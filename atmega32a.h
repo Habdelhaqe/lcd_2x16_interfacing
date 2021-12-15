@@ -20,7 +20,7 @@
     #define PIN5 5
     #define PIN6 6
     #define PIN7 7
-    
+
 
     //Renaming the DDRx Registers
     /*
@@ -134,10 +134,10 @@
     #define OUT_LOW_ON_PIN(PORT , PIN)      CLEAR_BIT(PORT , PIN)
     #define SCAN_SIGANL_ON_PIN(PORT , PIN)  GET_BIT(PORT , PIN)
     
-    #define OUT_CONDITIONED_SIGNAL_ON_PIN(PORT ,PIN , H_OR_L) if(H_OR_L){\
-                                                                 SET_BIT(PORT ,PIN);\
-                                                                 }else{\
-                                                                 CLEAR_BIT(PORT ,PIN);} 
+    #define OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORT ,PIN , H_OR_L) if(H_OR_L){\
+                                                                SET_BIT(PORT ,PIN);\
+                                                              }else{\
+                                                                CLEAR_BIT(PORT ,PIN);} 
 
     #define   OUT_DATA_ON_REG_KEEP_STATES(REG , DATA)   REG |= DATA
     #define OUT_DATA_ON_REG_CHANGE_STATES(REG , DATA)   REG &= DATA
@@ -178,8 +178,8 @@
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
      */
-    FUN_RETURN_STATUS setPortInOut(u8 /*port number*/ , 
-                                   u8 /*port configuration in LOW or out HIG*/);
+    FUN_RETURN_STATUS setPortInOut(u8 port_number, 
+                                   u8 program_hole_port_out_or_in);
    
     /*
      * program/configure the port pin to be used
@@ -197,9 +197,9 @@
      *              ERR_WRONG_PIN_NUMBER
      *              is returned
      */
-    FUN_RETURN_STATUS setPortPinInOut(u8 /*port number*/ , 
-                         u8 /*pin number*/ ,
-                         u8 /*port configuration in LOW or out HIG*/);
+    FUN_RETURN_STATUS setPortPinInOut(u8 port_number ,
+                                      u8 pin_number , 
+                                      u8 program_port_pin_out_or_in);
 
     /*
      * program/configure the port pin to be used
@@ -216,8 +216,8 @@
      *              ERR_WRONG_PIN_NUMBER
      *              is returned
      */
-    FUN_RETURN_STATUS programPortPinInOut(u8 /*port_pin_number*/ ,
-                         u8 /*port configuration in LOW or out HIG*/);    
+    FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, 
+                                          u8 program_port_pin_out_or_in );    
     
     /*
      * output selected control signal status on selected port
@@ -228,8 +228,8 @@
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
      */
-    FUN_RETURN_STATUS outControlSignalThroughPort(u8 /*port number*/ , 
-                         u8 /*control signal status*/);
+    FUN_RETURN_STATUS outControlSignalThroughPort(u8 port_number, 
+                                                  u8 output_signal);
     
     /*
      * output selected control signal status on selected port pin
@@ -242,9 +242,36 @@
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
      */
-    FUN_RETURN_STATUS outControlSignalThroughPortPin(u8 /*port number*/ , 
-                                        u8 /*pin number*/ , 
-                                        u8 /*control signal status*/);
+    FUN_RETURN_STATUS outControlSignalThroughPortPin(u8 port_number , 
+                                                 u8 pin_number, 
+                                                 u8 output_signal_high_or_low);
+
+    /*
+    * FUN_RETURN_STATUS @writeControlSignalOnPortPin(u8  , u8 );
+    * FUN_RETURN_STATUS @programPortPinInOut(u8, u8);
+    * THIS CODE IS NOT WORKING!!!!!!
+    * i thought the problem was that automatic variable \c u8 REG_NAME;
+    * is not suitable for holding DDRx/PORTx/PINx as they are of any of types:
+    * typedef unsigned int uint8_t __attribute__((__mode__(__QI__)));
+    * typedef signed int int16_t __attribute__ ((__mode__ (__HI__)));
+    * typedef unsigned int uint16_t __attribute__ ((__mode__ (__HI__)));
+    * typedef signed int int32_t __attribute__ ((__mode__ (__SI__)));
+    * typedef unsigned int uint32_t __attribute__ ((__mode__ (__SI__)));
+    * found in <stdint.h>
+    * so i tried using these types but it does not work also
+    * so work around was to use 3 @switch blocks and it worked
+    * i could use only one but the macro  OUT_HIGH_ON_PIN(REG , BIT_POS)
+    * gives me problems:
+    *      OUT_HIGH_ON_PIN( IOA == REG_NAME ? DDRA :
+                         IOB == REG_NAME ? DDRB :
+                         IOC == REG_NAME ? DDRC : DDRD, BIT_POS);
+
+    *  CAUSE OF THE EVALUATION PASSED INSIDE THE MACRO
+    * Problem Of Passing PORTx , PINx ,DDrx is they are also FUNCTION LIKE MACRO
+    * so Passing them to another FUNCTION LIKE MACRO causes all the problems i 
+    * encountered also you can't switch case on them cause case inside switch needs
+    * a fixed number or range not a calculation
+    */
 
     /*
      * output selected control signal status on selected port pin
@@ -255,9 +282,8 @@
      *  success = > NO_ERRORS is returned
      *  error   = > ERR_WRONG_PORT_NUMBER is returned
      */
-    FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 /*port_pin_number*/ , 
-                                        u8 /*control signal status*/);
-    
+    FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number , 
+                                              u8 output_signal_high_or_low);    
     /*
      * input/scan/read selected control signal status on selected port
      * fun arguments : -port number to select which port the passed control 

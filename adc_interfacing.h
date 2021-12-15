@@ -10,7 +10,6 @@
 #include "atmega32a.h"
 
     #define	ADC_INTERFACING_H
-    
     /*
      * ADC MUX input channels for supporting of 8 different 
      * voltage/signals to same ADC Unit through The Selection control signal
@@ -143,11 +142,19 @@
     //#define      SINGLE_CONVERSION_MODE 0x0F // 7>>higher  bits 7:5 => 111 1 0000
     #define        SINGLE_CONVERSION_MODE 0x0F // 7>>higher bits 7:5 => 111 1 0000
 
-    #define ERR_SELECTING_CONVERSION_MODE 0xFD00
+    #define ERR_SELECTING_CONVERSION_MODE 0xFD00 //0b 1111 1110 0000 0000 
+    #define CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT 10
+    #define CONVERSION_PROCESS_NOT_COMPLETE 0x4F //0b 0100 0000 
     
     #define AUTO_TRIGER_SECUIRTY_MASK 0xE0 //0b 1110 0000
     #define RESERVED_BIT_4_CLEAR_MASK 0xEF //0b 1110 111
-	#define RESERVED_BIT_4_NUMBER     PIN4  
+	#define RESERVED_BIT_4_NUMBER     PIN4
+    
+    #define IS_CONVERSION_COMPLETED GET_BIT(ADCSRA , ADIF)
+    #define IS_CONVERSION_STARTED GET_BIT(ADCSRA , ADSC)
+    #define CLEAR_INTEERUPT OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADCSRA , ADIF , HIGH)
+    #define DISABLE_CONVERSION_COMPLETE_INTERRUPT CLEAR_BIT(ADCSRA,ADIE);
+
 
     /*
      * initialize ADC internal circuitry to the desired logic levels
@@ -273,6 +280,10 @@
     s16 conversionComplete(void);
     
     /*
+     * this is a CALL BACK function That just handles conversion data{ADCH,ADCL}
+     * representation To the caller which might be CONVERSION COMPLETE INTERRUPT
+     * or any other logic that wants the representation
+     *  
      * ADC conversion is of 10 BITS precession so signed short AKA s16 is 
      * suitable to represent the result available through :
      *      ADCH , ADCL
@@ -294,6 +305,8 @@
     s16 onConversionComplete(void); 
     
     s16 onConversionCompleteUsingPolling(void);
+    
+    u8 isConversionStarted(void);
     
 #endif	/* ADC_INTERFACING_H */
 

@@ -40,12 +40,31 @@
 //}
 
 ISR(ADC_vect){
-    turnLEDOnOff(LED0,ON);
+    
     commandLCD(CLEAR_DISPLAY);
+    
+    //write result on display
     displayINTOnLCD(onConversionComplete());
-    _delay_ms(2000);
-    turnLEDOnOff(LED0,OFF);
+    
+    _delay_ms(1000);
+
+    //condition the LED1 be ON conversion completed
+    turnLEDOnOff(LED1 , IS_CONVERSION_COMPLETED);
+     
+    //condition the LED2 be OFF if conversion not started
+    turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+    
+    _delay_ms(1000);
+    
+    //start another conversion 
     onStartConversion(SINGLE_CONVERSION_MODE);
+    
+    //condition the LED2 be ON incase of a conversion started
+    turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+
+    //condition the LED1 be conversion not completed
+    turnLEDOnOff(LED1 , IS_CONVERSION_COMPLETED);
+
 }
 
 int main(void) {
@@ -151,15 +170,42 @@ int main(void) {
 
     u8 msg[] = "converting";
     
-    displayStringOnLCD(msg);
-    
-    _delay_ms(500);
+//    displayStringOnLCD(msg);
+//    
+//    _delay_ms(500);
     
     commandLCD(CLEAR_DISPLAY);
-    
+    //DISABLE_CONVERSION_COMPLETE_INTERRUPT;
     onStartConversion(SINGLE_CONVERSION_MODE);
+    //holder for conversion result    
+    //s16 conversion_result;
     
     while(KEEP_EXECUTING){
-    
+        
+        //condition the LED2 be ON incase of a conversion OFF if non
+//        turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+//        
+//        turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
+//        
+//        conversion_result = onConversionCompleteUsingPolling();
+//        
+//        turnLEDOnOff(LED1 , GET_BIT(conversion_result,CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT));
+//        
+//        if(GET_BIT(conversion_result,CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT)){
+//            //commandLCD(CLEAR_DISPLAY);
+//            //displayStringOnLCD(msg);
+//            turnLEDOnOff(LED2,IS_CONVERSION_COMPLETED);
+//            turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+//            _delay_ms(1000);
+//        }else{
+//            turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+//            //turnLEDOnOff(LED1,ON);
+//            //commandLCD(CLEAR_DISPLAY);
+//            displayINTOnLCD(conversion_result);
+//            turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
+//            _delay_ms(2000);
+//            onStartConversion(SINGLE_CONVERSION_MODE);
+//        }
+        
     }
 }

@@ -82,4 +82,3 @@ FUN_RETURN_STATUS initInterruptService(u8 /*which external interrupt pin*/ ,
                                         u8 /*mode of interrupt signal*/ );
 
 #endif	/* INTERRUPT_CONFIGURATION_H */
-
