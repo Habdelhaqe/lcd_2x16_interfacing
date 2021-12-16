@@ -64,7 +64,8 @@
      * http://web.alfredstate.edu/faculty/weimandn/lcd/lcd_initialization/lcd_initialization_index.html
      * https://www.electronicwings.com/avr-atmega/interfacing-lcd-16x2-in-4-bit-mode-with-atmega-16-32-#:~:text=LCD%2016x2%20can%20be%20used,required%20data%20in%20data%20mode.
      * https://asset.conrad.com/media10/add/160267/c1/-/en/001070528ML02/manual-1070528-joy-it-rb-lcd-16x2-module-56-cm-222-inch-16-x-2-p-compatible-with-raspberry-pi.pdf
-     * https://atmega32-avr.com/interface-lcd-4-bit-mode-avr-microcontroller/ 
+     * https://atmega32-avr.com/interface-lcd-4-bit-mode-avr-microcontroller/
+     * https://exploreembedded.com/wiki/Interfacing_LCD_in_4-bit_mode_with_8051 
      */
 
     /* configure/control which type of data 
@@ -129,7 +130,7 @@
     
     //count starts from zero rows:0->1 , columns:0->15
     #define LCD_ROW_COUNT 1
-    #define LCD_COLUMN_COUNT 15
+    #define LCD_COLUMN_COUNT 16
 
     #define ZERO_OFFSET 0x00
 

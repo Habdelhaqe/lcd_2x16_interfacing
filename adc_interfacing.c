@@ -63,7 +63,6 @@ s16 onConversionComplete(void){
 
 s16 onConversionCompleteUsingPolling(void){     
 
-    s16 conversion_output;
     /*
      * you should clear/rest ADIE(ADCSRA) to disable HW calling for ISR
      * even If The Application Layer implemented it
@@ -74,25 +73,26 @@ s16 onConversionCompleteUsingPolling(void){
      *  rest(0) then represent false data for the caller to check against
      *      example :     #define ERR_SELECTING_CONVERSION_MODE 0x8000
      */
-    
-    if(IS_CONVERSION_STARTED && IS_CONVERSION_COMPLETED){
-        conversion_output = onConversionComplete();
-        /*
-         * as i saw examples they all relay on HW clearing the ADIF and
-         * ADSC after the read is complete (ADCL then ADCH is read)
-         * clearing the Interrupt flag setting the ADIF(ADCSRA) manually cause 
-         * the code already satisfied the caller and represented the conversion 
-         * data
-        */
-        //CLEAR_INTEERUPT;
-        //CLEAR_BIT(ADCSRA,ADSC);   
-    }else{
-        conversion_output = CONVERSION_PROCESS_NOT_COMPLETE;    
-    }
-    return conversion_output;
+    //stalling MicroController Till The Conversion Complete Interrupt signal 
+    while(!IS_CONVERSION_COMPLETED);
+    return onConversionComplete();
 }
 
 s16 onConversionCompleteUsingPollingSpeedy(void){
+    /*
+     * you should clear/rest ADIE(ADCSRA) to disable HW calling for ISR
+     * even If The Application Layer implemented it
+     * 
+     * check for ADIF(ADCSRA):
+     *  set(1) then the CONVERSION is COMPLETED and ADCH ,ADCL is UPDATED
+     *      you should represent the data call @onConversionComplete();
+     *  rest(0) then represent false data for the caller to check against
+     *      example :     #define ERR_SELECTING_CONVERSION_MODE 0x8000
+     * 
+     *  I commented @IS_CONVERSION_STARTED cause it's pulled down immediately 
+     * by HW when Conversion is completed and o/p is ready so any check will
+     * result in @IS_CONVERSION_STARTED = 0  
+     */
 
     return ( /*IS_CONVERSION_STARTED &&*/ IS_CONVERSION_COMPLETED) ? 
                 onConversionComplete()  

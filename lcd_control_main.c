@@ -182,29 +182,52 @@ int main(void) {
     //holder for conversion result    
     s16 conversion_result;
     
-    while(KEEP_EXECUTING){
+    //my own solution to not stall microcontroller
+//    while(KEEP_EXECUTING){
+//        
+//        //condition the LED2 be ON incase of a conversion OFF if non
+//        turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+//        
+//        turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
+//        
+//        conversion_result = onConversionCompleteUsingPollingSpeedy();
+//        
+//        commandLCD(CLEAR_DISPLAY);
+//        displayStringOnLCD(msg);      
+//        
+//        turnLEDOnOff(LED1 , conversion_result==CONVERSION_PROCESS_NOT_COMPLETE );
+//        
+//        if( conversion_result!= 
+//                CONVERSION_PROCESS_NOT_COMPLETED_ADJUSTMENT_LEFT_RIGHT ){
+//            
+//            commandLCD(CLEAR_DISPLAY);
+//            displayINTOnLCD(conversion_result);
+//            _delay_ms(1000);
+//            onStartConversion(SINGLE_CONVERSION_MODE);
+//        
+//        }
+//        
+//    }
+       
+       //stalling microcontroller way
+       while(KEEP_EXECUTING){
         
         //condition the LED2 be ON incase of a conversion OFF if non
         turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
         
         turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
-        
-        conversion_result = onConversionCompleteUsingPollingSpeedy();
-        
+
         commandLCD(CLEAR_DISPLAY);
         displayStringOnLCD(msg);      
         
+        conversion_result = onConversionCompleteUsingPolling();
+                
         turnLEDOnOff(LED1 , conversion_result==CONVERSION_PROCESS_NOT_COMPLETE );
         
-        if( conversion_result!= 
-                CONVERSION_PROCESS_NOT_COMPLETED_ADJUSTMENT_LEFT_RIGHT ){
-            
-            commandLCD(CLEAR_DISPLAY);
-            displayINTOnLCD(conversion_result);
-            _delay_ms(1000);
-            onStartConversion(SINGLE_CONVERSION_MODE);
+        commandLCD(CLEAR_DISPLAY);
+        displayINTOnLCD(conversion_result);
+        _delay_ms(1000);
+        onStartConversion(SINGLE_CONVERSION_MODE);
         
         }
-        
-    }
 }

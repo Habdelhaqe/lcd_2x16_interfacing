@@ -458,24 +458,27 @@ void commandLCD(u8 pass_CMD_TO_LCD){
     
         outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD);
         //or if pins connection is configures to different pins on Microcontroller
-//        writeControlSignalOnPortPin(LCD_D0 , GET_BIT(pass_CMD_TO_LCD,BIT0) );
-//        writeControlSignalOnPortPin(LCD_D1 , GET_BIT(pass_CMD_TO_LCD,BIT1) );
-//        writeControlSignalOnPortPin(LCD_D2 , GET_BIT(pass_CMD_TO_LCD,BIT2) );
-//        writeControlSignalOnPortPin(LCD_D3 , GET_BIT(pass_CMD_TO_LCD,BIT3) );        
+//        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D0 ; pin_iterator--){
+//            writeControlSignalOnPortPin(pin_iterator ,
+//                    GET_BIT(pass_CMD_TO_LCD,(pin_iterator - LCD_D0)) );
+//        }
+        
+    }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
+            || LCD_OPERATION_MODE == _4BIT_1L_MODE){
+        //way #1    
+        //sending UPPER NIBBLE OF COMMAND bits : 4->7
 //        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(pass_CMD_TO_LCD,BIT4) );
 //        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(pass_CMD_TO_LCD,BIT5) );
 //        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(pass_CMD_TO_LCD,BIT6) );
 //        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(pass_CMD_TO_LCD,BIT7) );
-    
-    }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
-            || LCD_OPERATION_MODE == _4BIT_1L_MODE){
-        
-        //sending UPPER NIBBLE OF COMMAND bits : 4->7
-        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(pass_CMD_TO_LCD,BIT4) );
-        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(pass_CMD_TO_LCD,BIT5) );
-        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(pass_CMD_TO_LCD,BIT6) );
-        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(pass_CMD_TO_LCD,BIT7) );
-        
+//        generateLCDEnableControlPuls();
+        //sending LOWER NIBBLE OF COMMAND bits : 0->3        
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(pass_CMD_TO_LCD,BIT0) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(pass_CMD_TO_LCD,BIT1) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(pass_CMD_TO_LCD,BIT2) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(pass_CMD_TO_LCD,BIT3) );
+
+        //way#2
 //        /*
 //         * initialization of higher bits/nibble of 
 //         * what ever port LCD data lines is connected to
@@ -494,9 +497,7 @@ void commandLCD(u8 pass_CMD_TO_LCD){
 //         * \c pass_CMD_TO_LCD & 0xF0
 //         */
 //        outControlSignalThroughPort(LCD_PORT , pass_CMD_TO_LCD & 0xF0 );
-//        
-        generateLCDEnableControlPuls();
-        
+//        generateLCDEnableControlPuls();      
 //        /*
 //         * initialization of higher bits/nibble of 
 //         * what ever port LCD data lines is connected to
@@ -519,12 +520,18 @@ void commandLCD(u8 pass_CMD_TO_LCD){
 //         */
 //        outControlSignalThroughPort(LCD_PORT , (pass_CMD_TO_LCD<<4) & 0xF0 );
         
+        //way#3
+        //sending UPPER NIBBLE OF COMMAND bits : 4->7        
+        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+            writeControlSignalOnPortPin(pin_iterator ,
+                    GET_BIT(pass_CMD_TO_LCD,(pin_iterator - LCD_D0)) );
+        }
+        generateLCDEnableControlPuls();        
         //sending LOWER NIBBLE OF COMMAND bits : 0->3
-        
-        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(pass_CMD_TO_LCD,BIT0) );
-        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(pass_CMD_TO_LCD,BIT1) );
-        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(pass_CMD_TO_LCD,BIT2) );
-        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(pass_CMD_TO_LCD,BIT3) );
+        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+            writeControlSignalOnPortPin(pin_iterator ,
+                    GET_BIT(pass_CMD_TO_LCD,(pin_iterator - LCD_D4)) );
+        }
     }else{
         //shit happens
     }    
@@ -541,24 +548,27 @@ void displayCharacterOnLCD(u8 character_to_Display){
     
         outControlSignalThroughPort(OUTD,character_to_Display);
         //or if pins connection is configures to different pins on Microcontroller
-//        writeControlSignalOnPortPin(LCD_D0 , GET_BIT(character_to_Display,BIT0) );
-//        writeControlSignalOnPortPin(LCD_D1 , GET_BIT(character_to_Display,BIT1) );
-//        writeControlSignalOnPortPin(LCD_D2 , GET_BIT(character_to_Display,BIT2) );
-//        writeControlSignalOnPortPin(LCD_D3 , GET_BIT(character_to_Display,BIT3) );        
-//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT4) );
-//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT5) );
-//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT6) );
-//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT7) );
+//        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D0 ; pin_iterator--){
+//            writeControlSignalOnPortPin(pin_iterator ,
+//                    GET_BIT(character_to_Display,(pin_iterator - LCD_D0)) );
+//        }
     
     }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
             || LCD_OPERATION_MODE == _4BIT_1L_MODE){
 
+        //way#1
         //sending UPPER NIBBLE OF CHRACTER bits : 4->7
-        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT4) );
-        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT5) );
-        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT6) );
-        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT7) );
-                
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT4) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT5) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT6) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT7) );
+//        //sending LOWER NIBBLE OF CHARACTER bits : 0->3
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT0) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT1) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT2) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT3) );
+
+        //way#2
 //        /*
 //         * initialization of higher bits/nibble of 
 //         * what ever port LCD data lines is connected to
@@ -577,10 +587,8 @@ void displayCharacterOnLCD(u8 character_to_Display){
 //         * masking upper nibble of character with this
 //         * \c character_to_Display & 0xF0
 //         */
-//        outControlSignalThroughPort(LCD_PORT , character_to_Display & 0xF0 );
-        
-        generateLCDEnableControlPuls();
-        
+//        outControlSignalThroughPort(LCD_PORT , character_to_Display & 0xF0 );      
+//        generateLCDEnableControlPuls();
 //        /*
 //         * initialization of higher bits/nibble of 
 //         * what ever port LCD data lines is connected to
@@ -603,12 +611,18 @@ void displayCharacterOnLCD(u8 character_to_Display){
 //         */
 //        outControlSignalThroughPort(LCD_PORT , (character_to_Display<<4) & 0xF0 );
         
-
-        //sending LOWER NIBBLE OF CHARACTER bits : 0->3
-        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT0) );
-        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT1) );
-        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT2) );
-        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT3) );
+        //way#3
+        //sending UPPER NIBBLE OF COMMAND bits : 4->7        
+        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+            writeControlSignalOnPortPin(pin_iterator ,
+                    GET_BIT(character_to_Display,(pin_iterator - LCD_D0)) );
+        }
+        generateLCDEnableControlPuls();        
+        //sending LOWER NIBBLE OF COMMAND bits : 0->3
+        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+            writeControlSignalOnPortPin(pin_iterator ,
+                    GET_BIT(character_to_Display,(pin_iterator - LCD_D4)) );
+        }
     }else{
         //shit happens
     }    
@@ -623,9 +637,7 @@ FUN_RETURN_STATUS displayCharOrCommandLCD(u8 data , u8 char_or_command){
     if(CMD == char_or_command  || DATA == char_or_command ){
         
         //get down to business
-        
         writeControlSignalOnPortPin(LCD_RW,WRITE);
-    
         writeControlSignalOnPortPin(LCD_RS,char_or_command);
         
         if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
@@ -641,26 +653,41 @@ FUN_RETURN_STATUS displayCharOrCommandLCD(u8 data , u8 char_or_command){
 //        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT5) );
 //        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT6) );
 //        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT7) );
+//        for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D0 ; pin_iterator--){
+//            writeControlSignalOnPortPin(pin_iterator ,
+//                    GET_BIT(data,(pin_iterator - LCD_D0)) );
+//        }
             
             generateLCDEnableControlPuls();
             
         }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE || 
                     LCD_OPERATION_MODE == _4BIT_1L_MODE){
-        
+            //way#1
             //sending UPPER NIBBLE OF COMMAND bits : 4->7
-            writeControlSignalOnPortPin(LCD_D4 , GET_BIT(data,BIT4) );
-            writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT5) );
-            writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT6) );
-            writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT7) );
-        
-            generateLCDEnableControlPuls();
-
+//            writeControlSignalOnPortPin(LCD_D4 , GET_BIT(data,BIT4) );
+//            writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT5) );
+//            writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT6) );
+//            writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT7) );        
+//            generateLCDEnableControlPuls();
             //sending UPPER NIBBLE OF COMMAND bits : 0->3            
-            writeControlSignalOnPortPin(LCD_D4 , GET_BIT(data,BIT0) );
-            writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT1) );
-            writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT2) );
-            writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT3) );
+//            writeControlSignalOnPortPin(LCD_D4 , GET_BIT(data,BIT0) );
+//            writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT1) );
+//            writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT2) );
+//            writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT3) );            
+//            generateLCDEnableControlPuls();
             
+            //way#2
+            //sending UPPER NIBBLE OF COMMAND bits : 4->7        
+            for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+                writeControlSignalOnPortPin(pin_iterator ,
+                        GET_BIT(data,(pin_iterator - LCD_D0)) );
+            }
+            generateLCDEnableControlPuls();        
+            //sending LOWER NIBBLE OF COMMAND bits : 0->3
+            for(u8 pin_iterator = LCD_D7 ; pin_iterator>=LCD_D4 ; pin_iterator--){
+                writeControlSignalOnPortPin(pin_iterator ,
+                    GET_BIT(data,(pin_iterator - LCD_D4)) );
+             }
             generateLCDEnableControlPuls();
         }else{
             //shit happens idiotic user case report him back
@@ -678,39 +705,43 @@ void displayStringOnLCD(u8 *ptr_string){
     if(NULL == ptr_string){
         //i should kill you for calling me on empty pointer
     }else{
+        //there is no postfix and prefix when using with pointers
         //loop until encountering null char
-//        while(ptr_string != NULL_CHAR){
-//            displayCharacterOnLCD(*ptr_string);
-//            ptr_string++;
-//        }
-
-        for(u8 i    = LOOP_ZER0_INITIALIZER , 
-               line = LOOP_ZER0_INITIALIZER ; *(ptr_string+i) != NULL_CHAR ; i++ ){
-            
-            if( i >LCD_COLUMN_COUNT && !line /*check if cursor is @ first line */ ){
-                //go to second line PLACE cursor @ position Zero
-                moveCursorToLocation(LCD_ROW_COUNT,ZERO_OFFSET);
-                //mark that we have shifted to the second line
-                line = HIGH ;
+        u8 char_counter= LOOP_ZER0_INITIALIZER;
+        while(*ptr_string != NULL_CHAR){
+            if(char_counter == LCD_COLUMN_COUNT){
+                commandLCD(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE);
+                _delay_ms(1);
             }
-            /*
-             * next char in line by offset i from base ADDR 
-             * @ptr_string: *(ptr_string+i)
-             */
-            displayCharacterOnLCD( *(ptr_string + i) );
-//            displayCharOrCommandLCD(*(ptr_string+i) , DATA);
+            displayCharacterOnLCD(*ptr_string);
+            char_counter++;
+            ptr_string++;
         }
+
+//        for(u8 i    = LOOP_ZER0_INITIALIZER , 
+//               line = LOOP_ZER0_INITIALIZER ; 
+//                        *(ptr_string+i) != NULL_CHAR ; i++ ){
+//            
+//            if( i >LCD_COLUMN_COUNT && !line /*check if cursor is @ first line */ ){
+//                //go to second line PLACE cursor @ position Zero
+//                moveCursorToLocation(LCD_ROW_COUNT,ZERO_OFFSET);
+//                //mark that we have shifted to the second line
+//                line = HIGH ;
+//            }
+//            displayCharacterOnLCD( *(ptr_string + i) );
+////            displayCharOrCommandLCD(*(ptr_string+i) , DATA);
+//        }
     }
 }
 
 void displayINTOnLCD(int int_value_to_display){
 
-        /*
-         * the up coming code give me this warning
-         * warning: pointer targets in passing argument 1 of 
-         *  'displayStringOnLCD' differ in signedness [-Wpointer-sign]
-         *  char (*char_buffer_to_int_value)[BUFFER_MAX_SIZE];
-         */
+    /*
+     * the up coming code give me this warning
+     * warning: pointer targets in passing argument 1 of 
+     *  'displayStringOnLCD' differ in signedness [-Wpointer-sign]
+     *  char (*char_buffer_to_int_value)[BUFFER_MAX_SIZE];
+    */
         
     //u8 (*char_buffer_to_int_value)[BUFFER_MAX_SIZE]={NULL_CHAR};
     u8 char_buffer_to_int_value[BUFFER_MAX_SIZE]={NULL_CHAR};
@@ -720,7 +751,9 @@ void displayINTOnLCD(int int_value_to_display){
 //                *((char (*)[])char_buffer_to_int_value) , 
 //                    DECIMAL_RADIX);
 //        displayStringOnLCD(*char_buffer_to_int_value);
-    itoa(int_value_to_display , *((char(*)[])&char_buffer_to_int_value) ,DECIMAL_RADIX);
+    itoa(int_value_to_display , 
+            *((char(*)[])&char_buffer_to_int_value) ,
+                    DECIMAL_RADIX);
         
     displayStringOnLCD(char_buffer_to_int_value);
 }
@@ -750,24 +783,22 @@ void initLCD(void){
         _delay_ms(1000);
         commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE);
         turnLEDOnOff(LED0,ON);
-        _delay_ms(1000);
-        
-        //commandLCD(_4BIT_MODE_INIT);
-        //displayCharOrCommandLCD(CUSROR_HOME , CMD);
+        _delay_ms(1000);        
     }else if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
                 LCD_OPERATION_MODE == _8BIT_1L_MODE){
+        commandLCD(CUSROR_HOME);
+        _delay_ms(1);
         commandLCD(_8BIT_2L_MODE);
-        commandLCD(CLEAR_DISPLAY);
-        commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+        _delay_ms(1);
         commandLCD(DISPLAY_ON_CUSROR_ON);
-//        displayCharOrCommandLCD(_8BIT_2L_MODE , CMD);
-//        displayCharOrCommandLCD(CLEAR_DISPLAY , CMD);
-//        displayCharOrCommandLCD(INC_DISPLAY_SHIFT_TO_RIGHT , CMD);
+        _delay_ms(1);
+        commandLCD(CLEAR_DISPLAY);
+        _delay_ms(1);
+        commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+        _delay_ms(1);
+        commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE);
+        _delay_ms(1);
     }
-    //commandLCD(LCD_OPERATION_MODE);
-    //commandLCD(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE);    
-    //commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
-    //commandLCD(CLEAR_DISPLAY);
 }
 
 FUN_RETURN_STATUS moveCursorToLocation(u8 row,u8 col){
