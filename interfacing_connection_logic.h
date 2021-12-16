@@ -131,8 +131,7 @@
     //count starts from zero rows:0->1 , columns:0->15
     #define LCD_ROW_COUNT 1
     #define LCD_COLUMN_COUNT 16
-
-    #define ZERO_OFFSET 0x00
+    #define LCD_LAST_COLUMN_OFFSET 0xF
 
     //CMD for LCD control in Hex
     #define CLEAR_DISPLAY 0x01

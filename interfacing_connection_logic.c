@@ -707,7 +707,7 @@ void displayStringOnLCD(u8 *ptr_string){
     }else{
         //there is no postfix and prefix when using with pointers
         //loop until encountering null char
-        u8 char_counter= LOOP_ZER0_INITIALIZER;
+        u8 char_counter = LOOP_ZER0_INITIALIZER;
         while(*ptr_string != NULL_CHAR){
             if(char_counter == LCD_COLUMN_COUNT){
                 commandLCD(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE);
@@ -802,13 +802,14 @@ void initLCD(void){
 }
 
 FUN_RETURN_STATUS moveCursorToLocation(u8 row,u8 col){
-    ERR_CHECKER = col > LCD_COLUMN_COUNT || 
+    //validate col and row arguments to be in boundaries
+    ERR_CHECKER = col > LCD_LAST_COLUMN_OFFSET || 
                         row > LCD_ROW_COUNT ? ERR : NO_ERRORS;
     
     if (NO_ERRORS == ERR_CHECKER){
         commandLCD((row == LCD_ROW_COUNT ?
                     PLACE_CUR_AT_BEGINE_OF_SECOND_LINE  :
-                    PLACE_CUR_AT_BEGINE_OF_FIRST_LINE) | col);
+                    PLACE_CUR_AT_BEGINE_OF_FIRST_LINE) + col);
         
         //commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE | (row ? SECOND_ROW_START_OFFSET : ZERO_OFFSET) | col );
         //commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE + (row ? SECOND_ROW_START_OFFSET : ZERO_OFFSET) + col );

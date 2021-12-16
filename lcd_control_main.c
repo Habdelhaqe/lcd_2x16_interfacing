@@ -176,7 +176,7 @@ int main(void) {
     
     DISABLE_CONVERSION_COMPLETE_INTERRUPT;
     
-    onStartConversion(SINGLE_CONVERSION_MODE);
+    //onStartConversion(SINGLE_CONVERSION_MODE);
     //as it is the first conversion it takes 25 ADC CLK to complete
     
     //holder for conversion result    
@@ -209,10 +209,10 @@ int main(void) {
 //        
 //    }
        
-       //stalling microcontroller way
-       while(KEEP_EXECUTING){
+    //stalling microcontroller way
+    while(KEEP_EXECUTING){
         
-        //condition the LED2 be ON incase of a conversion OFF if non
+       //condition the LED2 be ON incase of a conversion OFF if non
         turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
         
         turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
@@ -228,6 +228,30 @@ int main(void) {
         displayINTOnLCD(conversion_result);
         _delay_ms(1000);
         onStartConversion(SINGLE_CONVERSION_MODE);
-        
-        }
+
+    }
+    
+    //visiting all LCD places
+//    while(KEEP_EXECUTING){
+//        for(u8 move_cursor_command =  PLACE_CUR_AT_BEGINE_OF_FIRST_LINE ; 
+//                move_cursor_command <= 0xCF ; move_cursor_command++ ){
+//            turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+//            commandLCD(move_cursor_command);
+//            _delay_ms(100);
+//            if(move_cursor_command==0x8F ){
+//                move_cursor_command = PLACE_CUR_AT_BEGINE_OF_SECOND_LINE;
+//            }
+//        }
+//        
+//        for(u8 shift = LOOP_ZER0_INITIALIZER , line = LOOP_ZER0_INITIALIZER ; shift<=LCD_LAST_COLUMN_OFFSET & line<=LCD_ROW_COUNT ; shift++){
+//            turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+//            moveCursorToLocation(line , shift);
+//            if( shift==LCD_LAST_COLUMN_OFFSET && !line){
+//                line++;
+//                shift = LOOP_ZER0_INITIALIZER;
+//            }
+//            _delay_ms(100);
+//        }
+//    }
+    
 }
