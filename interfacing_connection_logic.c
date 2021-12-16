@@ -4,6 +4,10 @@
 
 extern scan_fun_return fun_ret_status_and_data;
 
+#define ERR_CHECKER fun_ret_status_and_data.fun_return
+#define SCANNED_DATA fun_ret_status_and_data.scanned_data
+
+
 //FUN_RETURN_STATUS initLED(u8 which_led , u8 which_port){
 //
 //    //checking if argument are of correct value
@@ -20,10 +24,10 @@ extern scan_fun_return fun_ret_status_and_data;
 //        fun_ret_status_and_data.fun_return =
 //                setPortPinInOut(which_port,which_led,OUTPUT);
 //    }else{
-//        fun_ret_status_and_data.fun_return = ERR;
+//        ERR_CHECKER = ERR;
 //    }
 //    
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS initBTN(u8 which_btn ,u8 which_port){
@@ -39,13 +43,13 @@ extern scan_fun_return fun_ret_status_and_data;
 //                                which_port == IOD) ){
 //    
 //        //we are good to go
-//        fun_ret_status_and_data.fun_return =
+//        ERR_CHECKER =
 //                setPortPinInOut(which_port,which_btn,INPUT);
 //    }else{
-//        fun_ret_status_and_data.fun_return = ERR;
+//        ERR_CHECKER = ERR;
 //    }
 //    
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS initLEDS(void){
@@ -63,7 +67,7 @@ extern scan_fun_return fun_ret_status_and_data;
 //    }else{
 //        //nothing to do for now may be call debug code
 //    }
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS initBTNS(void){
@@ -81,7 +85,7 @@ extern scan_fun_return fun_ret_status_and_data;
 //    }else{
 //        //nothing to do for now may be call debug code
 //    }
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS turnLEDOnOff(u8 which_led,u8 on_off_signal){
@@ -89,25 +93,25 @@ extern scan_fun_return fun_ret_status_and_data;
 //    switch(which_led){
 //        
 //        case LED0:
-//            fun_ret_status_and_data.fun_return = 
+//            ERR_CHECKER = 
 //                    outControlSignalThroughPortPin(OUTC,LED0,on_off_signal);
 //            break;
 //            
 //        case LED1:
-//            fun_ret_status_and_data.fun_return = 
+//            ERR_CHECKER = 
 //                    outControlSignalThroughPortPin(OUTC,LED1,on_off_signal);
 //            break;
 //            
 //        case LED2:
-//            fun_ret_status_and_data.fun_return = 
+//            ERR_CHECKER = 
 //                    outControlSignalThroughPortPin(OUTD,LED2,on_off_signal);
 //            break;
 //        
 //        default:
-//            fun_ret_status_and_data.fun_return = ERR;
+//            ERR_CHECKER = ERR;
 //    }
 //    
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //scan_fun_return isBTNPressed(u8 which_btn){
@@ -130,11 +134,11 @@ extern scan_fun_return fun_ret_status_and_data;
 //            break;
 //        
 //        default:
-//            fun_ret_status_and_data.fun_return = ERR;
+//            ERR_CHECKER = ERR;
 //    }
 //    
-//    fun_ret_status_and_data.scanned_data = 
-//            fun_ret_status_and_data.scanned_data? BTN_PRESSED : BTN_UNPRSSED;
+//    SCANNED_DATA = 
+//            SCANNED_DATA? BTN_PRESSED : BTN_UNPRSSED;
 //    
 //    return fun_ret_status_and_data;
 //}
@@ -159,7 +163,7 @@ extern scan_fun_return fun_ret_status_and_data;
 //            break;
 //        
 //        default:
-//            fun_ret_status_and_data.fun_return = ERR;
+//            ERR_CHECKER = ERR;
 //    }
 //    
 //    return fun_ret_status_and_data;
@@ -182,7 +186,7 @@ extern scan_fun_return fun_ret_status_and_data;
 //    }else{
 //        //nothing to do for now may be call debug code
 //    }
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS configureLCDDataBusLines(void){
@@ -226,10 +230,10 @@ extern scan_fun_return fun_ret_status_and_data;
 //        }
 //
 //    }else{
-//        fun_ret_status_and_data.fun_return = ERR;
+//        ERR_CHECKER = ERR;
 //    }
 //    
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS returnLCDCursorHome(void){
@@ -259,7 +263,7 @@ extern scan_fun_return fun_ret_status_and_data;
 //    }else{
 //        //nothing to do for now may be call debug code    
 //    }
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 //FUN_RETURN_STATUS clearLCD(void){
@@ -289,31 +293,40 @@ extern scan_fun_return fun_ret_status_and_data;
 //    }else{
 //        //nothing to do for now may be call debug code    
 //    }
-//    return fun_ret_status_and_data.fun_return;
+//    return ERR_CHECKER;
 //}
 
 FUN_RETURN_STATUS initLED(u8 which_led ){
+
+    return (LED0 == which_led 
+                || LED1 == which_led 
+                    || LED2 == which_led) ?
+                programPortPinInOut(which_led,OUTPUT) : ERR ;
     
-    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
-        fun_ret_status_and_data.fun_return = 
-               programPortPinInOut(which_led,OUTPUT);
-    }else{
-        fun_ret_status_and_data.fun_return = ERR; 
-    }
-        
-    return fun_ret_status_and_data.fun_return;
+//    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
+//        ERR_CHECKER = 
+//               programPortPinInOut(which_led,OUTPUT);
+//    }else{
+//        ERR_CHECKER = ERR; 
+//    }
+//        
+//    return ERR_CHECKER;
 }
 
 FUN_RETURN_STATUS initBTN(u8 which_btn){
+    return (BTN0 == which_btn 
+                    || BTN1 == which_btn 
+                            || BTN2 == which_btn) ?
+                programPortPinInOut(which_btn,INPUT) : ERR ;
 
-    if(BTN0 == which_btn || BTN1 == which_btn || BTN2 == which_btn  ){
-        fun_ret_status_and_data.fun_return = 
-               programPortPinInOut(which_btn,INPUT);
-    }else{
-        fun_ret_status_and_data.fun_return = ERR; 
-    }
-
-    return fun_ret_status_and_data.fun_return;
+//    if(BTN0 == which_btn || BTN1 == which_btn || BTN2 == which_btn  ){
+//        ERR_CHECKER = 
+//               programPortPinInOut(which_btn,INPUT);
+//    }else{
+//        ERR_CHECKER = ERR; 
+//    }
+//
+//    return ERR_CHECKER;
 }
 
 void initLEDS(void){
@@ -331,45 +344,58 @@ void initBTNS(){
 }
 
 FUN_RETURN_STATUS turnLEDOnOff(u8 which_led,u8 on_off_signal){
-
-    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
-        fun_ret_status_and_data.fun_return = 
-               writeControlSignalOnPortPin(which_led,on_off_signal);
-    }else{
-        fun_ret_status_and_data.fun_return = ERR; 
-    }
-     
-    return fun_ret_status_and_data.fun_return;
+    
+    return (LED0 == which_led 
+                    || LED1 == which_led 
+                            || LED2 == which_led) ?
+                writeControlSignalOnPortPin(which_led,on_off_signal) : ERR ;
+    
+//    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
+//        ERR_CHECKER = 
+//               writeControlSignalOnPortPin(which_led,on_off_signal);
+//    }else{
+//        ERR_CHECKER = ERR; 
+//    }
+//     
+//    return ERR_CHECKER;
 }
 
 scan_fun_return isBTNPressed(u8 which_btn){
-
-    if(BTN0 == which_btn || BTN1 == which_btn || BTN2 == which_btn  ){
-        fun_ret_status_and_data = 
-               scanControlPassingThroughPortPin(which_btn);
-    }else{
-        fun_ret_status_and_data.fun_return = ERR; 
-    }
    
-    fun_ret_status_and_data.scanned_data = 
-            fun_ret_status_and_data.scanned_data? BTN_PRESSED : BTN_UNPRSSED;
+    return scanControlPassingThroughPortPin(
+            (BTN0 == which_btn || BTN1 == which_btn || BTN2 == which_btn) ? 
+                    which_btn : UN_IDENTIFIED);
     
-    return fun_ret_status_and_data;
+//    if(BTN0 == which_btn || BTN1 == which_btn || BTN2 == which_btn  ){
+//        fun_ret_status_and_data = 
+//               scanControlPassingThroughPortPin(which_btn);
+//    }else{
+//        ERR_CHECKER = ERR; 
+//    }
+//   
+//    SCANNED_DATA = 
+//            SCANNED_DATA? BTN_PRESSED : BTN_UNPRSSED;
+//    
+//    return fun_ret_status_and_data;
 }
 
 scan_fun_return isLEDOnOrOFF(u8 which_led){
 
-    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
-        fun_ret_status_and_data =
-               scanControlPassingThroughPortPin(which_led);
-    }else{
-        fun_ret_status_and_data.fun_return = ERR; 
-    }
+    return scanControlPassingThroughPortPin(
+            (LED0 == which_led || LED1 == which_led || LED2 == which_led) ? 
+                    which_led : UN_IDENTIFIED);
     
-    fun_ret_status_and_data.scanned_data = 
-        fun_ret_status_and_data.scanned_data? ON : OFF;
-
-    return fun_ret_status_and_data;
+//    if(LED0 == which_led || LED1 == which_led || LED2 == which_led  ){
+//        fun_ret_status_and_data =
+//               scanControlPassingThroughPortPin(which_led);
+//    }else{
+//        ERR_CHECKER = ERR; 
+//    }
+//    
+//    SCANNED_DATA = 
+//        SCANNED_DATA? ON : OFF;
+//
+//    return fun_ret_status_and_data;
 }
 
 void configureLCDControlPins(void){
@@ -431,6 +457,15 @@ void commandLCD(u8 pass_CMD_TO_LCD){
             LCD_OPERATION_MODE == _8BIT_1L_MODE){
     
         outControlSignalThroughPort(OUTD,pass_CMD_TO_LCD);
+        //or if pins connection is configures to different pins on Microcontroller
+//        writeControlSignalOnPortPin(LCD_D0 , GET_BIT(pass_CMD_TO_LCD,BIT0) );
+//        writeControlSignalOnPortPin(LCD_D1 , GET_BIT(pass_CMD_TO_LCD,BIT1) );
+//        writeControlSignalOnPortPin(LCD_D2 , GET_BIT(pass_CMD_TO_LCD,BIT2) );
+//        writeControlSignalOnPortPin(LCD_D3 , GET_BIT(pass_CMD_TO_LCD,BIT3) );        
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(pass_CMD_TO_LCD,BIT4) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(pass_CMD_TO_LCD,BIT5) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(pass_CMD_TO_LCD,BIT6) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(pass_CMD_TO_LCD,BIT7) );
     
     }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
             || LCD_OPERATION_MODE == _4BIT_1L_MODE){
@@ -505,6 +540,15 @@ void displayCharacterOnLCD(u8 character_to_Display){
             LCD_OPERATION_MODE == _8BIT_1L_MODE){
     
         outControlSignalThroughPort(OUTD,character_to_Display);
+        //or if pins connection is configures to different pins on Microcontroller
+//        writeControlSignalOnPortPin(LCD_D0 , GET_BIT(character_to_Display,BIT0) );
+//        writeControlSignalOnPortPin(LCD_D1 , GET_BIT(character_to_Display,BIT1) );
+//        writeControlSignalOnPortPin(LCD_D2 , GET_BIT(character_to_Display,BIT2) );
+//        writeControlSignalOnPortPin(LCD_D3 , GET_BIT(character_to_Display,BIT3) );        
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(character_to_Display,BIT4) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(character_to_Display,BIT5) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(character_to_Display,BIT6) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(character_to_Display,BIT7) );
     
     }else if(LCD_OPERATION_MODE == _4BIT_2L_MODE 
             || LCD_OPERATION_MODE == _4BIT_1L_MODE){
@@ -574,7 +618,7 @@ void displayCharacterOnLCD(u8 character_to_Display){
 FUN_RETURN_STATUS displayCharOrCommandLCD(u8 data , u8 char_or_command){
     //IGNORING THE ERROR RETURNED CAUSE I'M CALLING IT WITH THE CORRECT ARGS
     
-    fun_ret_status_and_data.fun_return = NO_ERRORS;
+    ERR_CHECKER = NO_ERRORS;
     
     if(CMD == char_or_command  || DATA == char_or_command ){
         
@@ -588,6 +632,15 @@ FUN_RETURN_STATUS displayCharOrCommandLCD(u8 data , u8 char_or_command){
                 LCD_OPERATION_MODE == _8BIT_1L_MODE){
     
             outControlSignalThroughPort(OUTD,data);
+        //or if pins connection is configures to different pins on Microcontroller
+//        writeControlSignalOnPortPin(LCD_D0 , GET_BIT(data,BIT0) );
+//        writeControlSignalOnPortPin(LCD_D1 , GET_BIT(data,BIT1) );
+//        writeControlSignalOnPortPin(LCD_D2 , GET_BIT(data,BIT2) );
+//        writeControlSignalOnPortPin(LCD_D3 , GET_BIT(data,BIT3) );        
+//        writeControlSignalOnPortPin(LCD_D4 , GET_BIT(data,BIT4) );
+//        writeControlSignalOnPortPin(LCD_D5 , GET_BIT(data,BIT5) );
+//        writeControlSignalOnPortPin(LCD_D6 , GET_BIT(data,BIT6) );
+//        writeControlSignalOnPortPin(LCD_D7 , GET_BIT(data,BIT7) );
             
             generateLCDEnableControlPuls();
             
@@ -611,14 +664,14 @@ FUN_RETURN_STATUS displayCharOrCommandLCD(u8 data , u8 char_or_command){
             generateLCDEnableControlPuls();
         }else{
             //shit happens idiotic user case report him back
-            fun_ret_status_and_data.fun_return = ERR;
+            ERR_CHECKER = ERR;
         }
         
     }else{
         //shit happens idiotic user case report him back
-        fun_ret_status_and_data.fun_return = ERR;
+        ERR_CHECKER = ERR;
     }
-    return fun_ret_status_and_data.fun_return;
+    return ERR_CHECKER;
 }
 
 void displayStringOnLCD(u8 *ptr_string){
@@ -630,7 +683,7 @@ void displayStringOnLCD(u8 *ptr_string){
 //            displayCharacterOnLCD(*ptr_string);
 //            ptr_string++;
 //        }
-        
+
         for(u8 i    = LOOP_ZER0_INITIALIZER , 
                line = LOOP_ZER0_INITIALIZER ; *(ptr_string+i) != NULL_CHAR ; i++ ){
             
@@ -679,11 +732,26 @@ void initLCD(void){
     //ALL COMMENTED IS NOT REQUIRED IN INITIALIZATION OF LCD !!
     
     //commandLCD(FUNCTION_SET);
+    
     if(LCD_OPERATION_MODE == _4BIT_2L_MODE || 
             LCD_OPERATION_MODE == _4BIT_1L_MODE){
-        
-        //commandLCD(_4BIT_2L_MODE);
         commandLCD(CUSROR_HOME);
+        turnLEDOnOff(LED0,ON);
+        _delay_ms(1000);
+        commandLCD(_4BIT_2L_MODE);
+        turnLEDOnOff(LED0,OFF);
+        _delay_ms(1000);
+        commandLCD(DISPLAY_ON_CUSROR_ON);
+        turnLEDOnOff(LED0,ON);
+        _delay_ms(1000);
+        //commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+        commandLCD(CLEAR_DISPLAY);
+        turnLEDOnOff(LED0,OFF);
+        _delay_ms(1000);
+        commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE);
+        turnLEDOnOff(LED0,ON);
+        _delay_ms(1000);
+        
         //commandLCD(_4BIT_MODE_INIT);
         //displayCharOrCommandLCD(CUSROR_HOME , CMD);
     }else if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
@@ -691,11 +759,11 @@ void initLCD(void){
         commandLCD(_8BIT_2L_MODE);
         commandLCD(CLEAR_DISPLAY);
         commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
+        commandLCD(DISPLAY_ON_CUSROR_ON);
 //        displayCharOrCommandLCD(_8BIT_2L_MODE , CMD);
 //        displayCharOrCommandLCD(CLEAR_DISPLAY , CMD);
 //        displayCharOrCommandLCD(INC_DISPLAY_SHIFT_TO_RIGHT , CMD);
     }
-    commandLCD(DISPLAY_ON_CUSROR_ON);
     //commandLCD(LCD_OPERATION_MODE);
     //commandLCD(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE);    
     //commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
@@ -703,10 +771,10 @@ void initLCD(void){
 }
 
 FUN_RETURN_STATUS moveCursorToLocation(u8 row,u8 col){
-    fun_ret_status_and_data.fun_return = col > LCD_COLUMN_COUNT || 
-                                         row > LCD_ROW_COUNT ? ERR : NO_ERRORS;
+    ERR_CHECKER = col > LCD_COLUMN_COUNT || 
+                        row > LCD_ROW_COUNT ? ERR : NO_ERRORS;
     
-    if (NO_ERRORS == fun_ret_status_and_data.fun_return){
+    if (NO_ERRORS == ERR_CHECKER){
         commandLCD((row == LCD_ROW_COUNT ?
                     PLACE_CUR_AT_BEGINE_OF_SECOND_LINE  :
                     PLACE_CUR_AT_BEGINE_OF_FIRST_LINE) | col);
@@ -715,5 +783,5 @@ FUN_RETURN_STATUS moveCursorToLocation(u8 row,u8 col){
         //commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE + (row ? SECOND_ROW_START_OFFSET : ZERO_OFFSET) + col );
     }
 
-    return fun_ret_status_and_data.fun_return;
+    return ERR_CHECKER;
 }

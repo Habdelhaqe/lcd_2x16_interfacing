@@ -69,10 +69,13 @@ ISR(ADC_vect){
 
 int main(void) {
 
-    //u8 string[] = "In The Name Of ALLAH";
+    u8 string[] = "In The Name Of ALLAH";
     //u8 string[] = {NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR,NULL_CHAR};
     //int my_id=9742;
     
+    initLEDS();
+
+    initBTNS();
     
     configureLCDDataBusLines();
     
@@ -83,15 +86,12 @@ int main(void) {
     //initADCInternalCircuitry(ADC_CHANNEL0 , VOLTAGE_AVCC , RIGHT_ADJUST , PRESCALER_CLK_BY_128);
     onInitADC(ADC_CHANNEL0 , VOLTAGE_AVCC , RIGHT_ADJUST , PRESCALER_CLK_BY_128);
         
-    initLEDS();
-
-    initBTNS();
         
     //detect if initInterruptService is not a success
-    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
-        turnLEDOnOff(LED1,ON);
-    }
-    //SERG set I bit : ENABLE global interrupt concept for the MIcroController
+//    if(ERR == initInterruptService(INT0,INTERRUPT_RISING_EDGE_MODE)){
+//        turnLEDOnOff(LED1,ON);
+//    }
+//    //SERG set I bit : ENABLE global interrupt concept for the MIcroController
     sei(); 
   
      /*
@@ -101,10 +101,10 @@ int main(void) {
      * how to calculate the delay!!!!
      */
     _delay_ms(10);
-
     //\c moveCursorToLocation(u8,u8) does not work with 4_bit Mode!!!!!!!
-//    if(ERR == moveCursorToLocation(LCD_ROW_COUNT,4)){
+//    if(ERR == moveCursorToLocation(LCD_ROW_COUNT,0)){
 //        turnLEDOnOff(LED0,ON);
+//        _delay_ms(2000);
 //    }
     
     //displayStringOnLCD(string);
@@ -164,48 +164,47 @@ int main(void) {
 //       _delay_ms(100);
 //    }
 
-    //commandLCD(CLEAR_DISPLAY);
-
-    commandLCD(CLEAR_DISPLAY);
-
-    u8 msg[] = "converting";
+//  commandLCD(CLEAR_DISPLAY);
     
-//    displayStringOnLCD(msg);
-//    
-//    _delay_ms(500);
+    u8 msg[] = "NOT COMPLETED!!!!!!!";
+    
+    displayStringOnLCD(string);
+    
+    _delay_ms(500);
     
     commandLCD(CLEAR_DISPLAY);
-    //DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+    
+    DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+    
     onStartConversion(SINGLE_CONVERSION_MODE);
+    //as it is the first conversion it takes 25 ADC CLK to complete
+    
     //holder for conversion result    
-    //s16 conversion_result;
+    s16 conversion_result;
     
     while(KEEP_EXECUTING){
         
         //condition the LED2 be ON incase of a conversion OFF if non
-//        turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
-//        
-//        turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
-//        
-//        conversion_result = onConversionCompleteUsingPolling();
-//        
-//        turnLEDOnOff(LED1 , GET_BIT(conversion_result,CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT));
-//        
-//        if(GET_BIT(conversion_result,CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT)){
-//            //commandLCD(CLEAR_DISPLAY);
-//            //displayStringOnLCD(msg);
-//            turnLEDOnOff(LED2,IS_CONVERSION_COMPLETED);
-//            turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
-//            _delay_ms(1000);
-//        }else{
-//            turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
-//            //turnLEDOnOff(LED1,ON);
-//            //commandLCD(CLEAR_DISPLAY);
-//            displayINTOnLCD(conversion_result);
-//            turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
-//            _delay_ms(2000);
-//            onStartConversion(SINGLE_CONVERSION_MODE);
-//        }
+        turnLEDOnOff(LED2,IS_CONVERSION_STARTED);
+        
+        turnLEDOnOff(LED0,IS_CONVERSION_COMPLETED);
+        
+        conversion_result = onConversionCompleteUsingPollingSpeedy();
+        
+        commandLCD(CLEAR_DISPLAY);
+        displayStringOnLCD(msg);      
+        
+        turnLEDOnOff(LED1 , conversion_result==CONVERSION_PROCESS_NOT_COMPLETE );
+        
+        if( conversion_result!= 
+                CONVERSION_PROCESS_NOT_COMPLETED_ADJUSTMENT_LEFT_RIGHT ){
+            
+            commandLCD(CLEAR_DISPLAY);
+            displayINTOnLCD(conversion_result);
+            _delay_ms(1000);
+            onStartConversion(SINGLE_CONVERSION_MODE);
+        
+        }
         
     }
 }

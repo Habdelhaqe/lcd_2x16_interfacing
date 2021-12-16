@@ -11,40 +11,20 @@ void onInitADC(u8 select_channel_and_mode ,
                 u8 select_left_or_right_adjustment ,
                 u8 select_input_source_frequency){
      
-//    displayINTOnLCD((int)ADCSRA);
-//    _delay_ms(1000);
-
     ADCSRA = 0x88 | (select_input_source_frequency & FREQUENCY_SECUIRTY_MASK);
-
-//    displayINTOnLCD((int)ADCSRA);
-//    _delay_ms(1000);
-
-//    displayINTOnLCD((int)ADMUX);
-//    _delay_ms(1000);
 
     ADMUX = (select_channel_and_mode & CHANNEL_SECUIRTY_MASK) 
                             |
             (select_left_or_right_adjustment & LEFT_RIGHT_SECUIRTY_MASK)
                             |
             (select_voltage_ref & VOLTAGE_SECUIRTY_MASK);
-
-//    displayINTOnLCD((int)ADMUX);
-//    _delay_ms(1000);
-    
-    //ADC is  ready for accepting Conversion requests
  }
-   
+
 void onStartConversion(u8 select_auto_or_manual_trigger){
-
-//    displayINTOnLCD((int)ADCSRA);
-//    _delay_ms(1000);
-
     if(SINGLE_CONVERSION_MODE == select_auto_or_manual_trigger){
         //Set BIT6 ADSC OF ADCSRA and BIT5 ADTE is Cleared 
         ADCSRA |= START_MANUAL_CONVERSION_PROCESS;
     }else{
-        //Set BIT6 ADSC OF ADCSRA and Set BIT5 ADTE
-        ADCSRA |= START_AUTO_CONVERSION_PROCESS;
         /*
          * configure SFIOR :TRIGGER SELECT source (Sampling Frequency)
          *  Bit7 : ADTS2
@@ -54,15 +34,15 @@ void onStartConversion(u8 select_auto_or_manual_trigger){
          *  Bits3:0 is rest/cleared for now!!!!
          */
         SFIOR = select_auto_or_manual_trigger & AUTO_TRIGER_SECUIRTY_MASK;
+        //Set BIT6 ADSC and BIT5 ADTE OF ADCSRA 
+        ADCSRA |= START_AUTO_CONVERSION_PROCESS;
     }
-//    displayINTOnLCD((int)ADCSRA);
-//    _delay_ms(1000);
 }
 
 s16 onConversionComplete(void){
     s16 conversion_result;
     //find out left or right adjust is set through scanning ADMUX : ADLAR
-    if(GET_BIT(ADMUX , ADLAR)){
+    if(LEFT_OR_RIGHT_ADJUST){
         //left adjustment case
         conversion_result = 
                 (ADCL << SHIFT_ADCL_FOR_LEFT_ADJUST) 
@@ -73,17 +53,15 @@ s16 onConversionComplete(void){
 //        *((u8 *)(&conversion_result)+1) = ADCH;        
     }else{
         //right adjustment case
-        conversion_result = ADCL | (ADCH << ADLAR_ADCH_SHIFT);
+        //conversion_result = ADCL | (ADCH << ADLAR_ADCH_SHIFT);
         //safer may be faster
-//        *(u8 *)(&conversion_result) = ADCL;  
-//        *((u8 *)(&conversion_result)+1) = ADCH;        
+        *(u8 *)(&conversion_result) = ADCL;  
+        *((u8 *)(&conversion_result)+1) = ADCH;        
     }
     return conversion_result;
 }
 
 s16 onConversionCompleteUsingPolling(void){     
-
-    //turnLEDOnOff(LED1,ON);
 
     s16 conversion_output;
     /*
@@ -97,29 +75,32 @@ s16 onConversionCompleteUsingPolling(void){
      *      example :     #define ERR_SELECTING_CONVERSION_MODE 0x8000
      */
     
-    if(IS_CONVERSION_STARTED){
-                
-        if( IS_CONVERSION_COMPLETED ){
-            conversion_output = onConversionComplete();
-            /*
-            * clearing the Interrupt flag setting the ADIF(ADCSRA) manually cause 
-            * the code already satisfied the caller and represented the conversion 
-            * data
-            */
-            CLEAR_INTEERUPT;
-            CLEAR_BIT(ADCSRA,ADSC);
-            //turnLEDOnOff(LED1,OFF);
-        }else{
-            conversion_output = CONVERSION_PROCESS_NOT_COMPLETE;
-        }
+    if(IS_CONVERSION_STARTED && IS_CONVERSION_COMPLETED){
+        conversion_output = onConversionComplete();
+        /*
+         * as i saw examples they all relay on HW clearing the ADIF and
+         * ADSC after the read is complete (ADCL then ADCH is read)
+         * clearing the Interrupt flag setting the ADIF(ADCSRA) manually cause 
+         * the code already satisfied the caller and represented the conversion 
+         * data
+        */
+        //CLEAR_INTEERUPT;
+        //CLEAR_BIT(ADCSRA,ADSC);   
     }else{
-        conversion_output = CONVERSION_PROCESS_NOT_COMPLETE;
+        conversion_output = CONVERSION_PROCESS_NOT_COMPLETE;    
     }
     return conversion_output;
 }
 
-u8 isConversionStarted(void){
-    return GET_BIT(ADCSRA,ADSC);
+s16 onConversionCompleteUsingPollingSpeedy(void){
+
+    return ( /*IS_CONVERSION_STARTED &&*/ IS_CONVERSION_COMPLETED) ? 
+                onConversionComplete()  
+                        :
+                LEFT_OR_RIGHT_ADJUST ? 
+                    CONVERSION_PROCESS_NOT_COMPLETE_LEFT_ADJUST 
+                            : 
+                        CONVERSION_PROCESS_NOT_COMPLETE;
 }
  
 //FUN_RETURN_STATUS checkForSelectedChannel(u8 selected_channel){

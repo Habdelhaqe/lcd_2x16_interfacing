@@ -3,6 +3,9 @@
  * Author: Engs
  *
  * Created on 10 December 2021, 17:54
+ * URLS:
+ * https://www.circuitstoday.com/using-adc-analog-digital-converter-avr
+ * https://www.electronicwings.com/avr-atmega/atmega1632-adc
  */
 
 #ifndef ADC_INTERFACING_H
@@ -143,8 +146,8 @@
     #define        SINGLE_CONVERSION_MODE 0x0F // 7>>higher bits 7:5 => 111 1 0000
 
     #define ERR_SELECTING_CONVERSION_MODE 0xFD00 //0b 1111 1110 0000 0000 
-    #define CONVERSION_PROCESS_NOT_COMPLETE_CHECKING_BIT 10
-    #define CONVERSION_PROCESS_NOT_COMPLETE 0x4F //0b 0100 0000 
+    #define CONVERSION_PROCESS_NOT_COMPLETE 0x4FF   //0b 0000 0100 1111 1111 
+    #define CONVERSION_PROCESS_NOT_COMPLETE_LEFT_ADJUST 0xFFD0 //0b 1111 1111 1101 0000 
     
     #define AUTO_TRIGER_SECUIRTY_MASK 0xE0 //0b 1110 0000
     #define RESERVED_BIT_4_CLEAR_MASK 0xEF //0b 1110 111
@@ -154,8 +157,11 @@
     #define IS_CONVERSION_STARTED GET_BIT(ADCSRA , ADSC)
     #define CLEAR_INTEERUPT OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADCSRA , ADIF , HIGH)
     #define DISABLE_CONVERSION_COMPLETE_INTERRUPT CLEAR_BIT(ADCSRA,ADIE);
-
-
+    #define LEFT_OR_RIGHT_ADJUST (GET_BIT(ADMUX , ADLAR))
+    
+    #define CONVERSION_PROCESS_NOT_COMPLETED_ADJUSTMENT_LEFT_RIGHT  (LEFT_OR_RIGHT_ADJUST ? \
+                                            CONVERSION_PROCESS_NOT_COMPLETE_LEFT_ADJUST \
+                                            : CONVERSION_PROCESS_NOT_COMPLETE)
     /*
      * initialize ADC internal circuitry to the desired logic levels
      * configure/program the ADC controls to the specific needs through
@@ -292,6 +298,11 @@
      * left adjustment : ADLAR is set (ADMUX)
      *      ADCH(ALL BITS) ADCL(BITS 7,6)
      * 
+     * "When reading the ADC output, we should read ADCL first then read ADCH. 
+     *      This is because reading ADCL, informs the ADC module that a read 
+     *      process is in progress and so no conversions happen until the 
+     *      ADCH is read as well."
+     * 
      * "When ADCL is read, the ADC Data Register is not updated until ADCH is 
      *  read. 
      *  Consequently, if the result is left adjusted and no more than 8-bit 
@@ -306,7 +317,7 @@
     
     s16 onConversionCompleteUsingPolling(void);
     
-    u8 isConversionStarted(void);
+    s16 onConversionCompleteUsingPollingSpeedy(void);
     
 #endif	/* ADC_INTERFACING_H */
 

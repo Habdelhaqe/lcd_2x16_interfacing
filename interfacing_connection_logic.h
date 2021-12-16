@@ -64,7 +64,7 @@
      * http://web.alfredstate.edu/faculty/weimandn/lcd/lcd_initialization/lcd_initialization_index.html
      * https://www.electronicwings.com/avr-atmega/interfacing-lcd-16x2-in-4-bit-mode-with-atmega-16-32-#:~:text=LCD%2016x2%20can%20be%20used,required%20data%20in%20data%20mode.
      * https://asset.conrad.com/media10/add/160267/c1/-/en/001070528ML02/manual-1070528-joy-it-rb-lcd-16x2-module-56-cm-222-inch-16-x-2-p-compatible-with-raspberry-pi.pdf
-     * 
+     * https://atmega32-avr.com/interface-lcd-4-bit-mode-avr-microcontroller/ 
      */
 
     /* configure/control which type of data 
@@ -150,6 +150,7 @@
     #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
     #define FUNCTION_SET 0b00111100
     #define UNKNOWN_SHIT_CMD 0x33
+    #define UNKNOWN_SHIT_CMD2 0x83
     
     #define LCD_OPERATION_MODE _4BIT_2L_MODE
 
