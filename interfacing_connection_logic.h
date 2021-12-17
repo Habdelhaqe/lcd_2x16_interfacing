@@ -65,7 +65,8 @@
      * https://www.electronicwings.com/avr-atmega/interfacing-lcd-16x2-in-4-bit-mode-with-atmega-16-32-#:~:text=LCD%2016x2%20can%20be%20used,required%20data%20in%20data%20mode.
      * https://asset.conrad.com/media10/add/160267/c1/-/en/001070528ML02/manual-1070528-joy-it-rb-lcd-16x2-module-56-cm-222-inch-16-x-2-p-compatible-with-raspberry-pi.pdf
      * https://atmega32-avr.com/interface-lcd-4-bit-mode-avr-microcontroller/
-     * https://exploreembedded.com/wiki/Interfacing_LCD_in_4-bit_mode_with_8051 
+     * https://exploreembedded.com/wiki/Interfacing_LCD_in_4-bit_mode_with_8051
+     * https://www.bipom.com/documents/appnotes/LCD%20Interfacing%20using%20HD44780%20Hitachi%20chipset%20compatible%20LCD.pdf
      */
 
     /* configure/control which type of data 
@@ -145,7 +146,9 @@
     #define DISPLAY_ON_CUSROR_ON 0x0F
     #define DISPLAY_ON_CUSROR_OFF 0x0C
     #define PLACE_CUR_AT_BEGINE_OF_FIRST_LINE 0x80
+    #define PLACE_CUR_AT_LAST_OF_FIRST_LINE 0x8F
     #define PLACE_CUR_AT_BEGINE_OF_SECOND_LINE 0xC0
+    #define PLACE_CUR_AT_LAST_OF_SECOND_LINE 0xCF
     #define SECOND_ROW_START_OFFSET 0x40
     #define INC_DISPLAY_SHIFT_TO_RIGHT 0x06
     #define FUNCTION_SET 0b00111100

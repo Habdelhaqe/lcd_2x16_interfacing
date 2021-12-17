@@ -1,4 +1,5 @@
 #include "phone_keypad.h"
+#include "interfacing_connection_logic.h"
 #include <util/delay.h>
 
 void initKeypad(void){
@@ -14,29 +15,6 @@ void initKeypad(void){
     programPortPinInOut(KEYPAD_3_PIN , OUTPUT);       
 }
 
-FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8 keypad_1_siganl ,
-                                  u8 keypad_2_siganl ,
-                                  u8 keypad_3_siganl){
-    //drive bias signal (HIGH) on : KEYPAD_1_PIN , KEYPAD_2_PIN ,KEYPAD_3_PIN
-    
-    FUN_RETURN_STATUS err_checker = NO_ERRORS;
-    
-    if( (HIGH == keypad_1_siganl && HIGH == keypad_2_siganl) ||
-           (HIGH == keypad_1_siganl && HIGH == keypad_3_siganl) || 
-                (HIGH == keypad_2_siganl && HIGH == keypad_3_siganl) ){
-        err_checker = ERR;
-    }
-    
-    if(NO_ERRORS == err_checker){
-        //IGNORING THE ERROR RETURNED CAUSE I'M CALLING THE SHOOTS
-        writeControlSignalOnPortPin(KEYPAD_1_PIN , keypad_1_siganl ? HIGH : LOW);
-        writeControlSignalOnPortPin(KEYPAD_2_PIN , keypad_2_siganl ? HIGH : LOW);
-        writeControlSignalOnPortPin(KEYPAD_3_PIN , keypad_3_siganl ? HIGH : LOW);
-    }else{
-        //what to do with the idiot user except to report back to the caller
-    }
-    return err_checker;
-}
 
 u8 getPressedKey(void){
     u8 pressedKey = UN_IDENTIFIED ,
@@ -87,32 +65,47 @@ u8 getPressedKey(void){
      *  inner loop iteration :
      *      iterator : start KEYPAD_A_PIN -> end KEYPAD_D_PIN
     */
-    
+        
     for(u8 column = KEYPAD_1_PIN ; column <= KEYPAD_3_PIN ; column++){
         
-        driveBiasSiganlThroughKeypad( column==KEYPAD_1_PIN? HIGH : LOW , 
-                                      column==KEYPAD_2_PIN? HIGH : LOW , 
-                                      column==KEYPAD_3_PIN? HIGH : LOW );
-        
-        for(iterator = KEYPAD_A_PIN , 
-            selected_key = ( column == KEYPAD_1_PIN ? KEYPAD_BTN1 : 
-                           ( column == KEYPAD_2_PIN ? KEYPAD_BTN2 : 
-                                                      KEYPAD_BTN3) )
-                ; 
-            iterator <= KEYPAD_D_PIN 
-                ;
-            iterator++ , selected_key += KEY_OFFSET
-           ){
-            
+        if(column == KEYPAD_1_PIN){
+            selected_key = KEYPAD_BTN1;
+            writeControlSignalOnPortPin(KEYPAD_1_PIN , HIGH );
+            writeControlSignalOnPortPin(KEYPAD_2_PIN , LOW );
+            writeControlSignalOnPortPin(KEYPAD_3_PIN , LOW );
+        }else if(column == KEYPAD_2_PIN){
+            selected_key = KEYPAD_BTN2;
+            writeControlSignalOnPortPin(KEYPAD_1_PIN , LOW );
+            writeControlSignalOnPortPin(KEYPAD_2_PIN , HIGH );
+            writeControlSignalOnPortPin(KEYPAD_3_PIN , LOW );
+        }else{
+            selected_key = KEYPAD_BTN3;
+            writeControlSignalOnPortPin(KEYPAD_1_PIN , LOW );
+            writeControlSignalOnPortPin(KEYPAD_2_PIN , LOW );
+            writeControlSignalOnPortPin(KEYPAD_3_PIN , HIGH );
+        }
+
+        for(iterator = KEYPAD_A_PIN ; iterator <= KEYPAD_D_PIN ; iterator++ , 
+                                                selected_key += KEY_OFFSET){
+//            displayINTOnLCD(iterator);
+//            displayCharacterOnLCD(':');
+            dispalyKeyAsChar(selected_key);
+//            displayINTOnLCD(
+//                    scanControlPassingThroughPortPin(iterator).scanned_data);
+            displayCharacterOnLCD(' ');            
             //loop body find if key pressed in selected column and line 
-            
-            if(HIGH == scanControlPassingThroughPortPin(iterator).scanned_data){
+            if(scanControlPassingThroughPortPin(iterator).scanned_data){
                 pressedKey = selected_key;
+                turnLEDOnOff(LED0,ON);
+                _delay_ms(3000);
                 break;
             }
             
+            _delay_ms(200);
         }
-        
+        _delay_ms(200);
+        commandLCD(CLEAR_DISPLAY);
+ 
         //check if we that a key is pressed
         if( UN_IDENTIFIED != pressedKey ){
             break;
@@ -122,5 +115,22 @@ u8 getPressedKey(void){
     }
 
     return pressedKey;
+}
 
+void dispalyKeyAsChar(u8 key){
+    switch(key){
+        case KEYPAD_BTN0: key = ASCI_0; break;
+        case KEYPAD_BTN1: 
+        case KEYPAD_BTN2: 
+        case KEYPAD_BTN3: 
+        case KEYPAD_BTN4: 
+        case KEYPAD_BTN5: 
+        case KEYPAD_BTN6: 
+        case KEYPAD_BTN7: 
+        case KEYPAD_BTN8: 
+        case KEYPAD_BTN9: key = ASCI_0 + key; break;            
+        case KEYPAD_BTN_STAR: key = ASCI_STAR; break;
+        case KEYPAD_BTN_POUND: key = ASCI_POUND;
+    }
+    displayCharacterOnLCD(key);
 }

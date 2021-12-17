@@ -7,7 +7,6 @@ extern scan_fun_return fun_ret_status_and_data;
 #define ERR_CHECKER fun_ret_status_and_data.fun_return
 #define SCANNED_DATA fun_ret_status_and_data.scanned_data
 
-
 //FUN_RETURN_STATUS initLED(u8 which_led , u8 which_port){
 //
 //    //checking if argument are of correct value
@@ -766,24 +765,23 @@ void initLCD(void){
     
     //commandLCD(FUNCTION_SET);
     
+    configureLCDDataBusLines();
+    
+    configureLCDControlPins();
+    
     if(LCD_OPERATION_MODE == _4BIT_2L_MODE || 
             LCD_OPERATION_MODE == _4BIT_1L_MODE){
         commandLCD(CUSROR_HOME);
-        turnLEDOnOff(LED0,ON);
-        _delay_ms(1000);
+        _delay_ms(1);
         commandLCD(_4BIT_2L_MODE);
-        turnLEDOnOff(LED0,OFF);
-        _delay_ms(1000);
+        _delay_ms(1);
         commandLCD(DISPLAY_ON_CUSROR_ON);
-        turnLEDOnOff(LED0,ON);
-        _delay_ms(1000);
+        _delay_ms(1);
         //commandLCD(INC_DISPLAY_SHIFT_TO_RIGHT);
         commandLCD(CLEAR_DISPLAY);
-        turnLEDOnOff(LED0,OFF);
-        _delay_ms(1000);
+        _delay_ms(1);
         commandLCD(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE);
-        turnLEDOnOff(LED0,ON);
-        _delay_ms(1000);        
+        _delay_ms(1);        
     }else if(LCD_OPERATION_MODE == _8BIT_2L_MODE ||
                 LCD_OPERATION_MODE == _8BIT_1L_MODE){
         commandLCD(CUSROR_HOME);

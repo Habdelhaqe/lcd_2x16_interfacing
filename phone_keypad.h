@@ -2,7 +2,10 @@
 
 #define PHONE_KEYPAD_HEADER
     #include"atmega32a.h"
-    
+    #define ASCI_0 0x30
+    #define ASCI_STAR 0x2A //*
+    #define ASCI_POUND 0x23 //#
+
     //keypad connections
     #define KEYPAD_A_PIN _PC_PIN4 // LINE A i/p to Microcontroller BTNS 1,2,3 
     #define KEYPAD_B_PIN _PC_PIN5 // LINE B i/p to Microcontroller BTNS 4,5,6
@@ -47,17 +50,7 @@
      * 
      */
     void initKeypad(void);
-    
-    /*
-     * select a column via driving a HIGH signal Through one column and 
-     * LOW on the other 2 only 1 should be HIGH
-     * FUN_RETURN_STATUS is to report back the passing of 2/3 HIGH signals
-     * passing to the function
-     */
-    FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8 /*DRIVING SINAL THROUGH COLUMN 1*/,
-                                      u8 /*DRIVING SINAL THROUGH COLUMN 2*/,
-                                      u8 /*DRIVING SINAL THROUGH COLUMN 3*/);
-    
+        
     /*
      * finding out which key is pressed if any via using function
      * \c FUN_RETURN_STATUS driveBiasSiganlThroughKeypad(u8,u8,u8);
@@ -70,4 +63,5 @@
      */
     u8 getPressedKey(void);
     
+    void dispalyKeyAsChar(u8 key);
 #endif
