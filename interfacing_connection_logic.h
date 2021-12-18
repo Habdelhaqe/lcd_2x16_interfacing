@@ -157,6 +157,8 @@
     
     #define LCD_OPERATION_MODE _4BIT_2L_MODE
 
+    #define CLEAR_LCD commandLCD(CLEAR_DISPLAY)
+
     /*
      * initialize/configure/program the LED Connected Port pin to be o/p
      * for write/output control signal

@@ -25,6 +25,8 @@ void mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique(void);
 void mainInterfacingWithKeyPad(void);
 void mainVisitAllLCDCursorPositions(void);
 void mainIdonotKnowWhatThisCodeFor(void);
+void main8LM35On8ChannelsDispalyTemp(void);
+void mainTest2LinesLCDToggling(void);
 
 /*
  * external interrupt initiated on INT0
@@ -91,13 +93,15 @@ int main(void) {
     
     //SERG set I bit : ENABLE global interrupt concept for the MIcroController
     sei(); 
-        
+    
+//    mainTest2LinesLCDToggling();
     
 //    mainInterfaceADCWithLM35TempDisplayOnLCD();
 //    mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique();
 //    mainVisitAllLCDCursorPositions();
-    mainInterfacingWithKeyPad();
-    
+//    mainInterfacingWithKeyPad();
+  main8LM35On8ChannelsDispalyTemp();
+  
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -224,6 +228,95 @@ void mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique(void){
     }
 }
 
+void main8LM35On8ChannelsDispalyTemp(void){
+    
+    //initLCD();
+    
+    u8 conv_msg[] ="New Conversion Set...";
+    
+    CLEAR_LCD;
+    
+    s32 conversion_result ;
+    
+    u8 channel_iterator ;
+    
+    //moveCursorToLocation(1 , LOOP_ZER0_INITIALIZER);
+    
+    onInitADC(ADC_CHANNEL0,VOLTAGE_AVCC,RIGHT_ADJUST,PRESCALER_CLK_BY_128);
+    DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+    //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+    while(KEEP_EXECUTING){
+        for(channel_iterator = ADC_CHANNEL0 ; channel_iterator <= ADC_CHANNEL7 ; channel_iterator++ ){
+            CHANGE_ADC_CHANNEL_KEPP_OTHER_ADMUX_ADCSRA_SETTINGS(channel_iterator);
+            _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);        
+        
+            onStartConversion(SINGLE_CONVERSION_MODE);
+            conversion_result = onConversionCompleteUsingPolling() * DIGITAL_REPRESENTATION_LM35V_FOR_1_C ;
+        
+            displayINTOnLCD(conversion_result);
+            displayCharacterOnLCD(' ');
+        
+            if(channel_iterator == ADC_CHANNEL3){
+                moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);
+            }
+        }
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        CLEAR_LCD;
+        displayStringOnLCD(conv_msg);
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        CLEAR_LCD;
+    }
+    
+    
+//    onStartConversion(SINGLE_CONVERSION_MODE);    
+//    conversion_result = onConversionCompleteUsingPolling() * DIGITAL_REPRESENTATION_LM35V_FOR_1_C ;
+//    
+//    displayINTOnLCD(conversion_result);
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+//    
+//    CHANGE_ADC_CHANNEL_KEPP_OTHER_ADMUX_ADCSRA_SETTINGS(ADC_CHANNEL0+1);
+//    _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+// 
+//    onStartConversion(SINGLE_CONVERSION_MODE);    
+//    conversion_result_ = onConversionCompleteUsingPolling() * DIGITAL_REPRESENTATION_LM35V_FOR_1_C ;
+    
+    //moveCursorToLocation(LOOP_ZER0_INITIALIZER , LOOP_ZER0_INITIALIZER);
+        
+//    displayINTOnLCD(conversion_result);
+//    displayINTOnLCD(conversion_result_);
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    
+//    u8 channel_iterator ;
+//    
+//    
+//    while(KEEP_EXECUTING){
+//        
+//        for(channel_iterator = ADC_CHANNEL0 ; channel_iterator <=ADC_CHANNEL7 ; channel_iterator++ ){
+//        
+//            onInitADC(channel_iterator,VOLTAGE_AVCC,RIGHT_ADJUST,PRESCALER_CLK_BY_128);
+//        
+//            DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+//    
+//            _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+//            
+//            conversion_result = onConversionCompleteUsingPolling();
+//            
+//            displayINTOnLCD(conversion_result * DIGITAL_REPRESENTATION_LM35V_FOR_1_C);
+//            
+//            displayCharacterOnLCD(' ');
+//            
+//            if(channel_iterator == ADC_CHANNEL3){
+//                moveCursorToLocation(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE,LOOP_ZER0_INITIALIZER);
+//            }
+//        }
+//        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+//        
+//        commandLCD(CLEAR_DISPLAY);
+//        
+//        moveCursorToLocation(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE,LOOP_ZER0_INITIALIZER);
+//    }
+}
+
 void mainInterfacingWithKeyPad(void){
 
     initKeypad();
@@ -340,4 +433,33 @@ void mainVisitAllLCDCursorPositions(void){
         }
     
     }
+}
+
+void mainTest2LinesLCDToggling(void){
+    
+    u8 line = LOOP_ZER0_INITIALIZER;
+    
+    CLEAR_LCD;
+    
+    while(KEEP_EXECUTING){
+        
+        line = !line;
+        
+        moveCursorToLocation(line , 0);
+        
+        displayINTOnLCD(9742);
+        
+        line = !line;
+        
+        moveCursorToLocation(line , 0);
+    
+        displayINTOnLCD(2020);
+    
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        
+        CLEAR_LCD; 
+        
+        line = !line;
+    } 
+   
 }
