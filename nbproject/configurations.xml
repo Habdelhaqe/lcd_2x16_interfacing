@@ -10,6 +10,7 @@
       <itemPath>phone_keypad.h</itemPath>
       <itemPath>interrupt_configuration.h</itemPath>
       <itemPath>adc_interfacing.h</itemPath>
+      <itemPath>timer0_interfacing.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -24,6 +25,7 @@
       <itemPath>phone_keypad.c</itemPath>
       <itemPath>interrupt_configuration.c</itemPath>
       <itemPath>adc_interfacing.c</itemPath>
+      <itemPath>timer0_interface.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

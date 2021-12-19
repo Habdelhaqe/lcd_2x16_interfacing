@@ -10,6 +10,7 @@
 #include"phone_keypad.h"
 #include"interrupt_configuration.h"
 #include "adc_interfacing.h"
+#include "timer0_interfacing.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -27,6 +28,7 @@ void mainVisitAllLCDCursorPositions(void);
 void mainIdonotKnowWhatThisCodeFor(void);
 void main8LM35On8ChannelsDispalyTemp(void);
 void mainTest2LinesLCDToggling(void);
+void mainTimer0(void);
 
 /*
  * external interrupt initiated on INT0
@@ -47,6 +49,7 @@ ISR(INT0_vect){
     
 }
 
+//internal interrupts
 ISR(ADC_vect){
     
     commandLCD(CLEAR_DISPLAY);
@@ -74,6 +77,15 @@ ISR(ADC_vect){
     turnLEDOnOff(LED1 , IS_CONVERSION_COMPLETED);
 
 }
+
+ISR(TIMER0_OVF_vect){
+    static u8 counter = 0;
+    counter++;
+    turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+    displayINTOnLCD(counter);
+    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+}
+
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
 
@@ -100,8 +112,10 @@ int main(void) {
 //    mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique();
 //    mainVisitAllLCDCursorPositions();
 //    mainInterfacingWithKeyPad();
-  main8LM35On8ChannelsDispalyTemp();
-  
+//  main8LM35On8ChannelsDispalyTemp();
+    
+    mainTimer0();
+        
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -228,6 +242,19 @@ void mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique(void){
     }
 }
 
+/*
+ * when calling:
+ *      @onIntADC(u8,u8,u8,u8);
+ *      DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+ *      to initiate ADC 2 times the o/p of ADC is ~= Doubled 
+ *      ADCH and ADCL doesn't just updates(as if they are anded with the the 
+ *      new value) no they are added to new ADCH and ADCL values(as if they are 
+ *      Or)
+ * that's one of the reasons for creating :
+ * @CHANGE_ADC_CHANNEL_KEPP_OTHER_ADMUX_ADCSRA_SETTINGS(NEW_CHANNEL);
+ * to keep the frequency and mode as selected along with the voltage ref 
+ * and just change the channel to convert the analog signal passing through it
+ */
 void main8LM35On8ChannelsDispalyTemp(void){
     
     //initLCD();
@@ -239,14 +266,14 @@ void main8LM35On8ChannelsDispalyTemp(void){
     s32 conversion_result ;
     
     u8 channel_iterator ;
-    
-    //moveCursorToLocation(1 , LOOP_ZER0_INITIALIZER);
-    
+        
     onInitADC(ADC_CHANNEL0,VOLTAGE_AVCC,RIGHT_ADJUST,PRESCALER_CLK_BY_128);
     DISABLE_CONVERSION_COMPLETE_INTERRUPT;
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
     while(KEEP_EXECUTING){
+        
         for(channel_iterator = ADC_CHANNEL0 ; channel_iterator <= ADC_CHANNEL7 ; channel_iterator++ ){
+        
             CHANGE_ADC_CHANNEL_KEPP_OTHER_ADMUX_ADCSRA_SETTINGS(channel_iterator);
             _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);        
         
@@ -255,19 +282,22 @@ void main8LM35On8ChannelsDispalyTemp(void){
         
             displayINTOnLCD(conversion_result);
             displayCharacterOnLCD(' ');
-        
+            
+            //move cursor to second line for the reaming 4 Temp sensors
             if(channel_iterator == ADC_CHANNEL3){
                 moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);
             }
+        
         }
         _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
         CLEAR_LCD;
+        
         displayStringOnLCD(conv_msg);
         _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
         CLEAR_LCD;
     }
-    
-    
+
+    //double the first reading value code    
 //    onStartConversion(SINGLE_CONVERSION_MODE);    
 //    conversion_result = onConversionCompleteUsingPolling() * DIGITAL_REPRESENTATION_LM35V_FOR_1_C ;
 //    
@@ -286,35 +316,6 @@ void main8LM35On8ChannelsDispalyTemp(void){
 //    displayINTOnLCD(conversion_result_);
 //    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
     
-//    u8 channel_iterator ;
-//    
-//    
-//    while(KEEP_EXECUTING){
-//        
-//        for(channel_iterator = ADC_CHANNEL0 ; channel_iterator <=ADC_CHANNEL7 ; channel_iterator++ ){
-//        
-//            onInitADC(channel_iterator,VOLTAGE_AVCC,RIGHT_ADJUST,PRESCALER_CLK_BY_128);
-//        
-//            DISABLE_CONVERSION_COMPLETE_INTERRUPT;
-//    
-//            _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
-//            
-//            conversion_result = onConversionCompleteUsingPolling();
-//            
-//            displayINTOnLCD(conversion_result * DIGITAL_REPRESENTATION_LM35V_FOR_1_C);
-//            
-//            displayCharacterOnLCD(' ');
-//            
-//            if(channel_iterator == ADC_CHANNEL3){
-//                moveCursorToLocation(PLACE_CUR_AT_BEGINE_OF_SECOND_LINE,LOOP_ZER0_INITIALIZER);
-//            }
-//        }
-//        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-//        
-//        commandLCD(CLEAR_DISPLAY);
-//        
-//        moveCursorToLocation(PLACE_CUR_AT_BEGINE_OF_FIRST_LINE,LOOP_ZER0_INITIALIZER);
-//    }
 }
 
 void mainInterfacingWithKeyPad(void){
@@ -462,4 +463,32 @@ void mainTest2LinesLCDToggling(void){
         line = !line;
     } 
    
+}
+
+void mainTimer0(void){
+    
+    initLED(LED0);
+    
+    //initLCD();
+    
+    CLEAR_LCD;
+    
+    _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+    
+    onInitTimer(TIMER0_PRESCALER_CLK_BY_8 ,
+                NORMAL_MODE ,
+                NON_PWD_NORMAL_PORT_OPERATION_MODE ,
+                TRUE ,
+                FALSE );
+    
+    //THIS CODE EXITS MAIN FUN NO INIFINTE LOOP BUT FUNCTIONS
+    //DOES NOT WORKING
+    _delay_ms(0.1);
+    
+    //WORKS FINE
+    //_delay_ms(HIGH);
+    //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+
+    //while(KEEP_EXECUTING);
+    
 }
