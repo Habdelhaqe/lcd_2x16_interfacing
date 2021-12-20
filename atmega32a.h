@@ -10,6 +10,9 @@
 #ifndef ATMEGA32A_H
     #define	ATMEGA32A_H
     #define F_CPU 16000000UL // 16 Mhz clk
+    
+    #define ON  HIGH
+    #define OFF LOW
 
     //8PINS MAPING
     #define PIN0 0

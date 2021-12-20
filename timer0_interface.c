@@ -1,4 +1,8 @@
 #include "timer0_interfacing.h"
+#include "interfacing_connection_logic.h"
+
+static u8 save_configuration_of_timer ,
+          is_timer0_on; 
 
 void onInitTimer(u8 selected_clk_source , 
                  u8 selected_wave_gen_mode , 
@@ -22,4 +26,31 @@ void onInitTimer(u8 selected_clk_source ,
                 (selected_wave_gen_mode & WGM_INPUT_SECUIRTY_MASK) |
                     (selected_compare_out_mode & COM_INPUT_SECUIRTY_MASK) ;
     
+    is_timer0_on = ((selected_clk_source & CLK_INPUT_SECUIRTY_MASK) != OFF) ;
+}
+
+void haltTimer(void){
+    save_configuration_of_timer = TCCR0;
+    STOP_TIMER0;
+    is_timer0_on = OFF ;
+}
+
+u8 getTimerConfiguration(void){
+    return save_configuration_of_timer;
+}
+
+u8 getTimerStatus(void){
+    return is_timer0_on;
+}
+
+void resumeTimer(void){
+    if(!is_timer0_on){
+        TCCR0 = getTimerConfiguration();
+        is_timer0_on = ON;
+    }
+}
+
+void changeTimerClk_source(u8 selected_new_clk_source_frequency){
+    STOP_TIMER0;
+    TCCR0 |= (selected_new_clk_source_frequency & CLK_INPUT_SECUIRTY_MASK);
 }

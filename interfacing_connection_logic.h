@@ -17,10 +17,7 @@
     #define	INTERFACING_CONNECTION_LOGIC_H
     
     #define LOOP_ZER0_INITIALIZER 0
-    
-    #define ON  HIGH
-    #define OFF LOW
-    
+        
     #define DECIMAL_RADIX 10
     #define BUFFER_MAX_SIZE 11 //8 bytes: 10 digit number + 1 null char
     

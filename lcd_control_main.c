@@ -15,6 +15,8 @@
 #include <avr/interrupt.h>
 
 #define KEEP_EXECUTING 1
+#define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
+#define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_WORKING 0.2
 
 #define INTERRUPT_RISING_EDGE_MODE            3 //0x03 : 0b 0000 0011
 #define INTERRUPT_FALLING_EDGE_MODE           2 //0x02 : 0b 0000 0010
@@ -29,7 +31,7 @@ void mainIdonotKnowWhatThisCodeFor(void);
 void main8LM35On8ChannelsDispalyTemp(void);
 void mainTest2LinesLCDToggling(void);
 void mainTimer0(void);
-
+void instrcutionsExecutedEverySec(void);
 /*
  * external interrupt initiated on INT0
  */
@@ -79,15 +81,19 @@ ISR(ADC_vect){
 }
 
 ISR(TIMER0_OVF_vect){
-    static u8 counter = 0;
-    counter++;
-    turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
-    displayINTOnLCD(counter);
-    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    //this code could be executed only if a delay is encountered @ least 0.2 mS     
+//    static u8 counter = 0;
+//    counter++;
+//    turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+//    displayINTOnLCD(counter);
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    instrcutionsExecutedEverySec();
 }
 
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
+
+u8 lcd_string[32];
 
 int main(void) {
     
@@ -475,20 +481,201 @@ void mainTimer0(void){
     
     _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
     
-    onInitTimer(TIMER0_PRESCALER_CLK_BY_8 ,
+    onInitTimer(TIMER0_PRESCALER_CLK_BY_1024 ,
                 NORMAL_MODE ,
                 NON_PWD_NORMAL_PORT_OPERATION_MODE ,
                 TRUE ,
                 FALSE );
+    /*
+     * case study : 
+     *          i forgot to add the infinite loop statement that keeps
+     * the @main fun statements/instructions running all time keeping 
+     * the microcontroller CPU looping for ever or till REST interrupt or 
+     * powered off ,
+     * timer0 TOIE0 is set so @ISR(TIMER0_OVF_vect) is activated: when @TCNT0 
+     * reaches @MAX(0xFF) the @TOVF0 is set interrupting the CPU internally 
+     * CPU examines the VECTOR TABLE finds :
+     *  $016 TIMER0 OVF "Timer/Counter0 Overflow" VECTOR_ENTRY and executes the 
+     *  instruction:  @jmp TIM0_OVF -> causing the execution of the 
+     *  @ISR(TIMER0_OVF_vect) routine; and then rest(idle)/continue any other 
+     *  routines or respond to other service/routines/interrupts 
+     * so if my analogy is correct then if i return from the @main fun 
+     * (does not keep CPU lingering/stall/stuck in a loop)
+     * the timer0 should be working and CPU should continue to respond 
+     * (give it be HW/Circuitry_no_SW involved or SW/instructions CPU carries 
+     * to do the respond mechanism ) to @TOVF0 flag calling @ISR(TIMER0_OVF_vect).
+     * @PROBLEM :- 
+     *      if i did return from @main fun after TIMER0 setup code is done the 
+     * @ISR(TIMER0_OVF_vect) is NEVER called .
+     *      if i delayed the return form @main fun by calling @_delay_ms(0.1);
+     * THE @ISR(TIMER0_OVF_vect) is NEVER called .
+     *      if i delayed the return form @main fun by calling @_delay_ms(0.2);
+     * THE @ISR(TIMER0_OVF_vect) is called .
+     *      if the @ISR(TIMER0_OVF_vect) routine contains a call to a fun
+     * that holds statements to execute what ever the delay is it is NEVER called
+     * also tested if the code/statements was placed in the routine directly
+     * also doesn't work!!! note(code is longer than before) 
+     */
     
-    //THIS CODE EXITS MAIN FUN NO INIFINTE LOOP BUT FUNCTIONS
-    //DOES NOT WORKING
-    _delay_ms(0.1);
-    
-    //WORKS FINE
-    //_delay_ms(HIGH);
+    //_delay_ms(DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING);   
+    //_delay_ms(DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_WORKING);
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+   //_delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+ 
+    while(KEEP_EXECUTING);
+}
 
-    //while(KEEP_EXECUTING);
+void instrcutionsExecutedEverySec(void){
+    #define NUMBER_OF_COMPLETE_COUNTS_TO_MAX_IN_1_SEC (u8)(1000000/16384)
+    //#define NUMBER_OF_COMPLETE_COUNTS_TO_MAX_IN_1_SEC 61
+    /*
+     * remember each statement you add causes a delay in the count
+     * as statement is converted to instructions added by compiler to deliver 
+     * the logic so the delay depends on how many cycles per each instruction
+     * multiplied by number of instructions / statements so for higher pression
+     * keep it to minimum and place the entire code inside the ISR routine
+     */
+    static u8 complete_count_to_max_counter ,
+              seconds_counter ,
+              halting_time  ,
+              frequency_change_req  ;
     
+    //check if ~= 1 sec passed
+    if(complete_count_to_max_counter == 
+            NUMBER_OF_COMPLETE_COUNTS_TO_MAX_IN_1_SEC){
+        //toggle LED0 ON / OFF
+        turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+        //display on LCD number of Seconds passed 
+        CLEAR_LCD;
+        displayINTOnLCD(++seconds_counter);
+        //rest the complete_count_to_max_counter for the upcoming count for 1 sec
+        complete_count_to_max_counter = 0;
+    }else{
+        complete_count_to_max_counter ++;
+    }
+    if(seconds_counter == 5 && halting_time==0){
+        haltTimer();
+        halting_time++;
+        frequency_change_req = LOOP_ZER0_INITIALIZER;
+        *(lcd_string + frequency_change_req++) = ' ';
+        *(lcd_string + frequency_change_req++) =('c');
+        *(lcd_string + frequency_change_req++) =('o');
+        *(lcd_string + frequency_change_req++) =('n');
+        *(lcd_string + frequency_change_req++) =('f');
+        *(lcd_string + frequency_change_req++) =('i');
+        *(lcd_string + frequency_change_req++) =('g');
+        *(lcd_string + frequency_change_req++) =('u');
+        *(lcd_string + frequency_change_req++) =('r');
+        *(lcd_string + frequency_change_req++) =('a');        
+        *(lcd_string + frequency_change_req++) =('t');
+        *(lcd_string + frequency_change_req++) =('i');
+        *(lcd_string + frequency_change_req++) =('o');
+        *(lcd_string + frequency_change_req++) =('n');
+        *(lcd_string + frequency_change_req++) =(':');
+        displayStringOnLCD(lcd_string);
+//        displayCharacterOnLCD(' ');
+//        displayCharacterOnLCD('c');
+//        displayCharacterOnLCD('o');
+//        displayCharacterOnLCD('f');
+//        displayCharacterOnLCD('i');
+//        displayCharacterOnLCD('g');
+//        displayCharacterOnLCD('r');
+//        displayCharacterOnLCD('t');
+//        displayCharacterOnLCD('i');
+//        displayCharacterOnLCD('o');
+//        displayCharacterOnLCD('n');
+//        displayCharacterOnLCD(':');
+        displayINTOnLCD(getTimerConfiguration());
+        moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);
+        frequency_change_req = LOOP_ZER0_INITIALIZER;
+        *(lcd_string + frequency_change_req++) =('H');
+        *(lcd_string + frequency_change_req++) =('A');
+        *(lcd_string + frequency_change_req++) =('L');
+        *(lcd_string + frequency_change_req++) =('T');
+        *(lcd_string + frequency_change_req++) =('E');
+        *(lcd_string + frequency_change_req++) =('D');
+        *(lcd_string + frequency_change_req++) =(':');
+        *(lcd_string + frequency_change_req++) =(NULL_CHAR);        
+        displayStringOnLCD(lcd_string);
+//        displayCharacterOnLCD('H');
+//        displayCharacterOnLCD('A');
+//        displayCharacterOnLCD('L');
+//        displayCharacterOnLCD('T');
+//        displayCharacterOnLCD('E');
+//        displayCharacterOnLCD('D');
+//        displayCharacterOnLCD(':');
+        displayCharacterOnLCD(getTimerStatus()? 'N' : 'F');
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        
+        resumeTimer();
+        
+        CLEAR_LCD;
+        frequency_change_req = LOOP_ZER0_INITIALIZER;
+        *(lcd_string + frequency_change_req++) =('R');
+        *(lcd_string + frequency_change_req++) =('E');
+        *(lcd_string + frequency_change_req++) =('S');
+        *(lcd_string + frequency_change_req++) =('U');
+        *(lcd_string + frequency_change_req++) =('M');
+        *(lcd_string + frequency_change_req++) =('E');
+        *(lcd_string + frequency_change_req++) =(' ');
+        *(lcd_string + frequency_change_req++) =('C');
+        *(lcd_string + frequency_change_req++) =('O');
+        *(lcd_string + frequency_change_req++) =('U');
+        *(lcd_string + frequency_change_req++) =('N');
+        *(lcd_string + frequency_change_req++) =('T');
+        *(lcd_string + frequency_change_req++) =('I');
+        *(lcd_string + frequency_change_req++) =('N');
+        *(lcd_string + frequency_change_req++) =('G');  
+        *(lcd_string + frequency_change_req++) =('!');
+        *(lcd_string + frequency_change_req++) =(NULL_CHAR);
+        displayStringOnLCD(lcd_string);
+        frequency_change_req = LOOP_ZER0_INITIALIZER;        
+//        displayCharacterOnLCD('R');
+//        displayCharacterOnLCD('E');
+//        displayCharacterOnLCD('S');
+//        displayCharacterOnLCD('U');
+//        displayCharacterOnLCD('M');
+//        displayCharacterOnLCD('E');
+//        displayCharacterOnLCD('!');
+    }
+    
+    if(seconds_counter == 7 && frequency_change_req == 0){
+        frequency_change_req++;
+        changeTimerClk_source(TIMER0_PRESCALER_CLK_BY_8);
+        CLEAR_LCD;
+        displayCharacterOnLCD('F');
+        displayCharacterOnLCD('R');
+        displayCharacterOnLCD('E');
+        displayCharacterOnLCD('Q');
+        displayCharacterOnLCD('U');
+        displayCharacterOnLCD('E');
+        displayCharacterOnLCD('N');
+        displayCharacterOnLCD('C');
+        displayCharacterOnLCD('Y');
+        displayCharacterOnLCD(' ');
+        displayCharacterOnLCD('C');
+        displayCharacterOnLCD('H');
+        displayCharacterOnLCD('A');
+        displayCharacterOnLCD('N');
+        displayCharacterOnLCD('N');
+        displayCharacterOnLCD('G');
+        moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);        
+        displayCharacterOnLCD('E');
+        displayCharacterOnLCD('D');
+        displayCharacterOnLCD(' ');
+        displayCharacterOnLCD('G');
+        displayCharacterOnLCD('E');
+        displayCharacterOnLCD('T');
+        displayCharacterOnLCD(' ');
+        displayCharacterOnLCD('R');
+        displayCharacterOnLCD('E');        
+        displayCharacterOnLCD('A');
+        displayCharacterOnLCD('D');
+        displayCharacterOnLCD('Y');
+        displayCharacterOnLCD('!');
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);        
+    }
+    if(seconds_counter == 255){
+        haltTimer();
+    }
 }

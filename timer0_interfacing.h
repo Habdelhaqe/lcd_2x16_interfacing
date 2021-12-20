@@ -12,6 +12,9 @@
     #include "atmega32a.h"
     #include <avr/iom32a.h>
     
+    #define ENABLE_INTERRUPT  HIGH
+    #define DISABLE_INTERRUPT LOW
+
     #define WGM_MASK_FOR_TCCR0       0xB7 // 1(WGM00)11 (WGM01)111
     #define WGM_INPUT_SECUIRTY_MASK  0x48 // 0(WGM00)00 (WGM01)000
 
@@ -61,7 +64,7 @@
     #define FORCE_STROPE_FOR_OC0_PIN_INIT_BEFORE_SET_DIRECTION OUT_DATA_ON_REG_CHANGE_STATES((TCCR0) , 0x80)
 
     //STOP TIMER
-    #define STOP_TIMER0     OUT_DATA_ON_REG_KEEP_STATES((TCCR0) , 0xF8);
+    #define STOP_TIMER0 OUT_DATA_ON_REG_CHANGE_STATES((TCCR0) , CLK_MASK_FOR_TCCR0);
 
     //TIMSK Bit 1 ? OCIE0: Timer/Counter0 Output Compare Match Interrupt Enable
     #define ENABLE_OUTPUT_COMPARE_MATCH_INTERRUPT    SET_BIT((TIMSK) , OCIE0);
@@ -76,5 +79,15 @@
                      u8 selected_compare_out_mode ,
                      u8 enable_disable_over_flow_interupt ,
                      u8 enable_disable_output_comnpare_interupt );
-        
+    
+    void haltTimer(void);
+    
+    u8 getTimerConfiguration(void);
+    
+    u8 getTimerStatus(void);
+    
+    void resumeTimer(void);
+    
+    void changeTimerClk_source(u8 selected_new_clk_source_frequency);
+    
 #endif	/* TIMER0_INTERFACING_H */
