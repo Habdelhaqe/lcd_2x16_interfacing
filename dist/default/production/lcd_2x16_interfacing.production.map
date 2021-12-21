@@ -757,14 +757,14 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x440b
+.debug_info     0x0000000000000000     0x440c
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x4e6 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_info    0x00000000000004e6     0x1ed6 build/default/production/lcd_control_main.o
- .debug_info    0x00000000000023bc      0x645 build/default/production/atemga32a.o
- .debug_info    0x0000000000002a01      0xe7e build/default/production/interfacing_connection_logic.o
- .debug_info    0x000000000000387f      0x439 build/default/production/adc_interfacing.o
- .debug_info    0x0000000000003cb8      0x753 build/default/production/timer0_interface.o
+ .debug_info    0x00000000000004e6     0x1ed7 build/default/production/lcd_control_main.o
+ .debug_info    0x00000000000023bd      0x645 build/default/production/atemga32a.o
+ .debug_info    0x0000000000002a02      0xe7e build/default/production/interfacing_connection_logic.o
+ .debug_info    0x0000000000003880      0x439 build/default/production/adc_interfacing.o
+ .debug_info    0x0000000000003cb9      0x753 build/default/production/timer0_interface.o
 
 .debug_abbrev   0x0000000000000000      0xd15
  *(.debug_abbrev)

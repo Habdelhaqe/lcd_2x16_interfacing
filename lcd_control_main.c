@@ -519,7 +519,7 @@ void mainTimer0(void){
                 ENABLE_INTERRUPT ,
                 ENABLE_INTERRUPT );
     
-    setCompraeValue(_8_BITS_COUNTER_MAX);
+    setCompraeValue(BOTTOM);
     
     /*
      * case study : 
@@ -557,7 +557,7 @@ void mainTimer0(void){
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
    //_delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE , NON_PWD_TOGLE_OC_ON_COMPARE_MATCH);
+    configureOutComparePinChangeCompareAndWaveMode(FAST_PWD_MODE , FAST_PWD_CLEAR_OC_ON_COMPARE_MATCH_NON_INVERTING);
     
     while(KEEP_EXECUTING);
 }
