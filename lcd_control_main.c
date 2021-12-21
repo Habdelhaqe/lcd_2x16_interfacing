@@ -18,6 +18,14 @@
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_WORKING 0.2
 
+#define CHANGE_ALL 0
+#define CHANGE_SEC_ONLY 12
+#define CHANGE_MIN_SEC_ONLY 9
+#define CHANGE_HR_MIN_SEC_ONLY 6
+#define CHANGE_DAY_HR_MIN_SEC_ONLY 22
+#define CHANGE_MONTH_DAY_HR_MIN_SEC_ONLY 26
+#define CHANGE_YEAR_MONTH_DAY_HR_MIN_SEC_ONLY 29
+
 #define INTERRUPT_RISING_EDGE_MODE            3 //0x03 : 0b 0000 0011
 #define INTERRUPT_FALLING_EDGE_MODE           2 //0x02 : 0b 0000 0010
 #define INTERRUPT_ANY_LOGICSL_CHANGE_MODE     1 //0x01 : 0b 0000 0001
@@ -32,6 +40,10 @@ void main8LM35On8ChannelsDispalyTemp(void);
 void mainTest2LinesLCDToggling(void);
 void mainTimer0(void);
 void instrcutionsExecutedEverySec(void);
+void digitalCalendar(void);
+void displayClanederData(u8 hour , u8 minute, u8 second , u8 day , u8 month , u8 year , u8 what_have_changed);
+u8 lastDayOfFebruaryleapYearCalc(u8 year);
+
 /*
  * external interrupt initiated on INT0
  */
@@ -87,13 +99,25 @@ ISR(TIMER0_OVF_vect){
 //    turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
 //    displayINTOnLCD(counter);
 //    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-    instrcutionsExecutedEverySec();
+//    instrcutionsExecutedEverySec();
+//    digitalCalendar();
 }
 
+ISR(TIMER0_COMP_vect){
+//    digitalCalendar();
+    static u8 counter = 0;
+    counter++;
+    if(counter == _8_BITS_COUNTER_MAX){
+        turnLEDOnOff(LED1,!isLEDOnOrOFF(LED1).scanned_data);
+        turnLEDOnOff(LED2,!isLEDOnOrOFF(LED1).scanned_data);
+    }
+}
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
 
 u8 lcd_string[32];
+
+u8 lcd_string_index = LCD_START_POS;
 
 int main(void) {
     
@@ -121,7 +145,7 @@ int main(void) {
 //  main8LM35On8ChannelsDispalyTemp();
     
     mainTimer0();
-        
+
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -475,17 +499,28 @@ void mainTimer0(void){
     
     initLED(LED0);
     
+    initLED(LED1);
+    
+    initLED(LED2);
+    
     //initLCD();
     
     CLEAR_LCD;
     
     _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
     
-    onInitTimer(TIMER0_PRESCALER_CLK_BY_1024 ,
+    displayClanederData(23,59,0,28,2,20,0);
+
+    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+
+    onInitTimer(NO_PRESCALING ,
                 NORMAL_MODE ,
                 NON_PWD_NORMAL_PORT_OPERATION_MODE ,
-                TRUE ,
-                FALSE );
+                ENABLE_INTERRUPT ,
+                ENABLE_INTERRUPT );
+    
+    setCompraeValue(_8_BITS_COUNTER_MAX);
+    
     /*
      * case study : 
      *          i forgot to add the infinite loop statement that keeps
@@ -521,7 +556,9 @@ void mainTimer0(void){
     //_delay_ms(DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_WORKING);
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
    //_delay_ms(LCD_DISPLAY_DELAY_IN_MS);
- 
+
+    configureOutComparePinChangeCompareAndWaveMode(CTC_MODE , NON_PWD_TOGLE_OC_ON_COMPARE_MATCH);
+    
     while(KEEP_EXECUTING);
 }
 
@@ -550,132 +587,362 @@ void instrcutionsExecutedEverySec(void){
         displayINTOnLCD(++seconds_counter);
         //rest the complete_count_to_max_counter for the upcoming count for 1 sec
         complete_count_to_max_counter = 0;
+        if(seconds_counter == 5 && halting_time==0){
+            haltTimer();
+            halting_time++;
+            frequency_change_req = LCD_START_POS;
+            *(lcd_string + frequency_change_req++) = ' ';
+            *(lcd_string + frequency_change_req++) =('c');
+            *(lcd_string + frequency_change_req++) =('o');
+            *(lcd_string + frequency_change_req++) =('n');
+            *(lcd_string + frequency_change_req++) =('f');
+            *(lcd_string + frequency_change_req++) =('i');
+            *(lcd_string + frequency_change_req++) =('g');
+            *(lcd_string + frequency_change_req++) =('u');
+            *(lcd_string + frequency_change_req++) =('r');
+            *(lcd_string + frequency_change_req++) =('a');        
+            *(lcd_string + frequency_change_req++) =('t');
+            *(lcd_string + frequency_change_req++) =('i');
+            *(lcd_string + frequency_change_req++) =('o');
+            *(lcd_string + frequency_change_req++) =('n');
+            *(lcd_string + frequency_change_req++) =(':');
+            displayStringOnLCD(lcd_string);
+//            displayCharacterOnLCD(' ');
+//            displayCharacterOnLCD('c');
+//            displayCharacterOnLCD('o');
+//            displayCharacterOnLCD('f');
+//            displayCharacterOnLCD('i');
+//            displayCharacterOnLCD('g');
+//            displayCharacterOnLCD('r');
+//            displayCharacterOnLCD('t');
+//            displayCharacterOnLCD('i');
+//            displayCharacterOnLCD('o');
+//            displayCharacterOnLCD('n');
+//            displayCharacterOnLCD(':');
+            displayINTOnLCD(getTimerConfiguration());
+            moveCursorToLocation(LCD_ROW_COUNT,LCD_START_POS);
+            frequency_change_req = LCD_START_POS;
+            *(lcd_string + frequency_change_req++) =('H');
+            *(lcd_string + frequency_change_req++) =('A');
+            *(lcd_string + frequency_change_req++) =('L');
+            *(lcd_string + frequency_change_req++) =('T');
+            *(lcd_string + frequency_change_req++) =('E');
+            *(lcd_string + frequency_change_req++) =('D');
+            *(lcd_string + frequency_change_req++) =(':');
+            *(lcd_string + frequency_change_req++) =(NULL_CHAR);        
+            displayStringOnLCD(lcd_string);
+//            displayCharacterOnLCD('H');
+//            displayCharacterOnLCD('A');
+//            displayCharacterOnLCD('L');
+//            displayCharacterOnLCD('T');
+//            displayCharacterOnLCD('E');
+//            displayCharacterOnLCD('D');
+//            displayCharacterOnLCD(':');
+            displayCharacterOnLCD(getTimerStatus()? 'N' : 'F');
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        
+            resumeTimer();
+        
+            CLEAR_LCD;
+            frequency_change_req = LOOP_ZER0_INITIALIZER;
+            *(lcd_string + frequency_change_req++) =('R');
+            *(lcd_string + frequency_change_req++) =('E');
+            *(lcd_string + frequency_change_req++) =('S');
+            *(lcd_string + frequency_change_req++) =('U');
+            *(lcd_string + frequency_change_req++) =('M');
+            *(lcd_string + frequency_change_req++) =('E');
+            *(lcd_string + frequency_change_req++) =(' ');
+            *(lcd_string + frequency_change_req++) =('C');
+            *(lcd_string + frequency_change_req++) =('O');
+            *(lcd_string + frequency_change_req++) =('U');
+            *(lcd_string + frequency_change_req++) =('N');
+            *(lcd_string + frequency_change_req++) =('T');
+            *(lcd_string + frequency_change_req++) =('I');
+            *(lcd_string + frequency_change_req++) =('N');
+            *(lcd_string + frequency_change_req++) =('G');  
+            *(lcd_string + frequency_change_req++) =('!');
+            *(lcd_string + frequency_change_req++) =(NULL_CHAR);
+            displayStringOnLCD(lcd_string);
+            frequency_change_req = LCD_START_POS;        
+//            displayCharacterOnLCD('R');
+//            displayCharacterOnLCD('E');
+//            displayCharacterOnLCD('S');
+//            displayCharacterOnLCD('U');
+//            displayCharacterOnLCD('M');
+//            displayCharacterOnLCD('E');
+//            displayCharacterOnLCD('!');
+        }
+    
+        if(seconds_counter == 7 && frequency_change_req == 0){
+            frequency_change_req++;
+            changeTimerClkSource(TIMER0_PRESCALER_CLK_BY_8);
+            CLEAR_LCD;
+            displayCharacterOnLCD('F');
+            displayCharacterOnLCD('R');
+            displayCharacterOnLCD('E');
+            displayCharacterOnLCD('Q');
+            displayCharacterOnLCD('U');
+            displayCharacterOnLCD('E');
+            displayCharacterOnLCD('N');
+            displayCharacterOnLCD('C');
+            displayCharacterOnLCD('Y');
+            displayCharacterOnLCD(' ');
+            displayCharacterOnLCD('C');
+            displayCharacterOnLCD('H');
+            displayCharacterOnLCD('A');
+            displayCharacterOnLCD('N');
+            displayCharacterOnLCD('N');
+            displayCharacterOnLCD('G');
+            moveCursorToLocation(LCD_ROW_COUNT,LCD_START_POS);        
+            displayCharacterOnLCD('E');
+            displayCharacterOnLCD('D');
+            displayCharacterOnLCD(' ');
+            displayCharacterOnLCD('G');
+            displayCharacterOnLCD('E');
+            displayCharacterOnLCD('T');
+            displayCharacterOnLCD(' ');
+            displayCharacterOnLCD('R');
+            displayCharacterOnLCD('E');        
+            displayCharacterOnLCD('A');
+            displayCharacterOnLCD('D');
+            displayCharacterOnLCD('Y');
+            displayCharacterOnLCD('!');
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);        
+        }
+    
+        if(seconds_counter == 255){
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+            restTimerCounter();
+        }
+        
     }else{
         complete_count_to_max_counter ++;
     }
-    if(seconds_counter == 5 && halting_time==0){
-        haltTimer();
-        halting_time++;
-        frequency_change_req = LOOP_ZER0_INITIALIZER;
-        *(lcd_string + frequency_change_req++) = ' ';
-        *(lcd_string + frequency_change_req++) =('c');
-        *(lcd_string + frequency_change_req++) =('o');
-        *(lcd_string + frequency_change_req++) =('n');
-        *(lcd_string + frequency_change_req++) =('f');
-        *(lcd_string + frequency_change_req++) =('i');
-        *(lcd_string + frequency_change_req++) =('g');
-        *(lcd_string + frequency_change_req++) =('u');
-        *(lcd_string + frequency_change_req++) =('r');
-        *(lcd_string + frequency_change_req++) =('a');        
-        *(lcd_string + frequency_change_req++) =('t');
-        *(lcd_string + frequency_change_req++) =('i');
-        *(lcd_string + frequency_change_req++) =('o');
-        *(lcd_string + frequency_change_req++) =('n');
-        *(lcd_string + frequency_change_req++) =(':');
-        displayStringOnLCD(lcd_string);
-//        displayCharacterOnLCD(' ');
-//        displayCharacterOnLCD('c');
-//        displayCharacterOnLCD('o');
-//        displayCharacterOnLCD('f');
-//        displayCharacterOnLCD('i');
-//        displayCharacterOnLCD('g');
-//        displayCharacterOnLCD('r');
-//        displayCharacterOnLCD('t');
-//        displayCharacterOnLCD('i');
-//        displayCharacterOnLCD('o');
-//        displayCharacterOnLCD('n');
-//        displayCharacterOnLCD(':');
-        displayINTOnLCD(getTimerConfiguration());
-        moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);
-        frequency_change_req = LOOP_ZER0_INITIALIZER;
-        *(lcd_string + frequency_change_req++) =('H');
-        *(lcd_string + frequency_change_req++) =('A');
-        *(lcd_string + frequency_change_req++) =('L');
-        *(lcd_string + frequency_change_req++) =('T');
-        *(lcd_string + frequency_change_req++) =('E');
-        *(lcd_string + frequency_change_req++) =('D');
-        *(lcd_string + frequency_change_req++) =(':');
-        *(lcd_string + frequency_change_req++) =(NULL_CHAR);        
-        displayStringOnLCD(lcd_string);
-//        displayCharacterOnLCD('H');
-//        displayCharacterOnLCD('A');
-//        displayCharacterOnLCD('L');
-//        displayCharacterOnLCD('T');
-//        displayCharacterOnLCD('E');
-//        displayCharacterOnLCD('D');
-//        displayCharacterOnLCD(':');
-        displayCharacterOnLCD(getTimerStatus()? 'N' : 'F');
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+
+}
+
+/*
+ * LCD Display line 1 : "TIME : HH:MM:SS "
+ * LCD Display line 2 : "DATE : DD/MM/YY "
+ * January ? 31 days
+   February ? 28 days in a common year and 29 days in leap years
+   March ? 31 days
+   April ? 30 days
+   May ? 31 days
+   June ? 30 days
+   July ? 31 days
+   August ? 31 days
+   September ? 30 days
+   October ? 31 days
+   November ? 30 days
+   December ? 31 days
+ */
+void digitalCalendar(void){
+    
+    #define NUMBER_OF_COMPLETE_COUNTS_TO_MAX_IN_1_SEC (u8)(1000000/16384)
+    
+    static u8 number_of_counts_to_max ,
+              what_have_changed ,  
+              second ,
+              minute = 59 ,
+              hour = 23 ,
+              day = 28 ,
+              month = 2 ,
+              year = 20 ;
+    
+    if(number_of_counts_to_max == 
+            NUMBER_OF_COMPLETE_COUNTS_TO_MAX_IN_1_SEC){
         
-        resumeTimer();
+        number_of_counts_to_max = LOOP_ZER0_INITIALIZER;
         
-        CLEAR_LCD;
-        frequency_change_req = LOOP_ZER0_INITIALIZER;
-        *(lcd_string + frequency_change_req++) =('R');
-        *(lcd_string + frequency_change_req++) =('E');
-        *(lcd_string + frequency_change_req++) =('S');
-        *(lcd_string + frequency_change_req++) =('U');
-        *(lcd_string + frequency_change_req++) =('M');
-        *(lcd_string + frequency_change_req++) =('E');
-        *(lcd_string + frequency_change_req++) =(' ');
-        *(lcd_string + frequency_change_req++) =('C');
-        *(lcd_string + frequency_change_req++) =('O');
-        *(lcd_string + frequency_change_req++) =('U');
-        *(lcd_string + frequency_change_req++) =('N');
-        *(lcd_string + frequency_change_req++) =('T');
-        *(lcd_string + frequency_change_req++) =('I');
-        *(lcd_string + frequency_change_req++) =('N');
-        *(lcd_string + frequency_change_req++) =('G');  
-        *(lcd_string + frequency_change_req++) =('!');
-        *(lcd_string + frequency_change_req++) =(NULL_CHAR);
-        displayStringOnLCD(lcd_string);
-        frequency_change_req = LOOP_ZER0_INITIALIZER;        
-//        displayCharacterOnLCD('R');
-//        displayCharacterOnLCD('E');
-//        displayCharacterOnLCD('S');
-//        displayCharacterOnLCD('U');
-//        displayCharacterOnLCD('M');
-//        displayCharacterOnLCD('E');
-//        displayCharacterOnLCD('!');
+        if(second == 59){
+            
+            what_have_changed = CHANGE_MIN_SEC_ONLY;            
+            
+            if(minute == 59){
+                
+                if(hour == 23){
+                                        
+                    if( (month == 2 && day == lastDayOfFebruaryleapYearCalc(year)) || 
+                            ( (month == 4 || month == 6 || month == 9 || month == 11) && day == 30) || 
+                                ( (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 ) && day == 31)) {
+                        
+                        day = 1;
+                        
+                        month++;
+                        
+                        what_have_changed = CHANGE_MONTH_DAY_HR_MIN_SEC_ONLY;                        
+                    
+                    } else if (month == 12 && day == 31) {
+                        
+                        day = 1;
+                        
+                        month = 1;
+                        
+                        year++;
+                        
+                        what_have_changed = CHANGE_YEAR_MONTH_DAY_HR_MIN_SEC_ONLY;
+                    
+                    }else {
+                        
+                        day++;
+                        
+                        what_have_changed = CHANGE_DAY_HR_MIN_SEC_ONLY;
+                    }
+                    
+                    hour = 0 ;
+                
+                }else{
+                
+                    what_have_changed = CHANGE_HR_MIN_SEC_ONLY;            
+                
+                }
+                
+                hour++;
+                
+                minute = 0;
+            
+            }
+            
+            minute++;
+            
+            second = 0;
+        
+        }else{
+            what_have_changed = CHANGE_SEC_ONLY;
+        }
+        second++;
+        
+        displayClanederData(hour,minute,second,day,month,year,what_have_changed);
+    
+    }else{
+    
+        number_of_counts_to_max ++;
+    
     }
     
-    if(seconds_counter == 7 && frequency_change_req == 0){
-        frequency_change_req++;
-        changeTimerClk_source(TIMER0_PRESCALER_CLK_BY_8);
-        CLEAR_LCD;
-        displayCharacterOnLCD('F');
-        displayCharacterOnLCD('R');
-        displayCharacterOnLCD('E');
-        displayCharacterOnLCD('Q');
-        displayCharacterOnLCD('U');
-        displayCharacterOnLCD('E');
-        displayCharacterOnLCD('N');
-        displayCharacterOnLCD('C');
-        displayCharacterOnLCD('Y');
-        displayCharacterOnLCD(' ');
-        displayCharacterOnLCD('C');
-        displayCharacterOnLCD('H');
-        displayCharacterOnLCD('A');
-        displayCharacterOnLCD('N');
-        displayCharacterOnLCD('N');
-        displayCharacterOnLCD('G');
-        moveCursorToLocation(LCD_ROW_COUNT,LOOP_ZER0_INITIALIZER);        
-        displayCharacterOnLCD('E');
-        displayCharacterOnLCD('D');
-        displayCharacterOnLCD(' ');
-        displayCharacterOnLCD('G');
-        displayCharacterOnLCD('E');
-        displayCharacterOnLCD('T');
-        displayCharacterOnLCD(' ');
-        displayCharacterOnLCD('R');
-        displayCharacterOnLCD('E');        
-        displayCharacterOnLCD('A');
-        displayCharacterOnLCD('D');
-        displayCharacterOnLCD('Y');
-        displayCharacterOnLCD('!');
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);        
-    }
-    if(seconds_counter == 255){
-        haltTimer();
+}
+
+void displayClanederData(u8 hour , u8 minute, u8 second , u8 day , u8 month , u8 year , u8 what_have_changed){
+        
+    turnLEDOnOff(LED0 ,!isLEDOnOrOFF(LED0).scanned_data);
+    
+    switch(what_have_changed){
+        
+        case CHANGE_ALL :
+
+            moveCursorToLocation(LCD_START_POS,LCD_START_POS);
+
+            lcd_string_index = LCD_START_POS;
+    
+            *(lcd_string + lcd_string_index++) ='T';
+            *(lcd_string + lcd_string_index++) ='I';
+            *(lcd_string + lcd_string_index++) ='M';
+            *(lcd_string + lcd_string_index++) ='E';
+            *(lcd_string + lcd_string_index++) =':';
+            *(lcd_string + lcd_string_index++) =' ';
+            displayStringOnLCD(lcd_string);
+
+            moveCursorToLocation(LCD_START_POS , 8 );
+            
+            displayCharacterOnLCD(':');
+            
+            moveCursorToLocation(LCD_START_POS ,11 );
+            
+            displayCharacterOnLCD(':');
+ 
+            moveCursorToLocation(LCD_ROW_COUNT,LCD_START_POS);
+        
+            lcd_string_index = LCD_START_POS;
+        
+            *(lcd_string + lcd_string_index++) ='D';
+            *(lcd_string + lcd_string_index++) ='A';
+            *(lcd_string + lcd_string_index++) ='T';
+            *(lcd_string + lcd_string_index++) ='E';
+            *(lcd_string + lcd_string_index++) =':';
+            *(lcd_string + lcd_string_index++) =' ';
+            displayStringOnLCD(lcd_string);
+            
+            moveCursorToLocation(LCD_ROW_COUNT , 8 );
+            
+            displayCharacterOnLCD('/');
+            
+            moveCursorToLocation(LCD_ROW_COUNT ,11 );
+            
+            displayCharacterOnLCD('/');
+             
+        case CHANGE_YEAR_MONTH_DAY_HR_MIN_SEC_ONLY :
+     
+            moveCursorToLocation(LCD_ROW_COUNT,CHANGE_SEC_ONLY);
+            
+            if(year<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(year);
+                    
+        case CHANGE_MONTH_DAY_HR_MIN_SEC_ONLY :
+                        
+            moveCursorToLocation(LCD_ROW_COUNT,CHANGE_MIN_SEC_ONLY);
+            
+            if(month<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(month);
+
+        case CHANGE_DAY_HR_MIN_SEC_ONLY :
+            
+            moveCursorToLocation(LCD_ROW_COUNT,CHANGE_HR_MIN_SEC_ONLY);
+            
+            if(day<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(day);
+
+        case CHANGE_HR_MIN_SEC_ONLY :
+            
+            moveCursorToLocation(LCD_START_POS,CHANGE_HR_MIN_SEC_ONLY);
+
+            if(hour<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(hour);    
+ 
+        case CHANGE_MIN_SEC_ONLY :
+            
+            moveCursorToLocation(LCD_START_POS,CHANGE_MIN_SEC_ONLY);
+
+            if(minute<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(minute);
+        
+        case CHANGE_SEC_ONLY :
+            
+            moveCursorToLocation(LCD_START_POS,CHANGE_SEC_ONLY);
+            
+            if(second<10){
+                displayCharacterOnLCD(' ');
+            }
+            displayINTOnLCD(second);
+            
+            break;
+        
+        default:
+            CLEAR_LCD;
     }
 }
+
+/*
+ *  1_If the year is evenly divisible by 4, go to step 2. Otherwise, go to step 5.
+    2_If the year is evenly divisible by 100, go to step 3. Otherwise, go to step 4.
+    3_If the year is evenly divisible by 400, go to step 4. Otherwise, go to step 5.
+    4_The year is a leap year (it has 366 days).
+    5_The year is not a leap year (it has 365 days).
+ */
+u8 lastDayOfFebruaryleapYearCalc(u8 year){
+    year += 2000;
+    return (year%4 == 0 ) && 
+                ( year%100 != 0 || 
+                    ( year %100 == 0  && year%400 == 0  ) ) ? 29  : 28;
+}
+

@@ -12,8 +12,13 @@
     #include "atmega32a.h"
     #include <avr/iom32a.h>
     
+    #define GET_FORCE_COMPARE_BIT GET_BIT((TCCR0) , FOC0)
+
     #define ENABLE_INTERRUPT  HIGH
     #define DISABLE_INTERRUPT LOW
+    
+    #define BOTTOM 0
+    #define _8_BITS_COUNTER_MAX 0xFF
 
     #define WGM_MASK_FOR_TCCR0       0xB7 // 1(WGM00)11 (WGM01)111
     #define WGM_INPUT_SECUIRTY_MASK  0x48 // 0(WGM00)00 (WGM01)000
@@ -88,6 +93,13 @@
     
     void resumeTimer(void);
     
-    void changeTimerClk_source(u8 selected_new_clk_source_frequency);
+    void changeTimerClkSource(u8 selected_new_clk_source_frequency);
+    
+    void restTimerCounter(void);
+    
+    void setCompraeValue(u8 compare_value);
+    
+    void configureOutComparePinChangeCompareAndWaveMode(u8 selected_wave_gen_mode 
+                                                    , u8 selected_compare_out_mode);
     
 #endif	/* TIMER0_INTERFACING_H */

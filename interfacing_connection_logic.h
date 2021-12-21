@@ -94,7 +94,7 @@
      *      placed on the DATA lines      
      */
     //#define LCD_EN PIN3 //portB pin:3 OUT
-    #define LCD_EN _PB_PIN3
+    #define LCD_EN _PB_PIN0
     
 //    //that's what connected on the Kit (4-bit LCD Mode nibble)
 //    #define LCD_D4 PIN4 //PortA pin:4 OUT/IN
@@ -130,6 +130,7 @@
     #define LCD_ROW_COUNT 1
     #define LCD_COLUMN_COUNT 16
     #define LCD_LAST_COLUMN_OFFSET 0xF
+    #define LCD_START_POS   0
 
     //CMD for LCD control in Hex
     #define CLEAR_DISPLAY 0x01
