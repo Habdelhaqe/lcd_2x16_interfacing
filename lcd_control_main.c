@@ -513,7 +513,7 @@ void mainTimer0(void){
 
     _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-    onInitTimer(NO_PRESCALING ,
+    onInitTimer(TIMER0_PRESCALER_CLK_BY_1024 ,
                 NORMAL_MODE ,
                 NON_PWD_NORMAL_PORT_OPERATION_MODE ,
                 ENABLE_INTERRUPT ,
@@ -557,7 +557,7 @@ void mainTimer0(void){
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
    //_delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-    configureOutComparePinChangeCompareAndWaveMode(CTC_MODE , NON_PWD_TOGLE_OC_ON_COMPARE_MATCH);
+    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE , NON_PWD_TOGLE_OC_ON_COMPARE_MATCH);
     
     while(KEEP_EXECUTING);
 }
