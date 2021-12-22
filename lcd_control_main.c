@@ -94,20 +94,28 @@ ISR(ADC_vect){
 
 ISR(TIMER0_OVF_vect){
     //this code could be executed only if a delay is encountered @ least 0.2 mS     
-//    static u8 counter = 0;
-//    counter++;
+//    static u8 counter_over_flow = 0;
+//    counter_over_flow++;
 //    turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
-//    displayINTOnLCD(counter);
+//    displayINTOnLCD(counter_over_flow);
 //    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+
 //    instrcutionsExecutedEverySec();
+
 //    digitalCalendar();
+
+    static u8 counter_over_flow ;
+    counter_over_flow++;
+    if(counter_over_flow == _8_BITS_COUNTER_MAX){
+        turnLEDOnOff(LED0,!isLEDOnOrOFF(LED0).scanned_data);
+    }
 }
 
 ISR(TIMER0_COMP_vect){
 //    digitalCalendar();
-    static u8 counter = 0;
-    counter++;
-    if(counter == _8_BITS_COUNTER_MAX){
+    static u8 counter_compare_match;
+    counter_compare_match++;
+    if(counter_compare_match == _8_BITS_COUNTER_MAX){
         turnLEDOnOff(LED1,!isLEDOnOrOFF(LED1).scanned_data);
         turnLEDOnOff(LED2,!isLEDOnOrOFF(LED1).scanned_data);
     }
@@ -512,14 +520,192 @@ void mainTimer0(void){
     displayClanederData(23,59,0,28,2,20,0);
 
     _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-
-    onInitTimer(TIMER0_PRESCALER_CLK_BY_1024 ,
+    /*
+     *     onInitTimer(NO_PRESCALING ,
                 NORMAL_MODE ,
-                NON_PWD_NORMAL_PORT_OPERATION_MODE ,
-                ENABLE_INTERRUPT ,
+                COM ,
+                DISABLE_INTERRUPT ,
                 ENABLE_INTERRUPT );
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : NORMAL MODE (NOT CTC MODE)
+     * TOIE DISABLE
+     * OCIE ENABLED
+     * CASE 1:
+     *  COM = NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      OR NON_PWD_CLAER_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *  
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE > BOTTOM (0)
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect)is not Called !
+     * 
+     * CASE 2:
+     *  COM = NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *  
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = WHAT EVER
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : NORMAL MODE (NOT CTC MODE)
+     * TOIE ENABLED
+     * OCIE ENABLED
+     * 
+     *  COM : WHAT EVER
+     *  
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE : WHAT EVER
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : NORMAL MODE (NOT CTC MODE)
+     * TOIE ENABLED
+     * OCIE DISABLE
+     *  COM : WHAT EVER
+     *  
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE : WHAT EVER
+     * @ISR(TIMER0_COMP_Vect) Called !
+     *
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : NORMAL MODE (NOT CTC MODE)
+     * TOIE DISABLE
+     * OCIE DISABLE
+     *  
+     * CASE 1:
+     *  COM = NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      OR NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE : WHAT EVER
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * 
+     * 
+     * CASE 2:
+     *  COM = NON_PWD_CLEAR_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) is not Called !
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : CTC MODE
+     * TOIE DISABLE
+     * OCIE DISABLE
+     *
+     * CASE 1:
+     *  COM = NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE : WHAT EVER
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * 
+     * CASE 2:
+     *  COM = NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_CLEAR_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called ! (VERY SLOWLY TOGGLES)
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called ! ( TOGGLES FAST)
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : CTC MODE
+     * TOIE ENABLE
+     * OCIE ENABLE
+     * 
+     * CASE 1:
+     *  COM = NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_CLEAR_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called ! \
+     *              (SOME WHAT FASTER IN NON_PWD_NORMAL_PORT_OPERATION_MODE)
+     *              (VERY SLOWLY TOGGLES)
+     * @ISR(TIMER0_OVF_vect) NOT CALLED
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called ! ( TOGGLES FAST)
+     * @ISR(TIMER0_OVF_vect) CALLED
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : CTC MODE
+     * TOIE DISABLE
+     * OCIE ENABLE
+     * 
+     * CASE 1 :
+     *  COM = NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) NOT CALLED !
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) CALLED
+     * 
+     * CASE 2 :
+     *  COM = NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) NOT CALLED
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) NOT CALLED
+     * 
+     * CASE 3 :
+     *  COM = NON_PWD_CLEAR_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called ! (TOGGLES SLOWLY)
+     * @ISR(TIMER0_OVF_vect) NOT CALLED
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) NOT CALLED
+     * 
+     * FIXED SETTINGS:-
+     * FREQUENCY/SOURCE : WHAT EVER
+     * WGM : CTC MODE
+     * TOIE ENABLE
+     * OCIE DISABLE
+     * 
+     * CASE :
+     *  COM = NON_PWD_NORMAL_PORT_OPERATION_MODE
+     *      OR NON_PWD_CLEAR_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_SET_OC_ON_COMPARE_MATCH
+     *      OR NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH
+     *      setCompraeValue(COMPARE_VALUE);
+     * COMPARE_VALUE = BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) NOT CALLED !
+     * COMPARE_VALUE > BOTTOM
+     * @ISR(TIMER0_COMP_Vect) Called !
+     * @ISR(TIMER0_OVF_vect) CALLED
+     * 
+     * 
+     */
     
-    setCompraeValue(BOTTOM);
+    onInitTimer(NO_PRESCALING ,
+                FAST_PWD_MODE ,
+                FAST_PWD_NORMAL_PORT_OPERATION_MODE ,
+                ENABLE_INTERRUPT ,
+                DISABLE_INTERRUPT );
+    
+//    setCompraeValue(BOTTOM);
+    setCompraeValue(_8_BITS_COUNTER_MAX);
     
     /*
      * case study : 
@@ -557,7 +743,17 @@ void mainTimer0(void){
     //_delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
    //_delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-    configureOutComparePinChangeCompareAndWaveMode(FAST_PWD_MODE , FAST_PWD_CLEAR_OC_ON_COMPARE_MATCH_NON_INVERTING);
+    //_PB_PIN3 : OC0 TOGGLES ALL TIME
+//    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE ,
+//            NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH);
+
+    //_PB_PIN3 : OC0 LOW ALL TIME
+//    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE ,
+//            NON_PWD_CLEAR_OC_ON_COMPARE_MATCH);
+
+    //_PB_PIN3 : OC0 HIGH ALL TIME
+//    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE ,
+//            NON_PWD_SET_OC_ON_COMPARE_MATCH);
     
     while(KEEP_EXECUTING);
 }

@@ -70,44 +70,18 @@ void configureOutComparePinChangeCompareAndWaveMode(u8 selected_wave_gen_mode
                                                     , u8 selected_compare_out_mode){
     
     selected_compare_out_mode &= COM_INPUT_SECUIRTY_MASK;
-    
-    CLEAR_LCD;
-    
-    displayINTOnLCD(selected_compare_out_mode);
-    
-    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-    
+        
     if( selected_compare_out_mode != NON_PWD_NORMAL_PORT_OPERATION_MODE ){
-
-        CLEAR_LCD;
-
-        displayINTOnLCD((GET_FORCE_COMPARE_BIT));
-        
-        turnLEDOnOff(LED2 , (GET_FORCE_COMPARE_BIT));
-        
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
         
         save_configuration_of_timer = TCCR0;
         
         FORCE_STROPE_FOR_OC0_PIN_INIT_BEFORE_SET_DIRECTION;
 
-        displayINTOnLCD((GET_FORCE_COMPARE_BIT));
-        
-        turnLEDOnOff(LED2 , (GET_FORCE_COMPARE_BIT));
-        
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-        
         programPortPinInOut(_PB_PIN3,OUTPUT); //OC0 PIN
-        
+       
         TCCR0 = (save_configuration_of_timer & CLK_INPUT_SECUIRTY_MASK) | 
                     selected_compare_out_mode |
                         (selected_wave_gen_mode & WGM_INPUT_SECUIRTY_MASK);
-
-        CLEAR_LCD;
-        
-        displayINTOnLCD(getTimerConfiguration());
-        
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);        
     }
     
 }

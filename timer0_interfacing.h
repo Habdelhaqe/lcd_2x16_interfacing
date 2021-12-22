@@ -16,7 +16,10 @@
 
     #define ENABLE_INTERRUPT  HIGH
     #define DISABLE_INTERRUPT LOW
-    
+
+    #define DONOT_CHANGE_WAVE_GEN_MODE OxFF
+    #define DONOT_CHANGE_COMPARE_MATCH_MODE OxFF
+
     #define BOTTOM 0
     #define _8_BITS_COUNTER_MAX 0xFF
 
@@ -38,7 +41,7 @@
     //TCCR0 Bit 5:4 ? COM0[1:0]: Compare Match Output Mode
     //NON_PWD
     #define NON_PWD_NORMAL_PORT_OPERATION_MODE 0
-    #define NON_PWD_TOGLE_OC_ON_COMPARE_MATCH  0x10 
+    #define NON_PWD_TOGGLE_OC_ON_COMPARE_MATCH  0x10 
     #define NON_PWD_CLEAR_OC_ON_COMPARE_MATCH  0x20
     #define NON_PWD_SET_OC_ON_COMPARE_MATCH    0x30
 
@@ -52,7 +55,7 @@
     #define PHASE_CORRECT_PWD_NORMAL_PORT_OPERATION_MODE                0  
     #define PHASE_CORRECT_PWD_RESERVED                                  0x01
     #define PHASE_CORRECT_PWD_CLEAR_OC_UP_COUNTIN_SET_OC_DOWN_COUNTING  0x20
-    #define PHASE_CORRECT_PWD_SET_OC__UP_COUNTIN_CLEAR_OC_DOWN_COUNTING 0x30
+    #define PHASE_CORRECT_PWD_SET_OC_UP_COUNTIN_CLEAR_OC_DOWN_COUNTING 0x30
 
     //TCCR0 BitS 2:0 ? CS02:0: Clock Select            SC2     SC1     SC0
     #define STOP_TIMER                                 0  //   0       0       0 
