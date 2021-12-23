@@ -702,10 +702,10 @@ void mainTimer0(void){
                 FAST_PWD_MODE ,
                 FAST_PWD_NORMAL_PORT_OPERATION_MODE ,
                 ENABLE_INTERRUPT ,
-                DISABLE_INTERRUPT );
+                ENABLE_INTERRUPT );
     
-//    setCompraeValue(BOTTOM);
-    setCompraeValue(_8_BITS_COUNTER_MAX);
+    setCompraeValue(BOTTOM);
+//    setCompraeValue(_8_BITS_COUNTER_MAX);
     
     /*
      * case study : 
@@ -754,6 +754,9 @@ void mainTimer0(void){
     //_PB_PIN3 : OC0 HIGH ALL TIME
 //    configureOutComparePinChangeCompareAndWaveMode(NORMAL_MODE ,
 //            NON_PWD_SET_OC_ON_COMPARE_MATCH);
+    
+    configureOutComparePinChangeCompareAndWaveMode(FAST_PWD_MODE , 
+            FAST_PWD_CLEAR_OC_ON_COMPARE_MATCH_NON_INVERTING);
     
     while(KEEP_EXECUTING);
 }

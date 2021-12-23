@@ -20,19 +20,7 @@ u8 getPressedKey(void){
     u8 pressedKey = UN_IDENTIFIED ,
             iterator , 
                 selected_key;
-    
-//    typedef union col_selection{
-//    
-//        typedef struct {
-//            u8 b0 : 1;
-//            u8 b1 : 1;
-//            u8 b2 : 1;
-//        } bit_field;
-//        
-//        u8 col;
-//    
-//    }col_selection;
-  
+      
     /*
      * logic for find out which key is pressed if any
      * outer loop iteration 1:
@@ -87,11 +75,7 @@ u8 getPressedKey(void){
 
         for(iterator = KEYPAD_A_PIN ; iterator <= KEYPAD_D_PIN ; iterator++ , 
                                                 selected_key += KEY_OFFSET){
-//            displayINTOnLCD(iterator);
-//            displayCharacterOnLCD(':');
             dispalyKeyAsChar(selected_key);
-//            displayINTOnLCD(
-//                    scanControlPassingThroughPortPin(iterator).scanned_data);
             displayCharacterOnLCD(' ');            
             //loop body find if key pressed in selected column and line 
             if(scanControlPassingThroughPortPin(iterator).scanned_data){

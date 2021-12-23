@@ -12,8 +12,18 @@ scan_fun_return fun_ret_status_and_data;
 
 FUN_RETURN_STATUS setPortInOut(u8 port_number, u8 program_hole_port_out_or_in){
     
+//    if(port_number == DDRA || port_number == DDRB || port_number == DDRC || 
+//                        port_number == DDRD){
+//        port_number = program_hole_port_out_or_in ? 
+//                            ALL_PINS_CONFIG_OUT : ALL_PINS_CONFIG_IN ;
+//        
+//        return NO_ERRORS;
+//    }else{
+//        return ERR_WRONG_PORT_NUMBER;
+//    }
+
     ERR_CHECKER = NO_ERRORS;
-    
+       
     switch(port_number){
        
         case IOA: //configuring DDRA => Port'A'
@@ -128,6 +138,15 @@ FUN_RETURN_STATUS setPortPinInOut(u8 port_number ,
 
 FUN_RETURN_STATUS outControlSignalThroughPort(u8 port_number, u8 output_signal){
 
+//    if(port_number == PORTA || port_number == PORTB || port_number == PORTC || 
+//                        port_number == PORTD){
+//        port_number = output_signal;
+//        
+//        return NO_ERRORS;
+//    }else{
+//        return ERR_WRONG_PORT_NUMBER;
+//    }
+//
     ERR_CHECKER = NO_ERRORS;
     
     switch(port_number){
@@ -217,7 +236,16 @@ FUN_RETURN_STATUS outControlSignalThroughPortPin(u8 port_number ,
 }
 
 scan_fun_return scanControlSignalThroughPort(u8 port_number){
-    
+
+//    if(port_number == PINA || port_number == PINB || port_number == PINC || 
+//                        port_number == PIND){
+//        SCANNED_DATA = port_number ;
+//        ERR_CHECKER  = NO_ERRORS;
+//    }else{
+//        SCANNED_DATA  = LOW;
+//        ERR_CHECKER = ERR_WRONG_PORT_NUMBER;
+//    }
+
     //initialization of fun_ret_status_and_data
     ERR_CHECKER   = NO_ERRORS;
     SCANNED_DATA  = LOW;
@@ -316,33 +344,33 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
     
     }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
     
-        PIN_NUMBER -= _PB_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTB , PIN_NUMBER);
+        //PIN_NUMBER -= _PB_PIN0 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTB , (PIN_NUMBER - _PB_PIN0) );
     
     }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
     
-        PIN_NUMBER -=_PC_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTC , PIN_NUMBER);
+        //PIN_NUMBER -=_PC_PIN0 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTC , (PIN_NUMBER -_PC_PIN0) );
     
     }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
     
-        PIN_NUMBER -=_PD_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTD , PIN_NUMBER);
+        //PIN_NUMBER -=_PD_PIN0 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTD , (PIN_NUMBER -_PD_PIN0) );
     
     }else if(ADMUX_MUX0 <= port_pin_number && ADMUX_REFS1 >= port_pin_number){
     
-        PIN_NUMBER -= ADMUX_MUX0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(ADMUX , PIN_NUMBER);
+        //PIN_NUMBER -= ADMUX_MUX0 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(ADMUX , (PIN_NUMBER - ADMUX_MUX0) );
     
     }else if(ADCSRA_ADPS0 <= port_pin_number && ADCSRA_ADEN >= port_pin_number){
     
-        PIN_NUMBER -= ADCSRA_ADPS0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(ADCSRA , PIN_NUMBER);
+        //PIN_NUMBER -= ADCSRA_ADPS0 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(ADCSRA , (PIN_NUMBER - ADCSRA_ADPS0) );
     
     }else if(SFIOR_PSR10 <= port_pin_number && SFIOR_ADTS2 >= port_pin_number){
     
-        PIN_NUMBER -= SFIOR_PSR10 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(SFIOR , PIN_NUMBER);
+        //PIN_NUMBER -= SFIOR_PSR10 ;
+        SCANNED_DATA = SCAN_SIGANL_ON_PIN(SFIOR , (PIN_NUMBER - SFIOR_PSR10) );
     
     }else{
         ERR_CHECKER = ERR;
@@ -429,7 +457,7 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
 FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number , 
                                               u8 output_signal_high_or_low){
     //initialization of fun_ret_status_and_data 
-    fun_ret_status_and_data.fun_return   = NO_ERRORS;
+    ERR_CHECKER = NO_ERRORS;
 
     //u8 REG_NAME = UN_IDENTIFIED;
     u8  BIT_POS = UN_IDENTIFIED;
@@ -454,36 +482,36 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
     
     }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
     
-        BIT_POS -= _PB_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTB , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -= _PB_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTB , (BIT_POS - _PB_PIN0) , output_signal_high_or_low);
     
     }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
     
-        BIT_POS -=_PC_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTC , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -=_PC_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTC , (BIT_POS - _PC_PIN0) , output_signal_high_or_low);
     
     }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
     
-        BIT_POS -=_PD_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTD , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -=_PD_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(PORTD , (BIT_POS - _PD_PIN0) , output_signal_high_or_low);
     
     }else if(ADMUX_MUX0 <= port_pin_number && ADMUX_REFS1 >= port_pin_number){
     
-        BIT_POS -= ADMUX_MUX0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADMUX , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -= ADMUX_MUX0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADMUX , (BIT_POS - ADMUX_MUX0) , output_signal_high_or_low);
     
     }else if(ADCSRA_ADPS0 <= port_pin_number && ADCSRA_ADEN >= port_pin_number){
     
-        BIT_POS -= ADCSRA_ADPS0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADCSRA , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -= ADCSRA_ADPS0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(ADCSRA , (BIT_POS - ADCSRA_ADPS0) , output_signal_high_or_low);
     
     }else if(SFIOR_PSR10 <= port_pin_number && SFIOR_ADTS2 >= port_pin_number){
     
-        BIT_POS -= SFIOR_PSR10 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(SFIOR , BIT_POS, output_signal_high_or_low);
+        //BIT_POS -= SFIOR_PSR10 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(SFIOR , (BIT_POS - SFIOR_PSR10) , output_signal_high_or_low);
     
     }else{
-        fun_ret_status_and_data.fun_return = ERR;
+        ERR_CHECKER = ERR;
     }
     
 //    switch(port_pin_number){
@@ -581,7 +609,7 @@ FUN_RETURN_STATUS writeControlSignalOnPortPin(u8 port_pin_number ,
 //        }
 //    }
 //    
-    return fun_ret_status_and_data.fun_return;
+    return ERR_CHECKER;
 }
 
 FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number, 
@@ -609,21 +637,21 @@ FUN_RETURN_STATUS programPortPinInOut(u8 port_pin_number,
     
     }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
     
-        BIT_POS -= _PB_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRB , BIT_POS, program_port_pin_out_or_in);
+        //BIT_POS -= _PB_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRB , (BIT_POS - _PB_PIN0) , program_port_pin_out_or_in);
     
     }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
     
-        BIT_POS -=_PC_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRC , BIT_POS, program_port_pin_out_or_in);
+        //BIT_POS -=_PC_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRC , (BIT_POS - _PC_PIN0) , program_port_pin_out_or_in);
     
     }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
     
-        BIT_POS -=_PD_PIN0 ;
-        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRD , BIT_POS, program_port_pin_out_or_in);
+        //BIT_POS -=_PD_PIN0 ;
+        OUT_HIGH_OR_LOW_SIGNAL_ON_PIN(DDRD , (BIT_POS - _PD_PIN0) , program_port_pin_out_or_in);
     
     }else{
-        fun_ret_status_and_data.fun_return = ERR;
+        ERR_CHECKER = ERR;
     }
     
 //    switch(port_pin_number){
