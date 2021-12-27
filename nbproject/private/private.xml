@@ -5,9 +5,10 @@
         <group>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/atemga32a.c</file>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/interfacing_connection_logic.h</file>
+            <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/usart_interface.h</file>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/interfacing_connection_logic.c</file>
-            <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/atmega32a.h</file>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/lcd_control_main.c</file>
+            <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/usart_interface.c</file>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/timer0_interfacing.h</file>
             <file>file:/D:/AMIT/Interfacing/MPLABX_Projects/lcd_2x16_interfacing/timer0_interface.c</file>
         </group>

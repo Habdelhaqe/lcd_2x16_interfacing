@@ -23,11 +23,20 @@
     #define OUTPUT HIGH
     #define INPUT  LOW
 
+    #define SET HIGH
+    #define REST LOW
+    #define CLEAR LOW
+
     //BIT ARITHIMETICS
     #define    SET_BIT(REG , BIT_LOCATION)     REG |= (HIGH<<BIT_LOCATION)
     #define  CLEAR_BIT(REG , BIT_LOCATION)     REG &= ~(HIGH<<BIT_LOCATION)
     #define TOGGLE_BIT(REG , BIT_LOCATION)     REG ^= (HIGH<<BIT_LOCATION)
     #define    GET_BIT(REG , BIT_LOCATION)     (REG & (HIGH<<BIT_LOCATION))
+
+    #define    SET_BIT_DELAY_UPDATE(REG , BIT_LOCATION)     (REG) | (HIGH<<(BIT_LOCATION))
+    #define  CLEAR_BIT_DELAY_UPDATE(REG , BIT_LOCATION)     (REG) & ~(HIGH<<(BIT_LOCATION))
+    #define TOGGLE_BIT_DELAY_UPDATE(REG , BIT_LOCATION)     (REG) ^ (HIGH<<(BIT_LOCATION))
+
     /*
      * this is not wright to do cause you don't want to modify or change
      * the register value you want to read a specific bit either to be
@@ -47,8 +56,9 @@
     #define LCD_DISPLAY_DELAY_IN_MS 1000
     #define VISIT_ALL_LCD_IN_MS 100
 
-    typedef unsigned char u8;
+    typedef unsigned char  u8;
     typedef unsigned short u16;
     typedef   signed short s16;
-    typedef   signed int   s32;   
+    typedef   signed int   s32;
+    typedef unsigned int   u32;
 #endif	/* COMMON_TYPES_DEFS_H */

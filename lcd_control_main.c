@@ -11,8 +11,10 @@
 #include"interrupt_configuration.h"
 #include "adc_interfacing.h"
 #include "timer0_interfacing.h"
+#include "usart_interface.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "usart_interface.h"
 
 #define KEEP_EXECUTING 1
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
@@ -43,7 +45,7 @@ void instrcutionsExecutedEverySec(void);
 void digitalCalendar(void);
 void displayClanederData(u8 hour , u8 minute, u8 second , u8 day , u8 month , u8 year , u8 what_have_changed);
 u8 lastDayOfFebruaryleapYearCalc(u8 year);
-
+void mainUSART(void);
 /*
  * external interrupt initiated on INT0
  */
@@ -151,9 +153,8 @@ int main(void) {
 //    mainVisitAllLCDCursorPositions();
 //    mainInterfacingWithKeyPad();
 //  main8LM35On8ChannelsDispalyTemp();
-    
-    mainTimer0();
-
+//    mainTimer0();
+    mainUSART();
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -1145,3 +1146,104 @@ u8 lastDayOfFebruaryleapYearCalc(u8 year){
                     ( year %100 == 0  && year%400 == 0  ) ) ? 29  : 28;
 }
 
+void mainUSART(void){
+    
+    u32 baud_rate_freq = 9600;
+    u8 index ;    
+    
+    CLEAR_LCD;
+    
+    //displayStringOnLCD((u8 *)&("ERROR = "));
+   
+    moveCursorToLocation(LCD_START_POS,LCD_START_POS);
+    *(start_msg + (index = 0)) = 'U';
+    *(start_msg + ++index) = 'S';
+    *(start_msg + ++index) = 'A';
+    *(start_msg + ++index) = 'R';
+    *(start_msg + ++index) = 'T';
+    *(start_msg + ++index) = ' ';
+    *(start_msg + ++index) = 'I';
+    *(start_msg + ++index) = 'N';
+    *(start_msg + ++index) = 'I'; 
+    *(start_msg + ++index) = 'T'; 
+    *(start_msg + ++index) = 'I'; 
+    *(start_msg + ++index) = 'A';
+    *(start_msg + ++index) = 'L';
+    *(start_msg + ++index) = 'I';
+    *(start_msg + ++index) = 'Z';
+    *(start_msg + ++index) = 'E';
+    *(start_msg + ++index) = NULL_CHAR;
+    displayStringOnLCD(start_msg);
+    
+    moveCursorToLocation(LCD_ROW_COUNT,LCD_START_POS);
+    *(start_msg + (index = 0)) = 'E';
+    *(start_msg + ++index) = 'R';
+    *(start_msg + ++index) = 'R';
+    *(start_msg + ++index) = 'O';
+    *(start_msg + ++index) = 'R';
+    *(start_msg + ++index) = ' ';
+    *(start_msg + ++index) = '=';
+    *(start_msg + ++index) = ' ';
+    *(start_msg + ++index) = NULL_CHAR;
+    displayStringOnLCD(start_msg);
+    
+    displayINTOnLCD(
+    init_USART( ENABLE_USART_TX , 
+					ENABLE_USART_RX  , 
+						DISABLE_DATA_REG_EMPTY_INTERRUPT , 
+							DISABLE_TRANSMIT_COMPLETE_INTERRUPT , 
+								DISABLE_RECEIVE_COMPLETE_INTERRUPT , 
+									baud_rate_freq , 
+										FRAME_SIZE_8_BITS, 
+											ASYNC_MODE , 
+												ASYNC_MODE_NORAML_RATE , 
+													IGNORE_ARGUMENT , 
+														DISABLE_MULTI_PROCESSOR_COMMUNICATION_MODE ,
+															PARITY_MODE_NON , 
+																_1_STOP_BIT , 
+																	POLARITY_RISING_EDGE));
+    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    
+    //initLCD();
+    while(KEEP_EXECUTING){
+        CLEAR_LCD;
+        moveCursorToLocation(LCD_START_POS,LCD_START_POS);
+        index = 0;
+        *(lcd_string + index++) = 'U';
+        *(lcd_string + index++) = 'C';
+        *(lcd_string + index++) = 'S';
+        *(lcd_string + index++) = 'R';
+        *(lcd_string + index++) = 'A';
+        *(lcd_string + index++) = ':';
+        *(lcd_string + index++) = NULL_CHAR;
+        displayStringOnLCD(lcd_string);
+        displayINTOnLCD(getStatusOfUCSRA());
+        index = 0;
+        *(lcd_string + index++) = 'U';
+        *(lcd_string + index++) = 'C';
+        *(lcd_string + index++) = 'S';
+        *(lcd_string + index++) = 'R';
+        *(lcd_string + index++) = 'B';
+        *(lcd_string + index++) = ':';
+        *(lcd_string + index) = NULL_CHAR;
+        moveCursorToLocation(LCD_ROW_COUNT,LCD_START_POS);
+        displayStringOnLCD(lcd_string);
+        displayINTOnLCD(getStatusOfUCSRB());
+        _delay_ms(2 * LCD_DISPLAY_DELAY_IN_MS);
+        
+        CLEAR_LCD;
+        moveCursorToLocation(LCD_START_POS,LCD_START_POS);
+        index = 0;
+        *(lcd_string + index++) = 'U';
+        *(lcd_string + index++) = 'C';
+        *(lcd_string + index++) = 'S';
+        *(lcd_string + index++) = 'R';
+        *(lcd_string + index++) = 'B';
+        *(lcd_string + index++) = ':';
+        *(lcd_string + index) = NULL_CHAR;
+        displayStringOnLCD(lcd_string);        
+        displayINTOnLCD(getStatusOfUCSRC());
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    }
+    
+}
