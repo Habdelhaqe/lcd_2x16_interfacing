@@ -340,22 +340,25 @@ scan_fun_return scanControlPassingThroughPortPin(u8 port_pin_number){
     PIN_NUMBER = port_pin_number;
     if(_PA_PIN0 <= port_pin_number && _PA_PIN7 >= port_pin_number){
         
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTA , PIN_NUMBER);
+//        SCANNED_DATA = SCAN_SIGANL_ON_PIN(GET_BIT(DDRA ,PIN_NUMBER) ? PORTA : PINA , PIN_NUMBER);
+        SCANNED_DATA = DDRA & HIGH<<PIN_NUMBER ? PORTA & HIGH<<PIN_NUMBER : PINA & HIGH<<PIN_NUMBER ;
     
     }else if(_PB_PIN0 <= port_pin_number && _PB_PIN7 >= port_pin_number){
     
         //PIN_NUMBER -= _PB_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTB , (PIN_NUMBER - _PB_PIN0) );
-    
+//        SCANNED_DATA = SCAN_SIGANL_ON_PIN(GET_BIT(DDRB ,(PIN_NUMBER -=_PB_PIN0)) ? PORTB : PINB , PIN_NUMBER);
+        SCANNED_DATA = DDRB & HIGH<<(PIN_NUMBER -=_PB_PIN0) ? PORTB & HIGH<<PIN_NUMBER : PINB & HIGH<<PIN_NUMBER ;
+ 
     }else if(_PC_PIN0 <= port_pin_number && _PC_PIN7 >= port_pin_number){
     
         //PIN_NUMBER -=_PC_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTC , (PIN_NUMBER -_PC_PIN0) );
-    
+        SCANNED_DATA = DDRC & HIGH<<(PIN_NUMBER -=_PC_PIN0) ? PORTC & HIGH<<PIN_NUMBER : PINC & HIGH<<PIN_NUMBER ;
+
     }else if(_PD_PIN0 <= port_pin_number && _PD_PIN7 >= port_pin_number){
     
         //PIN_NUMBER -=_PD_PIN0 ;
-        SCANNED_DATA = SCAN_SIGANL_ON_PIN(PORTD , (PIN_NUMBER -_PD_PIN0) );
+//        SCANNED_DATA = SCAN_SIGANL_ON_PIN(GET_BIT(DDRD ,(PIN_NUMBER -=_PD_PIN0)) ? PORTD : PIND , PIN_NUMBER );
+        SCANNED_DATA = DDRD & HIGH<<(PIN_NUMBER -=_PD_PIN0) ? PORTD & HIGH<<PIN_NUMBER : PIND & HIGH<<PIN_NUMBER ;
     
     }else if(ADMUX_MUX0 <= port_pin_number && ADMUX_REFS1 >= port_pin_number){
     

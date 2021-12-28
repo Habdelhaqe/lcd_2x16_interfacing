@@ -46,6 +46,7 @@ void digitalCalendar(void);
 void displayClanederData(u8 hour, u8 minute, u8 second, u8 day, u8 month, u8 year, u8 what_have_changed);
 u8 lastDayOfFebruaryleapYearCalc(u8 year);
 void mainUSART(void);
+void mainSimulatingRisingEdgeThroughBTN(void);
 
 /*
  * external interrupt initiated on INT0
@@ -209,6 +210,7 @@ int main(void) {
     //  main8LM35On8ChannelsDispalyTemp();
     //    mainTimer0();
     mainUSART();
+    //mainSimulatingRisingEdgeThroughBTN();
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -1369,4 +1371,36 @@ void mainUSART(void) {
         
     }
 
+}
+
+void mainSimulatingRisingEdgeThroughBTN(void){
+    //BTN1 _PB_PIN4
+    initBTNS();
+    initLEDS();
+   
+    turnLEDOnOff(LED0 , ON);
+    turnLEDOnOff(LED1 , OFF);
+    turnLEDOnOff(LED2 , ON);
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+
+    while(KEEP_EXECUTING){
+        
+        CLEAR_LCD;
+        turnLEDOnOff(LED0 , !isLEDOnOrOFF(LED0).scanned_data);
+//        turnLEDOnOff(LED1 , !isBTNPressed(BTN1).scanned_data);
+//        turnLEDOnOff(LED2 , !isLEDOnOrOFF(LED2).scanned_data);
+
+        //_delay_ms(100);
+        
+        while(isBTNPressed(BTN1).scanned_data){
+            //if(isBTNPressed(BTN1).scanned_data) break;
+            turnLEDOnOff(LED1 , ON);
+            //if(isBTNPressed(BTN1).scanned_data) break;
+            turnLEDOnOff(LED2 , !isLEDOnOrOFF(LED2).scanned_data);
+            //_delay_ms(500);
+        }
+            turnLEDOnOff(LED1 , !isLEDOnOrOFF(LED1).scanned_data);
+            turnLEDOnOff(LED2 , ON);
+    }
+    
 }
