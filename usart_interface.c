@@ -1,4 +1,5 @@
 #include"usart_interface.h"
+#include "interfacing_connection_logic.h"
 /*
  *      once communication_mode is a SET then SYNC mode is selected for TX/RX
  * so XCK pin may not have to be programmed as o/p or i/p ??? it may be done automatically
@@ -32,28 +33,31 @@ FUN_RETURN_STATUS init_USART(u8 enable_disable_TX,
         ERR_CHECKER = ERR;
     } else {
         ERR_CHECKER = NO_ERRORS;
-
+                
         u16 UBRR_REG = GET_UBRR_VALUE(baud_rate_frequency,
                 communication_mode ? /*SYNC_MODE*/ SYNC_MODE_CLK_DIVISOR :
                 case_async_normal_double_rate ? /*ASYNC_MODE_DOUBLE_RATE*/ ASYNC_MODE_DOUBLE_RATE_CLK_DIVISOR :
                 /*ASYNC_MODE_NORAML_RATE*/ ASYNC_MODE_NORAML_RATE_CLK_DIVISOR);
+                
         if (communication_mode) {
             //SYNC_MODE
             //case_sync_master_slave SET then pin is O/P MATER, rest pin is I/P SLAVE
             programPortPinInOut(XCK, case_sync_master_slave);
         }
-        
-        UBRRL = (u8) UBRR_REG;
-        UBRRH = *((u8 *) & UBRR_REG + 1); //FASTER ,SAFER , DUMB COMPILER IS OK WITH IT
-        //UBRRH = (u8)(UBRR_REG>>8); //READABLE , SAFER , NEED SMART COMBILER FOR MAKING FAST ACC TRANSLATION
-
+                
+        UBRRH = (u8)(UBRR_REG>>HIGHER_BYTE_SHIFT_FOR_UBRRH); //READABLE , SAFER , NEED SMART COMBILER FOR MAKING FAST ACC TRANSLATION
+//        UBRRH = *((u8 *)&UBRR_REG + 1); //FASTER ,SAFER , DUMB COMPILER IS OK WITH IT
+        UBRRL = (u8) UBRR_REG;        
+                
         UCSRC = SET_REST_REG_BIT(
                 SET_REST_REG_BIT(
                 SET_REST_REG_BIT(
                 SET_REST_REG_BIT(
                 SET_REST_REG_BIT(
                 SET_REST_REG_BIT(
-                SET_REST_REG_BIT(UCSRC_INITIAL_VALUE, UPM1, parity_mode >> PARITY_MODE_UPM1_SHIFT)
+                SET_REST_REG_BIT(
+                SET_REST_REG_BIT( UCSRC , URSEL , SET)
+                , UPM1, parity_mode >> PARITY_MODE_UPM1_SHIFT)
                 , UPM0, parity_mode & PARITY_MODE_UPM0_MASK)
                 , USBS, stop_bits)
                 , UCPOL, polarity_falling_rising)
@@ -99,4 +103,42 @@ void flushUSART_RX_Buffers(void) {
     while (GET_BIT(UCSRA, RXC)) {
         *((u8 *) NULL) = UDR;
     }
+}
+
+u16 getUBRR(void){
+	return UBRRL | (UBRRH<<HIGHER_BYTE_SHIFT_FOR_UBRRH) ;
+//	return UBRRH ;
+}
+
+void transmitMSGviaUSARTusingPolling(u16 msg){
+    if(GET_BIT(UCSRB , UCSZ2)){
+        //9 BITS msg
+    }else{
+        //5 , 6 , 7 , 8 BITS msg
+        while(!GET_BIT(UCSRA , UDRE));
+        UDR = (u8) msg;
+    }
+}
+
+u16 receiveMSGviaUSARTusingPolling(void){
+    
+    while(!(GET_BIT(UCSRA , RXC)));
+    
+//    u16 msg = LOW;
+//    
+//    if(GET_BIT(UCSRB , UCSZ2)){
+//        msg = (GET_BIT(UCSRB , RXB8)) << HIGHER_BYTE_SHIFT_FOR_UBRRH; 
+//    }
+//    
+//    msg |= UDR;
+//    
+//    return msg;
+    
+    return GET_BIT(UCSRB , UCSZ2) ? (GET_BIT(UCSRB , RXB8)) << HIGHER_BYTE_SHIFT_FOR_UBRRH | UDR : UDR;
+
+}
+u16 receiveMSGviaUSARTusingINTER(void){
+
+    return GET_BIT(UCSRB , UCSZ2) ? (GET_BIT(UCSRB , RXB8)) << HIGHER_BYTE_SHIFT_FOR_UBRRH | UDR : UDR;
+
 }

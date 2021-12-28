@@ -10,6 +10,9 @@
     
     #define NULL (void *)0
     #define NULL_CHAR '\0'
+    #define CARRIAGE_RETURN 13
+    #define NEW_LINE 10
+    #define LINE_FEED CARRIAGE_RETURN & NEW_LINE
 
     //SIGNALS STATUS
     #define HIGH 1

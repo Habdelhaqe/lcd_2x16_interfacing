@@ -24,7 +24,7 @@
     #define DIVISOR_ASYNC_DOUBLE_RATE_MODE 8
     #define      DIVISOR_ASYNC_NORMAL_MODE 16
 
-    #define GET_UBRR_VALUE(BAUD_RATE_FREQUENY , DIVISOR) (u16)(F_CPU / ((BAUD_RATE_FREQUENY) * (DIVISOR)) - 1)
+    #define GET_UBRR_VALUE(BAUD_RATE_FREQUENY , DIVISOR) F_CPU / (BAUD_RATE_FREQUENY) / (DIVISOR) - 1
 
     #define XCK _PB_PIN0
 
@@ -162,6 +162,8 @@
     #define DISABLE_MULTI_PROCESSOR_COMMUNICATION_MODE REST
     #define  ENABLE_MULTI_PROCESSOR_COMMUNICATION_MODE SET
 
+    #define HIGHER_BYTE_SHIFT_FOR_UBRRH 8
+
     #define ENABLE_USART_TRANSMITTER SET_BIT(UCSRB , TXEN);    
     /*
      * ANY BINDING TX WILL BE COMMITED BEFORE DISABLE TX
@@ -189,18 +191,18 @@
     #define ENABLE_MULTI_PROCESSOR_MODE SET_BIT(UCSRA , MPCM);
     #define DISABLE_MULTI_PROCESSOR_MODE CLEAR_BIT(UCSRA , MPCM);
 
-    #define ENABLE_DISABLE_PARITY_MODE_CHOSE_ASLSO_EVEN_OR_ODD( EN_DIS , ODD_EVEN ) SET_REST_REG_BIT(UCSRC , UMP1 , EN_DIS );\
+    #define ENABLE_DISABLE_PARITY_MODE_CHOSE_ASLSO_EVEN_OR_ODD( EN_DIS , ODD_EVEN ) UCSRC = SET_REST_REG_BIT(UCSRC , UPM1 , EN_DIS );\
                                                                                      if(EN_DIS){\
-                                                                                        SET_REST_REG_BIT(UCSRC , UMP0 , ODD_EVEN);\
+                                                                                        UCSRC = SET_REST_REG_BIT(UCSRC , UPM0 , ODD_EVEN);\
                                                                                      }else{\
                                                                                      }
     #define ENABLE_2_STOP_BITS SET_BIT(UCSRC , USBS);
     #define DISABLE_2_STOP_BITS SET_BIT(UCSRC , USBS);
 
-    #define CHANGE_POLARITY(FALLING_RISING) SET_REST_REG_BIT(UCSRC , UPOL , FALLING_RISING);
+    #define CHANGE_POLARITY(FALLING_RISING)  UCSRC = SET_REST_REG_BIT(UCSRC , UCPOL , FALLING_RISING )
 
-    #define CHANGE_FRAME_SIZE(FRAME_SIZE) SET_REST_REG_BIT(SET_REST_REG_BIT(UCSRC , UCSZ1 , FRAME_SIZE & FRAME_SIZE_UCSZ1_MASK) , UCSZ0 , FRAME_SIZE & FRAME_SIZE_UCSZ0_MASK);\
-                                          SET_REST_REG_BIT(UCSRB , UCSZ2 , FRAME_SIZE >> FRAME_SIZE_UCSZ2_SHIFT );
+    #define CHANGE_FRAME_SIZE(FRAME_SIZE) UCSRC = SET_REST_REG_BIT(SET_REST_REG_BIT(UCSRC , UCSZ1 , FRAME_SIZE & FRAME_SIZE_UCSZ1_MASK) , UCSZ0 , FRAME_SIZE & FRAME_SIZE_UCSZ0_MASK);\
+                                          UCSRB = SET_REST_REG_BIT(UCSRB , UCSZ2 , FRAME_SIZE >> FRAME_SIZE_UCSZ2_SHIFT );
 
 FUN_RETURN_STATUS init_USART(u8 enable_disable_TX , 
 					u8 enable_disable_RX , 
@@ -224,5 +226,13 @@ u8 getStatusOfUCSRB(void);
 u8 getStatusOfUCSRC(void);
 
 void flushUSART_RX_Buffers(void);
+
+u16 getUBRR(void);
+
+void transmitMSGviaUSARTusingPolling(u16 msg);
+
+u16 receiveMSGviaUSARTusingPolling(void);
+
+u16 receiveMSGviaUSARTusingINTER(void);
 
 #endif	/* USART_INTERFACE_H */

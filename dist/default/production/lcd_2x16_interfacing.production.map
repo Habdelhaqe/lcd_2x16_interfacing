@@ -87,29 +87,29 @@ Discarded input sections
                 0x0000000000000000       0x40 build/default/production/lcd_control_main.o
  .text.digitalCalendar
                 0x0000000000000000      0x142 build/default/production/lcd_control_main.o
- .data.day.2202
+ .data.day.2218
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .data.year.2204
+ .data.year.2220
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .data.month.2203
+ .data.month.2219
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .data.hour.2201
+ .data.hour.2217
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .data.minute.2200
+ .data.minute.2216
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.what_have_changed.2198
+ .bss.what_have_changed.2214
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.second.2199
+ .bss.second.2215
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.number_of_counts_to_max.2197
+ .bss.number_of_counts_to_max.2213
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.frequency_change_req.2193
+ .bss.frequency_change_req.2209
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.halting_time.2192
+ .bss.halting_time.2208
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.seconds_counter.2191
+ .bss.seconds_counter.2207
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
- .bss.complete_count_to_max_counter.2190
+ .bss.complete_count_to_max_counter.2206
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
  .bss.lcd_string_index
                 0x0000000000000000        0x1 build/default/production/lcd_control_main.o
@@ -131,7 +131,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/default/production/interfacing_connection_logic.o
  .data          0x0000000000000000        0x0 build/default/production/interfacing_connection_logic.o
  .bss           0x0000000000000000        0x0 build/default/production/interfacing_connection_logic.o
- .text.initLED  0x0000000000000000       0x14 build/default/production/interfacing_connection_logic.o
  .text.initBTN  0x0000000000000000       0x18 build/default/production/interfacing_connection_logic.o
  .text.initLEDS
                 0x0000000000000000       0x14 build/default/production/interfacing_connection_logic.o
@@ -224,6 +223,10 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 build/default/production/usart_interface.o
  .text.flushUSART_RX_Buffers
                 0x0000000000000000       0x12 build/default/production/usart_interface.o
+ .text.transmitMSGviaUSARTusingPolling
+                0x0000000000000000        0xc build/default/production/usart_interface.o
+ .text.receiveMSGviaUSARTusingPolling
+                0x0000000000000000       0x1e build/default/production/usart_interface.o
  .text          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libm.a(fixsfsi.o)
  .data          0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libm.a(fixsfsi.o)
  .bss           0x0000000000000000        0x0 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libm.a(fixsfsi.o)
@@ -795,73 +798,73 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x0000000000000000      0x228
+.debug_aranges  0x0000000000000000      0x250
  *(.debug_aranges)
  .debug_aranges
-                0x0000000000000000       0xa8 build/default/production/lcd_control_main.o
+                0x0000000000000000       0xb0 build/default/production/lcd_control_main.o
  .debug_aranges
-                0x00000000000000a8       0x60 build/default/production/atemga32a.o
+                0x00000000000000b0       0x60 build/default/production/atemga32a.o
  .debug_aranges
-                0x0000000000000108       0xa0 build/default/production/interfacing_connection_logic.o
+                0x0000000000000110       0xa0 build/default/production/interfacing_connection_logic.o
  .debug_aranges
-                0x00000000000001a8       0x40 build/default/production/adc_interfacing.o
+                0x00000000000001b0       0x40 build/default/production/adc_interfacing.o
  .debug_aranges
-                0x00000000000001e8       0x40 build/default/production/usart_interface.o
+                0x00000000000001f0       0x60 build/default/production/usart_interface.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0x4615
+.debug_info     0x0000000000000000     0x47d7
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000      0x4e6 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_info    0x00000000000004e6     0x2223 build/default/production/lcd_control_main.o
- .debug_info    0x0000000000002709      0x648 build/default/production/atemga32a.o
- .debug_info    0x0000000000002d51      0xe7e build/default/production/interfacing_connection_logic.o
- .debug_info    0x0000000000003bcf      0x439 build/default/production/adc_interfacing.o
- .debug_info    0x0000000000004008      0x60d build/default/production/usart_interface.o
+ .debug_info    0x00000000000004e6     0x231d build/default/production/lcd_control_main.o
+ .debug_info    0x0000000000002803      0x648 build/default/production/atemga32a.o
+ .debug_info    0x0000000000002e4b      0xe7e build/default/production/interfacing_connection_logic.o
+ .debug_info    0x0000000000003cc9      0x439 build/default/production/adc_interfacing.o
+ .debug_info    0x0000000000004102      0x6d5 build/default/production/usart_interface.o
 
-.debug_abbrev   0x0000000000000000      0xcc8
+.debug_abbrev   0x0000000000000000      0xce2
  *(.debug_abbrev)
  .debug_abbrev  0x0000000000000000      0x4a3 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
  .debug_abbrev  0x00000000000004a3      0x2db build/default/production/lcd_control_main.o
  .debug_abbrev  0x000000000000077e      0x116 build/default/production/atemga32a.o
  .debug_abbrev  0x0000000000000894      0x248 build/default/production/interfacing_connection_logic.o
  .debug_abbrev  0x0000000000000adc       0xa7 build/default/production/adc_interfacing.o
- .debug_abbrev  0x0000000000000b83      0x145 build/default/production/usart_interface.o
+ .debug_abbrev  0x0000000000000b83      0x15f build/default/production/usart_interface.o
 
-.debug_line     0x0000000000000000     0x283c
+.debug_line     0x0000000000000000     0x2d15
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000      0x119 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_line    0x0000000000000119      0xf2a build/default/production/lcd_control_main.o
- .debug_line    0x0000000000001043      0x569 build/default/production/atemga32a.o
- .debug_line    0x00000000000015ac      0x552 build/default/production/interfacing_connection_logic.o
- .debug_line    0x0000000000001afe      0x164 build/default/production/adc_interfacing.o
- .debug_line    0x0000000000001c62      0xbda build/default/production/usart_interface.o
+ .debug_line    0x0000000000000119      0xf67 build/default/production/lcd_control_main.o
+ .debug_line    0x0000000000001080      0x569 build/default/production/atemga32a.o
+ .debug_line    0x00000000000015e9      0x552 build/default/production/interfacing_connection_logic.o
+ .debug_line    0x0000000000001b3b      0x164 build/default/production/adc_interfacing.o
+ .debug_line    0x0000000000001c9f     0x1076 build/default/production/usart_interface.o
 
-.debug_frame    0x0000000000000000      0x69c
+.debug_frame    0x0000000000000000      0x730
  *(.debug_frame)
- .debug_frame   0x0000000000000000      0x310 build/default/production/lcd_control_main.o
- .debug_frame   0x0000000000000310       0xa4 build/default/production/atemga32a.o
- .debug_frame   0x00000000000003b4      0x1c8 build/default/production/interfacing_connection_logic.o
- .debug_frame   0x000000000000057c       0x74 build/default/production/adc_interfacing.o
- .debug_frame   0x00000000000005f0       0xac build/default/production/usart_interface.o
+ .debug_frame   0x0000000000000000      0x368 build/default/production/lcd_control_main.o
+ .debug_frame   0x0000000000000368       0xa4 build/default/production/atemga32a.o
+ .debug_frame   0x000000000000040c      0x1c8 build/default/production/interfacing_connection_logic.o
+ .debug_frame   0x00000000000005d4       0x74 build/default/production/adc_interfacing.o
+ .debug_frame   0x0000000000000648       0xe8 build/default/production/usart_interface.o
 
-.debug_str      0x0000000000000000      0x55c
+.debug_str      0x0000000000000000      0x579
  *(.debug_str)
  .debug_str     0x0000000000000000      0x196 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
- .debug_str     0x0000000000000196      0x270 build/default/production/lcd_control_main.o
- .debug_str     0x0000000000000406       0x7e build/default/production/atemga32a.o
- .debug_str     0x0000000000000484       0xa2 build/default/production/interfacing_connection_logic.o
- .debug_str     0x0000000000000526        0x0 build/default/production/adc_interfacing.o
- .debug_str     0x0000000000000526       0x36 build/default/production/usart_interface.o
+ .debug_str     0x0000000000000196      0x28d build/default/production/lcd_control_main.o
+ .debug_str     0x0000000000000423       0x7e build/default/production/atemga32a.o
+ .debug_str     0x00000000000004a1       0xa2 build/default/production/interfacing_connection_logic.o
+ .debug_str     0x0000000000000543        0x0 build/default/production/adc_interfacing.o
+ .debug_str     0x0000000000000543       0x36 build/default/production/usart_interface.o
 
-.debug_loc      0x0000000000000000     0x244f
+.debug_loc      0x0000000000000000     0x24e7
  *(.debug_loc)
- .debug_loc     0x0000000000000000      0xbeb build/default/production/lcd_control_main.o
- .debug_loc     0x0000000000000beb      0xc95 build/default/production/atemga32a.o
- .debug_loc     0x0000000000001880      0x649 build/default/production/interfacing_connection_logic.o
- .debug_loc     0x0000000000001ec9       0xa5 build/default/production/adc_interfacing.o
- .debug_loc     0x0000000000001f6e      0x4e1 build/default/production/usart_interface.o
+ .debug_loc     0x0000000000000000      0xc4b build/default/production/lcd_control_main.o
+ .debug_loc     0x0000000000000c4b      0xc95 build/default/production/atemga32a.o
+ .debug_loc     0x00000000000018e0      0x649 build/default/production/interfacing_connection_logic.o
+ .debug_loc     0x0000000000001f29       0xa5 build/default/production/adc_interfacing.o
+ .debug_loc     0x0000000000001fce      0x519 build/default/production/usart_interface.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -881,13 +884,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000      0x210
+.debug_ranges   0x0000000000000000      0x238
  *(.debug_ranges)
- .debug_ranges  0x0000000000000000       0xb8 build/default/production/lcd_control_main.o
- .debug_ranges  0x00000000000000b8       0x50 build/default/production/atemga32a.o
- .debug_ranges  0x0000000000000108       0x90 build/default/production/interfacing_connection_logic.o
- .debug_ranges  0x0000000000000198       0x30 build/default/production/adc_interfacing.o
- .debug_ranges  0x00000000000001c8       0x48 build/default/production/usart_interface.o
+ .debug_ranges  0x0000000000000000       0xc0 build/default/production/lcd_control_main.o
+ .debug_ranges  0x00000000000000c0       0x50 build/default/production/atemga32a.o
+ .debug_ranges  0x0000000000000110       0x90 build/default/production/interfacing_connection_logic.o
+ .debug_ranges  0x00000000000001a0       0x30 build/default/production/adc_interfacing.o
+ .debug_ranges  0x00000000000001d0       0x68 build/default/production/usart_interface.o
 
 .debug_macro
  *(.debug_macro)
@@ -900,209 +903,243 @@ LOAD data_init
  .note.gnu.avr.deviceinfo
                 0x0000000000000000       0x3c C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
 
-.bss.counter_compare_match.2111
+.bss.current_read_char.2127
                 0x00000000008000a2        0x1
- .bss.counter_compare_match.2111
+ .bss.current_read_char.2127
                 0x00000000008000a2        0x1 build/default/production/lcd_control_main.o
 
-.bss.counter_over_flow.2105
+.bss.last_read_char.2126
                 0x00000000008000a3        0x1
- .bss.counter_over_flow.2105
+ .bss.last_read_char.2126
                 0x00000000008000a3        0x1 build/default/production/lcd_control_main.o
 
+.bss.prev_to_last_read_char.2125
+                0x00000000008000a4        0x1
+ .bss.prev_to_last_read_char.2125
+                0x00000000008000a4        0x1 build/default/production/lcd_control_main.o
+
+.bss.counter_compare_match.2119
+                0x00000000008000a5        0x1
+ .bss.counter_compare_match.2119
+                0x00000000008000a5        0x1 build/default/production/lcd_control_main.o
+
+.bss.counter_over_flow.2113
+                0x00000000008000a6        0x1
+ .bss.counter_over_flow.2113
+                0x00000000008000a6        0x1 build/default/production/lcd_control_main.o
+
 .text.init_USART
-                0x00000000000000ba      0x818
+                0x00000000000000ba      0x886
  .text.init_USART
-                0x00000000000000ba      0x818 build/default/production/usart_interface.o
+                0x00000000000000ba      0x886 build/default/production/usart_interface.o
                 0x00000000000000ba                init_USART
 
 .text.writeControlSignalOnPortPin
-                0x00000000000008d2      0x1e6
+                0x0000000000000940      0x1e6
  .text.writeControlSignalOnPortPin
-                0x00000000000008d2      0x1e6 build/default/production/atemga32a.o
-                0x00000000000008d2                writeControlSignalOnPortPin
+                0x0000000000000940      0x1e6 build/default/production/atemga32a.o
+                0x0000000000000940                writeControlSignalOnPortPin
 
 .text.mainUSART
-                0x0000000000000ab8      0x1a0
+                0x0000000000000b26      0x1a2
  .text.mainUSART
-                0x0000000000000ab8      0x1a0 build/default/production/lcd_control_main.o
-                0x0000000000000ab8                mainUSART
+                0x0000000000000b26      0x1a2 build/default/production/lcd_control_main.o
+                0x0000000000000b26                mainUSART
 
 .text.programPortPinInOut
-                0x0000000000000c58      0x11a
+                0x0000000000000cc8      0x11a
  .text.programPortPinInOut
-                0x0000000000000c58      0x11a build/default/production/atemga32a.o
-                0x0000000000000c58                programPortPinInOut
+                0x0000000000000cc8      0x11a build/default/production/atemga32a.o
+                0x0000000000000cc8                programPortPinInOut
 
 .text.scanControlPassingThroughPortPin
-                0x0000000000000d72      0x110
+                0x0000000000000de2      0x110
  .text.scanControlPassingThroughPortPin
-                0x0000000000000d72      0x110 build/default/production/atemga32a.o
-                0x0000000000000d72                scanControlPassingThroughPortPin
+                0x0000000000000de2      0x110 build/default/production/atemga32a.o
+                0x0000000000000de2                scanControlPassingThroughPortPin
+
+.text.__vector_13
+                0x0000000000000ef2       0xfc
+ .text.__vector_13
+                0x0000000000000ef2       0xfc build/default/production/lcd_control_main.o
+                0x0000000000000ef2                __vector_13
 
 .text.__vector_1
-                0x0000000000000e82       0xc0
+                0x0000000000000fee       0xc0
  .text.__vector_1
-                0x0000000000000e82       0xc0 build/default/production/lcd_control_main.o
-                0x0000000000000e82                __vector_1
+                0x0000000000000fee       0xc0 build/default/production/lcd_control_main.o
+                0x0000000000000fee                __vector_1
 
 .text.__vector_16
-                0x0000000000000f42       0xa4
+                0x00000000000010ae       0xa4
  .text.__vector_16
-                0x0000000000000f42       0xa4 build/default/production/lcd_control_main.o
-                0x0000000000000f42                __vector_16
+                0x00000000000010ae       0xa4 build/default/production/lcd_control_main.o
+                0x00000000000010ae                __vector_16
 
 .text.commandLCD
-                0x0000000000000fe6       0x98
+                0x0000000000001152       0x98
  .text.commandLCD
-                0x0000000000000fe6       0x98 build/default/production/interfacing_connection_logic.o
-                0x0000000000000fe6                commandLCD
+                0x0000000000001152       0x98 build/default/production/interfacing_connection_logic.o
+                0x0000000000001152                commandLCD
 
 .text.displayCharacterOnLCD
-                0x000000000000107e       0x98
+                0x00000000000011ea       0x98
  .text.displayCharacterOnLCD
-                0x000000000000107e       0x98 build/default/production/interfacing_connection_logic.o
-                0x000000000000107e                displayCharacterOnLCD
+                0x00000000000011ea       0x98 build/default/production/interfacing_connection_logic.o
+                0x00000000000011ea                displayCharacterOnLCD
 
 .text.__vector_10
-                0x0000000000001116       0x76
+                0x0000000000001282       0x76
  .text.__vector_10
-                0x0000000000001116       0x76 build/default/production/lcd_control_main.o
-                0x0000000000001116                __vector_10
+                0x0000000000001282       0x76 build/default/production/lcd_control_main.o
+                0x0000000000001282                __vector_10
 
 .text.__vector_11
-                0x000000000000118c       0x64
+                0x00000000000012f8       0x64
  .text.__vector_11
-                0x000000000000118c       0x64 build/default/production/lcd_control_main.o
-                0x000000000000118c                __vector_11
+                0x00000000000012f8       0x64 build/default/production/lcd_control_main.o
+                0x00000000000012f8                __vector_11
 
-.text.initLCD   0x00000000000011f0       0x64
- .text.initLCD  0x00000000000011f0       0x64 build/default/production/interfacing_connection_logic.o
-                0x00000000000011f0                initLCD
+.text.initLCD   0x000000000000135c       0x64
+ .text.initLCD  0x000000000000135c       0x64 build/default/production/interfacing_connection_logic.o
+                0x000000000000135c                initLCD
 
 .text.displayINTOnLCD
-                0x0000000000001254       0x4c
+                0x00000000000013c0       0x4c
  .text.displayINTOnLCD
-                0x0000000000001254       0x4c build/default/production/interfacing_connection_logic.o
-                0x0000000000001254                displayINTOnLCD
+                0x00000000000013c0       0x4c build/default/production/interfacing_connection_logic.o
+                0x00000000000013c0                displayINTOnLCD
 
 .text.displayStringOnLCD
-                0x00000000000012a0       0x44
+                0x000000000000140c       0x44
  .text.displayStringOnLCD
-                0x00000000000012a0       0x44 build/default/production/interfacing_connection_logic.o
-                0x00000000000012a0                displayStringOnLCD
+                0x000000000000140c       0x44 build/default/production/interfacing_connection_logic.o
+                0x000000000000140c                displayStringOnLCD
 
 .text.libgcc.div
-                0x00000000000012e4       0x44
+                0x0000000000001450       0x44
  .text.libgcc.div
-                0x00000000000012e4       0x44 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_udivmodsi4.o)
-                0x00000000000012e4                __udivmodsi4
+                0x0000000000001450       0x44 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/avr5/memx-const\libgcc.a(_udivmodsi4.o)
+                0x0000000000001450                __udivmodsi4
 
 .text.onConversionComplete
-                0x0000000000001328       0x38
+                0x0000000000001494       0x38
  .text.onConversionComplete
-                0x0000000000001328       0x38 build/default/production/adc_interfacing.o
-                0x0000000000001328                onConversionComplete
+                0x0000000000001494       0x38 build/default/production/adc_interfacing.o
+                0x0000000000001494                onConversionComplete
 
-.text.avrlibc   0x0000000000001360       0x34
- .text.avrlibc  0x0000000000001360       0x34 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(utoa_ncheck.o)
-                0x0000000000001360                __utoa_ncheck
-                0x0000000000001362                __utoa_common
+.text.avrlibc   0x00000000000014cc       0x34
+ .text.avrlibc  0x00000000000014cc       0x34 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(utoa_ncheck.o)
+                0x00000000000014cc                __utoa_ncheck
+                0x00000000000014ce                __utoa_common
 
-.text.main      0x0000000000001394       0x30
- .text.main     0x0000000000001394       0x30 build/default/production/lcd_control_main.o
-                0x0000000000001394                main
+.text.main      0x0000000000001500       0x30
+ .text.main     0x0000000000001500       0x30 build/default/production/lcd_control_main.o
+                0x0000000000001500                main
 
 .text.moveCursorToLocation
-                0x00000000000013c4       0x2e
+                0x0000000000001530       0x2e
  .text.moveCursorToLocation
-                0x00000000000013c4       0x2e build/default/production/interfacing_connection_logic.o
-                0x00000000000013c4                moveCursorToLocation
+                0x0000000000001530       0x2e build/default/production/interfacing_connection_logic.o
+                0x0000000000001530                moveCursorToLocation
 
 .text.configureLCDDataBusLines
-                0x00000000000013f2       0x22
+                0x000000000000155e       0x22
  .text.configureLCDDataBusLines
-                0x00000000000013f2       0x22 build/default/production/interfacing_connection_logic.o
-                0x00000000000013f2                configureLCDDataBusLines
+                0x000000000000155e       0x22 build/default/production/interfacing_connection_logic.o
+                0x000000000000155e                configureLCDDataBusLines
 
-.text.avrlibc   0x0000000000001414       0x20
- .text.avrlibc  0x0000000000001414       0x20 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(strrev.o)
-                0x0000000000001414                strrev
+.text.avrlibc   0x0000000000001580       0x20
+ .text.avrlibc  0x0000000000001580       0x20 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(strrev.o)
+                0x0000000000001580                strrev
 
 .text.generateLCDEnableControlPuls
-                0x0000000000001434       0x1e
+                0x00000000000015a0       0x1e
  .text.generateLCDEnableControlPuls
-                0x0000000000001434       0x1e build/default/production/interfacing_connection_logic.o
-                0x0000000000001434                generateLCDEnableControlPuls
+                0x00000000000015a0       0x1e build/default/production/interfacing_connection_logic.o
+                0x00000000000015a0                generateLCDEnableControlPuls
 
 .text.configureLCDControlPins
-                0x0000000000001452       0x1a
+                0x00000000000015be       0x1a
  .text.configureLCDControlPins
-                0x0000000000001452       0x1a build/default/production/interfacing_connection_logic.o
-                0x0000000000001452                configureLCDControlPins
+                0x00000000000015be       0x1a build/default/production/interfacing_connection_logic.o
+                0x00000000000015be                configureLCDControlPins
 
-.text.avrlibc   0x000000000000146c       0x16
- .text.avrlibc  0x000000000000146c       0x16 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(itoa_ncheck.o)
-                0x000000000000146c                __itoa_ncheck
+.text.receiveMSGviaUSARTusingINTER
+                0x00000000000015d8       0x1a
+ .text.receiveMSGviaUSARTusingINTER
+                0x00000000000015d8       0x1a build/default/production/usart_interface.o
+                0x00000000000015d8                receiveMSGviaUSARTusingINTER
+
+.text.avrlibc   0x00000000000015f2       0x16
+ .text.avrlibc  0x00000000000015f2       0x16 c:/program files/microchip/xc8/v2.32/avr/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/memx-const\libc.a(itoa_ncheck.o)
+                0x00000000000015f2                __itoa_ncheck
+
+.text.initLED   0x0000000000001608       0x14
+ .text.initLED  0x0000000000001608       0x14 build/default/production/interfacing_connection_logic.o
+                0x0000000000001608                initLED
 
 .text.onStartConversion
-                0x0000000000001482       0x14
+                0x000000000000161c       0x14
  .text.onStartConversion
-                0x0000000000001482       0x14 build/default/production/adc_interfacing.o
-                0x0000000000001482                onStartConversion
+                0x000000000000161c       0x14 build/default/production/adc_interfacing.o
+                0x000000000000161c                onStartConversion
 
 .text.turnLEDOnOff
-                0x0000000000001496       0x12
+                0x0000000000001630       0x12
  .text.turnLEDOnOff
-                0x0000000000001496       0x12 build/default/production/interfacing_connection_logic.o
-                0x0000000000001496                turnLEDOnOff
+                0x0000000000001630       0x12 build/default/production/interfacing_connection_logic.o
+                0x0000000000001630                turnLEDOnOff
 
 .text.isLEDOnOrOFF
-                0x00000000000014a8       0x10
+                0x0000000000001642       0x10
  .text.isLEDOnOrOFF
-                0x00000000000014a8       0x10 build/default/production/interfacing_connection_logic.o
-                0x00000000000014a8                isLEDOnOrOFF
+                0x0000000000001642       0x10 build/default/production/interfacing_connection_logic.o
+                0x0000000000001642                isLEDOnOrOFF
 
-.text           0x00000000000014b8        0x4
- .text          0x00000000000014b8        0x4 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
-                0x00000000000014b8                __vector_12
-                0x00000000000014b8                __bad_interrupt
-                0x00000000000014b8                __vector_6
-                0x00000000000014b8                __vector_3
-                0x00000000000014b8                __vector_13
-                0x00000000000014b8                __vector_17
-                0x00000000000014b8                __vector_19
-                0x00000000000014b8                __vector_7
-                0x00000000000014b8                __vector_5
-                0x00000000000014b8                __vector_4
-                0x00000000000014b8                __vector_9
-                0x00000000000014b8                __vector_2
-                0x00000000000014b8                __vector_15
-                0x00000000000014b8                __vector_8
-                0x00000000000014b8                __vector_14
-                0x00000000000014b8                __vector_18
-                0x00000000000014b8                __vector_20
+.text.getUBRR   0x0000000000001652        0xa
+ .text.getUBRR  0x0000000000001652        0xa build/default/production/usart_interface.o
+                0x0000000000001652                getUBRR
+
+.text           0x000000000000165c        0x4
+ .text          0x000000000000165c        0x4 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/ATmega_DFP/2.3.126/xc8/avr/lib/avr5/memx-const/crtatmega32a.o
+                0x000000000000165c                __vector_12
+                0x000000000000165c                __bad_interrupt
+                0x000000000000165c                __vector_6
+                0x000000000000165c                __vector_3
+                0x000000000000165c                __vector_17
+                0x000000000000165c                __vector_19
+                0x000000000000165c                __vector_7
+                0x000000000000165c                __vector_5
+                0x000000000000165c                __vector_4
+                0x000000000000165c                __vector_9
+                0x000000000000165c                __vector_2
+                0x000000000000165c                __vector_15
+                0x000000000000165c                __vector_8
+                0x000000000000165c                __vector_14
+                0x000000000000165c                __vector_18
+                0x000000000000165c                __vector_20
 
 .text.getStatusOfUCSRA
-                0x00000000000014bc        0x4
+                0x0000000000001660        0x4
  .text.getStatusOfUCSRA
-                0x00000000000014bc        0x4 build/default/production/usart_interface.o
-                0x00000000000014bc                getStatusOfUCSRA
+                0x0000000000001660        0x4 build/default/production/usart_interface.o
+                0x0000000000001660                getStatusOfUCSRA
 
 .text.getStatusOfUCSRB
-                0x00000000000014c0        0x4
+                0x0000000000001664        0x4
  .text.getStatusOfUCSRB
-                0x00000000000014c0        0x4 build/default/production/usart_interface.o
-                0x00000000000014c0                getStatusOfUCSRB
+                0x0000000000001664        0x4 build/default/production/usart_interface.o
+                0x0000000000001664                getStatusOfUCSRB
 
 .text.getStatusOfUCSRC
-                0x00000000000014c4        0x4
+                0x0000000000001668        0x4
  .text.getStatusOfUCSRC
-                0x00000000000014c4        0x4 build/default/production/usart_interface.o
-                0x00000000000014c4                getStatusOfUCSRC
+                0x0000000000001668        0x4 build/default/production/usart_interface.o
+                0x0000000000001668                getStatusOfUCSRC
 
 .data.start_msg
-                0x0000000000800082       0x20 load address 0x00000000000014c8
+                0x0000000000800082       0x20 load address 0x000000000000166c
  .data.start_msg
                 0x0000000000800082       0x20 build/default/production/lcd_control_main.o
                 0x0000000000800082                start_msg
