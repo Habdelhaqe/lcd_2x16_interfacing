@@ -120,6 +120,16 @@ void transmitMSGviaUSARTusingPolling(u16 msg){
     }
 }
 
+void transmitMSGviaUSARTusingINTER(u16 msg){
+    if(GET_BIT(UCSRB , UCSZ2)){
+        //9 BITS msg
+    }else{
+        //5 , 6 , 7 , 8 BITS msg
+        while(!GET_BIT(UCSRA ,UDRE));
+        UDR = (u8) msg;
+    }
+}
+
 u16 receiveMSGviaUSARTusingPolling(void){
     
     while(!(GET_BIT(UCSRA , RXC)));

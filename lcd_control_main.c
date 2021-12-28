@@ -162,6 +162,20 @@ ISR(USART_RXC_vect){
      
 }
 
+ISR(USART_TXC_vect){
+    static u8 index = 0;
+    //send msg: ALL ASCII Table 1 time and then stop
+//    if(index<128){
+//        transmitMSGviaUSARTusingINTER(index++);
+//        transmitMSGviaUSARTusingINTER(CARRIAGE_RETURN);
+//    }
+    //send msg: ALL ASCII Table continusly
+    if(index>127){
+        index = 0 ;
+    }
+    transmitMSGviaUSARTusingINTER(index++);
+    transmitMSGviaUSARTusingINTER(CARRIAGE_RETURN);
+}
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
 
@@ -268,7 +282,6 @@ void mainInterfaceADCWithLM35TempDisplayOnLCD(void) {
 }
 
 //polling microcontroller
-
 void mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique(void) {
 
     u8 temp_conv_string [] = "TEMP ",
@@ -1238,7 +1251,7 @@ void mainUSART(void) {
             init_USART(ENABLE_USART_TX,
             ENABLE_USART_RX,
             DISABLE_DATA_REG_EMPTY_INTERRUPT,
-            DISABLE_TRANSMIT_COMPLETE_INTERRUPT,
+            ENABLE_TRANSMIT_COMPLETE_INTERRUPT,
             ENABLE_RECEIVE_COMPLETE_INTERRUPT,
             baud_rate_freq,
             FRAME_SIZE_8_BITS,
@@ -1309,6 +1322,7 @@ void mainUSART(void) {
     
 //    u8 frame_size = FRAME_SIZE_5_BITS;
     CLEAR_LCD;
+    transmitMSGviaUSARTusingINTER(NULL_CHAR);
     while (KEEP_EXECUTING) {
 
 //        CLEAR_LCD;

@@ -231,6 +231,8 @@ u16 getUBRR(void);
 
 void transmitMSGviaUSARTusingPolling(u16 msg);
 
+void transmitMSGviaUSARTusingINTER(u16 msg);
+
 u16 receiveMSGviaUSARTusingPolling(void);
 
 u16 receiveMSGviaUSARTusingINTER(void);
