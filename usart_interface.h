@@ -203,6 +203,8 @@
 
     #define CHANGE_FRAME_SIZE(FRAME_SIZE) UCSRC = SET_REST_REG_BIT(SET_REST_REG_BIT(UCSRC , UCSZ1 , FRAME_SIZE & FRAME_SIZE_UCSZ1_MASK) , UCSZ0 , FRAME_SIZE & FRAME_SIZE_UCSZ0_MASK);\
                                           UCSRB = SET_REST_REG_BIT(UCSRB , UCSZ2 , FRAME_SIZE >> FRAME_SIZE_UCSZ2_SHIFT );
+    
+    #define SEND_CHARACTER_TO_USART_FOR_TX(MSG) UDR = MSG;
 
 FUN_RETURN_STATUS init_USART(u8 enable_disable_TX , 
 					u8 enable_disable_RX , 
@@ -236,5 +238,7 @@ void transmitMSGviaUSARTusingINTER(u16 msg);
 u16 receiveMSGviaUSARTusingPolling(void);
 
 u16 receiveMSGviaUSARTusingINTER(void);
+
+void initiateTransimission(void);
 
 #endif	/* USART_INTERFACE_H */

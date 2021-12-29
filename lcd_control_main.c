@@ -170,13 +170,31 @@ ISR(USART_TXC_vect){
 //        transmitMSGviaUSARTusingINTER(index++);
 //        transmitMSGviaUSARTusingINTER(CARRIAGE_RETURN);
 //    }
+    
     //send msg: ALL ASCII Table continusly
     if(index>127){
         index = 0 ;
     }
     transmitMSGviaUSARTusingINTER(index++);
     transmitMSGviaUSARTusingINTER(CARRIAGE_RETURN);
+    
 }
+
+ISR(USART_UDRE_vect){
+    static u8 msg_charcter_index ; 
+    static u8 MSG[] = "in the name of allah the most gracious the most merciful then every "
+                      "thing will be good and i'll stand on top of the world looking humble to his grace";
+    
+    if(msg_charcter_index < 149 /*MSG_length*/ ){
+        SEND_CHARACTER_TO_USART_FOR_TX( *(MSG + msg_charcter_index) == ' ' ? CARRIAGE_RETURN :  *(MSG + msg_charcter_index));
+        msg_charcter_index++;
+    }else{
+        DISABLE_DATA_REGISTER_EMPTY_INTERRUPT_FOR_USART_RECEIVER;
+        msg_charcter_index = 0;    
+    }
+}
+
+
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
 
@@ -201,16 +219,15 @@ int main(void) {
     //SERG set I bit : ENABLE global interrupt concept for the MIcroController
     sei();
 
-    //    mainTest2LinesLCDToggling();
-
-    //    mainInterfaceADCWithLM35TempDisplayOnLCD();
-    //    mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique();
-    //    mainVisitAllLCDCursorPositions();
-    //    mainInterfacingWithKeyPad();
-    //  main8LM35On8ChannelsDispalyTemp();
-    //    mainTimer0();
+//        mainTest2LinesLCDToggling();
+//        mainInterfaceADCWithLM35TempDisplayOnLCD();
+//        mainInterfaceADCWithLM35TempDisplayOnLCDPollingTechique();
+//        mainVisitAllLCDCursorPositions();
+//        mainInterfacingWithKeyPad();
+//      main8LM35On8ChannelsDispalyTemp();
+//        mainTimer0();
     mainUSART();
-    //mainSimulatingRisingEdgeThroughBTN();
+//    mainSimulatingRisingEdgeThroughBTN();
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -1208,8 +1225,9 @@ u8 lastDayOfFebruaryleapYearCalc(u8 year) {
 
 void mainUSART(void) {
 
-    //initLCD();
-    initLED(LED0);
+//    initLCD();
+//    initLED(LED0);
+    initLEDS();
     u32 baud_rate_freq = 9600;
     u8 index;
 
@@ -1253,8 +1271,8 @@ void mainUSART(void) {
             init_USART(ENABLE_USART_TX,
             ENABLE_USART_RX,
             DISABLE_DATA_REG_EMPTY_INTERRUPT,
-            ENABLE_TRANSMIT_COMPLETE_INTERRUPT,
-            ENABLE_RECEIVE_COMPLETE_INTERRUPT,
+            DISABLE_TRANSMIT_COMPLETE_INTERRUPT,
+            DISABLE_RECEIVE_COMPLETE_INTERRUPT,
             baud_rate_freq,
             FRAME_SIZE_8_BITS,
             ASYNC_MODE,
@@ -1324,7 +1342,11 @@ void mainUSART(void) {
     
 //    u8 frame_size = FRAME_SIZE_5_BITS;
     CLEAR_LCD;
+    
     transmitMSGviaUSARTusingINTER(NULL_CHAR);
+   
+//    initiateTransimission();
+    
     while (KEEP_EXECUTING) {
 
 //        CLEAR_LCD;
@@ -1351,10 +1373,13 @@ void mainUSART(void) {
 //        displayStringOnLCD(lcd_string);
 //        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-//        displayCharacterOnLCD(receiveMSGviaUSARTusingPolling());
+        displayCharacterOnLCD(receiveMSGviaUSARTusingPolling());
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        turnLEDOnOff(LED0,OFF);
+        turnLEDOnOff(LED1,OFF);
+        turnLEDOnOff(LED2,OFF);
         
 //        CLEAR_LCD;
-//
 //        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
 //        *(lcd_string + (index = 0)) = 'E';
 //        *(lcd_string + ++index) = 'N';
@@ -1367,40 +1392,81 @@ void mainUSART(void) {
 //        CHANGE_FRAME_SIZE( frame_size );
 //        frame_size++;
 //        CHANGE_POLARITY(POLARITY_RISING_EDGE);
-//        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-        
+//        _delay_ms(100);
     }
 
 }
 
 void mainSimulatingRisingEdgeThroughBTN(void){
-    //BTN1 _PB_PIN4
+   /*BTN1 used in simulation of Rising edge
+		
+		BTN1 PRESSED :
+		loop is on as long as it's pressed	
+		while(isBTNPressed(BTN1).scanned_data){
+			//bla blas tasks gets done
+		}
+		
+		BTN1 UN_PRESSED : 
+		loop is off
+		while(isBTNPressed(BTN1).scanned_data);
+	*/
+	
+    //initialize BTNs to use any{BTN0 , BTN1 , BTN2} and LEDs To use any{LED0 , LDE1 , LDE2}
     initBTNS();
     initLEDS();
    
     turnLEDOnOff(LED0 , ON);
     turnLEDOnOff(LED1 , OFF);
     turnLEDOnOff(LED2 , ON);
-            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    
+    //just a delay to recognize that we didn't enter the outer infinite loop yet
+    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
     while(KEEP_EXECUTING){
-        
+        //i wanted to use LCD for display but i didn't i left it for future needs and for it's delay for passing command to LCD
         CLEAR_LCD;
+        
+        //toggle LED0 ON >:< OFF
         turnLEDOnOff(LED0 , !isLEDOnOrOFF(LED0).scanned_data);
 //        turnLEDOnOff(LED1 , !isBTNPressed(BTN1).scanned_data);
 //        turnLEDOnOff(LED2 , !isLEDOnOrOFF(LED2).scanned_data);
 
         //_delay_ms(100);
-        
+
+		/*
+			loop initaied only if BTN1 PRESSED
+			
+			=>important note is that each TASK is a blocking statement(fun call) => instructions
+			can't sense the BTN RELEASED during it's execution so another abroach is breaking the call to
+			it's statements (instructions) here in the loop and perform checking for BTN RELEASED when ever convenient
+			if 	statement(fun call) is a unit that must not be disrupted or broken_down down according to the business logic
+			that's what i assume in all 3 TASKS then what i did is good simulation i think
+		*/        
         while(isBTNPressed(BTN1).scanned_data){
-            //if(isBTNPressed(BTN1).scanned_data) break;
+			//wasting cycles for checking again but that is essential for fast exit           
+            if(!isBTNPressed(BTN1).scanned_data) break;
+
+			//task 1 : LED1 ON
             turnLEDOnOff(LED1 , ON);
-            //if(isBTNPressed(BTN1).scanned_data) break;
+
+			//wasting cycles for checking again but that is essential for fast exit                       
+            if(!isBTNPressed(BTN1).scanned_data) break;
+            
+            //task 2 : toggle LED2 ON >:< OFF
             turnLEDOnOff(LED2 , !isLEDOnOrOFF(LED2).scanned_data);
-            //_delay_ms(500);
+            
+			//wasting cycles for checking again but that is essential for fast exit            
+            if(!isBTNPressed(BTN1).scanned_data) break;
+
+			//task 3 : delay for what ever  
+            _delay_ms(10);
         }
-            turnLEDOnOff(LED1 , !isLEDOnOrOFF(LED1).scanned_data);
-            turnLEDOnOff(LED2 , ON);
+        
+        //just to recognize that we are out of loop doing the opposite to logic inside the loop
+        //toggle LED1 ON >:< OFF
+        turnLEDOnOff(LED1 , !isLEDOnOrOFF(LED1).scanned_data);
+        
+        //LED2 ON
+        turnLEDOnOff(LED2 , ON);
     }
-    
 }

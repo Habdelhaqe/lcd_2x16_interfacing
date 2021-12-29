@@ -122,14 +122,30 @@ void transmitMSGviaUSARTusingPolling(u16 msg){
 
 void transmitMSGviaUSARTusingINTER(u16 msg){
     if(GET_BIT(UCSRB , UCSZ2)){
-        //9 BITS msg
+        //9 BITS MSG
     }else{
-        //5 , 6 , 7 , 8 BITS msg
+        //5 , 6 , 7 , 8 BITS MSG
+        /*
+         * using polling cause you may transmit 2 or more characters @ 1 time
+         * that is you call the function 2 or more to transmit data @ each 
+         * ISR(TXC) call
+         * note if you only call it 1 time @ each ISR(TXC) call the only delay
+         * is the check !GET_BIT(UCSRA ,UDRE) which will always be :
+         *      UDRE = 1 is set so the TX is idle ready for business 
+         */
         while(!GET_BIT(UCSRA ,UDRE));
         UDR = (u8) msg;
     }
 }
 
+/*
+ * idea is to use the UDRE flag through UDRIE interrupt to handle sending of 
+ * long messages more than 1 character 
+ */
+void initiateTransimission(void){
+    //right now all i am going to do is to enable the UDRIE flag 
+    ENABLE_DATA_REGISTER_EMPTY_INTERRUPT_FOR_USART_RECEIVER;
+}
 u16 receiveMSGviaUSARTusingPolling(void){
     
     while(!(GET_BIT(UCSRA , RXC)));
@@ -144,11 +160,16 @@ u16 receiveMSGviaUSARTusingPolling(void){
 //    
 //    return msg;
     
+    //a check for FE PE DOR before processeding with data receiving
+    turnLEDOnOff(LED0 , GET_BIT(UCSRA , FE));
+    turnLEDOnOff(LED1 , GET_BIT(UCSRA , DOR));
+    if(GET_BIT(UCSRC , UPM1)){
+        turnLEDOnOff(LED2 , GET_BIT(UCSRA , UPE));
+    }
+        
     return GET_BIT(UCSRB , UCSZ2) ? (GET_BIT(UCSRB , RXB8)) << HIGHER_BYTE_SHIFT_FOR_UBRRH | UDR : UDR;
-
 }
+
 u16 receiveMSGviaUSARTusingINTER(void){
-
     return GET_BIT(UCSRB , UCSZ2) ? (GET_BIT(UCSRB , RXB8)) << HIGHER_BYTE_SHIFT_FOR_UBRRH | UDR : UDR;
-
 }
