@@ -1554,9 +1554,24 @@ void readChannel0AnalogSiganl(void){
     DISABLE_CONVERSION_COMPLETE_INTERRUPT;
     onStartConversion(SINGLE_CONVERSION_MODE);
     ADC_CLEAR;
-    displayINTOnLCD(onConversionCompleteUsingPolling());
-//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-    
+    u8 index = 0;
+    *(start_msg + index++) = 'T';
+    *(start_msg + index++) = 'e';
+    *(start_msg + index++) = 'm';
+    *(start_msg + index++) = 'p';
+    *(start_msg + index++) = 'r';
+    *(start_msg + index++) = 'e';
+    *(start_msg + index++) = 't';
+    *(start_msg + index++) = 'u';
+    *(start_msg + index++) = 'r';   
+    *(start_msg + index++) = 'e';
+    *(start_msg + index++) = ':';    
+    *(start_msg + index++) = NULL_CHAR;
+    displayStringOnLCD(start_msg);
+    displayINTOnLCD(onConversionCompleteUsingPolling()* DIGITAL_REPRESENTATION_LM35V_FOR_1_C);
+    displayCharacterOnLCD(' ');
+    displayCharacterOnLCD('C');
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);    
     ENABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
 }
 
