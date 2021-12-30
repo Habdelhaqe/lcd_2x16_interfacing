@@ -12,6 +12,7 @@
       <itemPath>adc_interfacing.h</itemPath>
       <itemPath>timer0_interfacing.h</itemPath>
       <itemPath>usart_interface.h</itemPath>
+      <itemPath>my_utils.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -28,6 +29,7 @@
       <itemPath>adc_interfacing.c</itemPath>
       <itemPath>timer0_interface.c</itemPath>
       <itemPath>usart_interface.c</itemPath>
+      <itemPath>my_utils.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -5,16 +5,17 @@
  * Created on November 28, 2021, 10:41 AM
  */
 
-#include"atmega32a.h"
-#include"interfacing_connection_logic.h"
-#include"phone_keypad.h"
-#include"interrupt_configuration.h"
+#include "atmega32a.h"
+#include "interfacing_connection_logic.h"
+#include "phone_keypad.h"
+#include "interrupt_configuration.h"
 #include "adc_interfacing.h"
 #include "timer0_interfacing.h"
 #include "usart_interface.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "usart_interface.h"
+#include "my_utils.h"
 
 #define KEEP_EXECUTING 1
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
@@ -47,6 +48,10 @@ void displayClanederData(u8 hour, u8 minute, u8 second, u8 day, u8 month, u8 yea
 u8 lastDayOfFebruaryleapYearCalc(u8 year);
 void mainUSART(void);
 void mainSimulatingRisingEdgeThroughBTN(void);
+void commandHandlerForMCUreceivedThroughUSART(u8 *ptr_command);
+void transmitAllAsciiChars(void);
+void readChannel0AnalogSiganl(void);
+void trafficLightFlickerring(void);
 
 /*
  * external interrupt initiated on INT0
@@ -127,40 +132,82 @@ ISR(TIMER0_COMP_vect) {
 }
 
 ISR(USART_RXC_vect){
-    
-    static u8 prev_to_last_read_char , 
-              last_read_char ,
-              current_read_char;
-    
-    if(prev_to_last_read_char == NULL_CHAR){
-        prev_to_last_read_char = (u8)receiveMSGviaUSARTusingINTER();
-        displayCharacterOnLCD(prev_to_last_read_char);
-    }else if (last_read_char == NULL_CHAR){
-        last_read_char = (u8)receiveMSGviaUSARTusingINTER();
-        displayCharacterOnLCD(last_read_char);
-    }else{
-        current_read_char = (u8)receiveMSGviaUSARTusingINTER();
-        displayCharacterOnLCD(current_read_char);
-    }
-    
-    
-    //toggle LED0
-    
-    if( ((last_read_char == 'o' || last_read_char == 'O') && (current_read_char == 'n' || current_read_char == 'N')) ||
-       ((prev_to_last_read_char == 'o' || prev_to_last_read_char == 'O') && (last_read_char == 'n' || last_read_char == 'N') ) ){
-        turnLEDOnOff(LED0, ON);
-        prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;       
-    }else if( (prev_to_last_read_char == 'o' || prev_to_last_read_char == 'O') && 
-              (last_read_char == 'f' || last_read_char == 'F') && 
-              (current_read_char == 'f' || current_read_char == 'F')  ){
-        turnLEDOnOff(LED0, OFF);
-        prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;
-    }
-    
-    if(current_read_char){
-       prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;   
-    }
-     
+
+/*
+ * ON OFF LED0 based on ON/oN/On/on and OFF/OFf/OfF/oFF/oFf/ofF/off
+ */    
+//    static u8 prev_to_last_read_char , 
+//              last_read_char ,
+//              current_read_char;
+//    
+//    if(prev_to_last_read_char == NULL_CHAR){
+//        prev_to_last_read_char = (u8)receiveMSGviaUSARTusingINTER();
+//        displayCharacterOnLCD(prev_to_last_read_char);
+//    }else if (last_read_char == NULL_CHAR){
+//        last_read_char = (u8)receiveMSGviaUSARTusingINTER();
+//        displayCharacterOnLCD(last_read_char);
+//    }else{
+//        current_read_char = (u8)receiveMSGviaUSARTusingINTER();
+//        displayCharacterOnLCD(current_read_char);
+//    }
+//    
+//    
+//    //toggle LED0    
+//    if( ((last_read_char == 'o' || last_read_char == 'O') && (current_read_char == 'n' || current_read_char == 'N')) ||
+//       ((prev_to_last_read_char == 'o' || prev_to_last_read_char == 'O') && (last_read_char == 'n' || last_read_char == 'N') ) ){
+//        turnLEDOnOff(LED0, ON);
+//        prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;       
+//    }else if( (prev_to_last_read_char == 'o' || prev_to_last_read_char == 'O') && 
+//              (last_read_char == 'f' || last_read_char == 'F') && 
+//              (current_read_char == 'f' || current_read_char == 'F')  ){
+//        turnLEDOnOff(LED0, OFF);
+//        prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;
+//    }
+//    
+//    if(current_read_char){
+//       prev_to_last_read_char = last_read_char = current_read_char = NULL_CHAR;   
+//    }
+
+/*
+ * calling on pre configured routines based on a command terminated by CARRIG_RETURN char
+ */
+  static u8 index = 0 , current_char;
+  
+  static u8 command_string[32];
+  
+  current_char = receiveMSGviaUSARTusingINTER();
+  
+  if(current_char == CARRIAGE_RETURN){
+      *(command_string+index) = NULL_CHAR;
+      commandHandlerForMCUreceivedThroughUSART(command_string);
+      index=0;
+  }else{
+      if(index <32 ){
+        *( command_string + index )= current_char;
+        index++;
+      }else{
+          index = 0;
+          initLCD();
+          *(command_string + index++) = 'B';
+          *(command_string + index++) = 'u';
+          *(command_string + index++) = 'f';
+          *(command_string + index++) = 'f';
+          *(command_string + index++) = 'e';
+          *(command_string + index++) = 'r';
+          *(command_string + index++) = ' ';
+          *(command_string + index++) = 'o';
+          *(command_string + index++) = 'v';
+          *(command_string + index++) = 'e';
+          *(command_string + index++) = 'r';
+          *(command_string + index++) = ' ';
+          *(command_string + index++) = 'f';
+          *(command_string + index++) = 'l';
+          *(command_string + index++) = 'o';
+          *(command_string + index++) = 'w';
+          displayStringOnLCD(command_string);
+          _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+      }      
+  }
 }
 
 ISR(USART_TXC_vect){
@@ -1272,7 +1319,7 @@ void mainUSART(void) {
             ENABLE_USART_RX,
             DISABLE_DATA_REG_EMPTY_INTERRUPT,
             DISABLE_TRANSMIT_COMPLETE_INTERRUPT,
-            DISABLE_RECEIVE_COMPLETE_INTERRUPT,
+            ENABLE_RECEIVE_COMPLETE_INTERRUPT,
             baud_rate_freq,
             FRAME_SIZE_8_BITS,
             ASYNC_MODE,
@@ -1373,11 +1420,11 @@ void mainUSART(void) {
 //        displayStringOnLCD(lcd_string);
 //        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
-        displayCharacterOnLCD(receiveMSGviaUSARTusingPolling());
-        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
-        turnLEDOnOff(LED0,OFF);
-        turnLEDOnOff(LED1,OFF);
-        turnLEDOnOff(LED2,OFF);
+//        displayCharacterOnLCD(receiveMSGviaUSARTusingPolling());
+//        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+//        turnLEDOnOff(LED0,OFF);
+//        turnLEDOnOff(LED1,OFF);
+//        turnLEDOnOff(LED2,OFF);
         
 //        CLEAR_LCD;
 //        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
@@ -1469,4 +1516,64 @@ void mainSimulatingRisingEdgeThroughBTN(void){
         //LED2 ON
         turnLEDOnOff(LED2 , ON);
     }
+}
+
+void commandHandlerForMCUreceivedThroughUSART(u8 *ptr_command){
+    
+    static void (*(arr_of_ptr_to_rout[3]))(void) = 
+            {&transmitAllAsciiChars , &readChannel0AnalogSiganl , &trafficLightFlickerring };
+    
+    u8 command1[] = "tx";
+    u8 command2[] = "adc";
+    u8 command3[] = "traf";
+    
+    u8 * arr_of_commands [] = {command1 , command2 , command3};
+    
+    for(u8 i = 0 ; i <3 ; i++){
+        if(compare2Strings(ptr_command , *(arr_of_commands + i) , IGNORE_CASE_SENSTIVE )){
+            (*( arr_of_ptr_to_rout + i ))();
+            break;
+        }
+    }
+    
+}
+
+void transmitAllAsciiChars(void){
+    DISABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+    for(u8 index_for_ascii_chars =0 ; index_for_ascii_chars<128 ; index_for_ascii_chars++ ){
+        transmitMSGviaUSARTusingPolling(index_for_ascii_chars);
+        transmitMSGviaUSARTusingPolling(CARRIAGE_RETURN);
+    }
+    ENABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+}
+
+void readChannel0AnalogSiganl(void){
+    DISABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+    initLCD();
+    onInitADC(ADC_CHANNEL0,VOLTAGE_AVCC,RIGHT_ADJUST,PRESCALER_CLK_BY_128);
+    DISABLE_CONVERSION_COMPLETE_INTERRUPT;
+    onStartConversion(SINGLE_CONVERSION_MODE);
+    ADC_CLEAR;
+    displayINTOnLCD(onConversionCompleteUsingPolling());
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    
+    ENABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+}
+
+void trafficLightFlickerring(void){
+    DISABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+    initLEDS();
+    
+    turnLEDOnOff(LED0 , OFF);
+    turnLEDOnOff(LED1 , OFF);
+    turnLEDOnOff(LED2 , OFF);
+    
+    for(u8 counter = 255 , trafic_light = 2 ; counter > 0 ; counter-- ){
+        turnLEDOnOff(LED0 , trafic_light & HIGH<<1 );
+        turnLEDOnOff(LED1 , trafic_light & HIGH<<2 );
+        turnLEDOnOff(LED2 , trafic_light & HIGH<<3 );
+        trafic_light = trafic_light == 8 ? 2 : trafic_light<<1;
+        _delay_ms(10);
+    }
+    ENABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
 }

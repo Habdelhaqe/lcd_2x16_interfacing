@@ -20,7 +20,8 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h \
  phone_keypad.h interrupt_configuration.h adc_interfacing.h \
  timer0_interfacing.h usart_interface.h \
- c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h
+ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h \
+ my_utils.h
 
 atmega32a.h:
 
@@ -71,3 +72,5 @@ timer0_interfacing.h:
 usart_interface.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:
+
+my_utils.h:

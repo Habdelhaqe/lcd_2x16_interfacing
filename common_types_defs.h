@@ -13,6 +13,12 @@
     #define CARRIAGE_RETURN 13
     #define NEW_LINE 10
     #define LINE_FEED CARRIAGE_RETURN & NEW_LINE
+    #define ASCII_ZER0_CHARACTER 48
+    #define ASCII_ONE_CHARACTER ASCII_ZER0_CHARACTER + 1 
+    #define ALPHA_CHARS_SHIFT 32
+
+    #define CASE_SENSTIVE 0
+    #define IGNORE_CASE_SENSTIVE 1
 
     //SIGNALS STATUS
     #define HIGH 1
@@ -60,6 +66,7 @@
     #define VISIT_ALL_LCD_IN_MS 100
 
     typedef unsigned char  u8;
+    typedef   signed char  s8;
     typedef unsigned short u16;
     typedef   signed short s16;
     typedef   signed int   s32;
