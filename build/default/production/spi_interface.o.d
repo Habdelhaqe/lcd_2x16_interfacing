@@ -1,6 +1,6 @@
-build/default/production/lcd_control_main.o.d \
- build/default/production/lcd_control_main.o: lcd_control_main.c \
- atmega32a.h \
+build/default/production/spi_interface.o.d \
+ build/default/production/spi_interface.o: spi_interface.c \
+ spi_interface.h interfacing_connection_logic.h atmega32a.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\io.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\sfr_defs.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\inttypes.h \
@@ -12,16 +12,16 @@ build/default/production/lcd_control_main.o.d \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\version.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\fuse.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h \
- common_types_defs.h interfacing_connection_logic.h \
+ common_types_defs.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h \
- c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h \
- phone_keypad.h interrupt_configuration.h adc_interfacing.h \
- timer0_interfacing.h usart_interface.h \
- c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h \
- my_utils.h spi_interface.h
+ c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h
+
+spi_interface.h:
+
+interfacing_connection_logic.h:
 
 atmega32a.h:
 
@@ -49,8 +49,6 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\lock.h:
 
 common_types_defs.h:
 
-interfacing_connection_logic.h:
-
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\util\delay_basic.h:
@@ -60,19 +58,3 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\math.h:
 c:\program\ files\microchip\xc8\v2.32\avr\avr\include\stdlib.h:
 
 c:\program\ files\microchip\xc8\v2.32\avr\lib\gcc\avr\5.4.0\include\stddef.h:
-
-phone_keypad.h:
-
-interrupt_configuration.h:
-
-adc_interfacing.h:
-
-timer0_interfacing.h:
-
-usart_interface.h:
-
-c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:
-
-my_utils.h:
-
-spi_interface.h:

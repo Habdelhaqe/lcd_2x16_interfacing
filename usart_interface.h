@@ -82,8 +82,6 @@
      */
     #define UCSRC_INITIAL_VALUE 0x86 //1000 0110
 
-    #define SET_REST_REG_BIT(REG ,BIT , H_OR_L) (H_OR_L ? SET_BIT_DELAY_UPDATE(REG , BIT) : CLEAR_BIT_DELAY_UPDATE(REG , BIT))
-
     #define ENABLE_DISABLE_USART_TX(EN_DIS)  SET_REST_REG_BIT((UCSRB) , TXEN , EN_DIS)
 
     #define ENABLE_DISABLE_USART_RX(EN_DIS)  SET_REST_REG_BIT((UCSRB) , RXEN , EN_DIS)
@@ -232,6 +230,8 @@ void flushUSART_RX_Buffers(void);
 u16 getUBRR(void);
 
 void transmitMSGviaUSARTusingPolling(u16 msg);
+
+void transmitMSGviaUSARTusingPollingOnTXC(u16 msg);
 
 void transmitMSGviaUSARTusingINTER(u16 msg);
 

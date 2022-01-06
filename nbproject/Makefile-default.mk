@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=lcd_control_main.c atemga32a.c interfacing_connection_logic.c phone_keypad.c interrupt_configuration.c adc_interfacing.c timer0_interface.c usart_interface.c my_utils.c
+SOURCEFILES_QUOTED_IF_SPACED=lcd_control_main.c atemga32a.c interfacing_connection_logic.c phone_keypad.c interrupt_configuration.c adc_interfacing.c timer0_interface.c usart_interface.c my_utils.c spi_interface.c twi_interface.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd_control_main.o ${OBJECTDIR}/atemga32a.o ${OBJECTDIR}/interfacing_connection_logic.o ${OBJECTDIR}/phone_keypad.o ${OBJECTDIR}/interrupt_configuration.o ${OBJECTDIR}/adc_interfacing.o ${OBJECTDIR}/timer0_interface.o ${OBJECTDIR}/usart_interface.o ${OBJECTDIR}/my_utils.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/lcd_control_main.o.d ${OBJECTDIR}/atemga32a.o.d ${OBJECTDIR}/interfacing_connection_logic.o.d ${OBJECTDIR}/phone_keypad.o.d ${OBJECTDIR}/interrupt_configuration.o.d ${OBJECTDIR}/adc_interfacing.o.d ${OBJECTDIR}/timer0_interface.o.d ${OBJECTDIR}/usart_interface.o.d ${OBJECTDIR}/my_utils.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/lcd_control_main.o ${OBJECTDIR}/atemga32a.o ${OBJECTDIR}/interfacing_connection_logic.o ${OBJECTDIR}/phone_keypad.o ${OBJECTDIR}/interrupt_configuration.o ${OBJECTDIR}/adc_interfacing.o ${OBJECTDIR}/timer0_interface.o ${OBJECTDIR}/usart_interface.o ${OBJECTDIR}/my_utils.o ${OBJECTDIR}/spi_interface.o ${OBJECTDIR}/twi_interface.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/lcd_control_main.o.d ${OBJECTDIR}/atemga32a.o.d ${OBJECTDIR}/interfacing_connection_logic.o.d ${OBJECTDIR}/phone_keypad.o.d ${OBJECTDIR}/interrupt_configuration.o.d ${OBJECTDIR}/adc_interfacing.o.d ${OBJECTDIR}/timer0_interface.o.d ${OBJECTDIR}/usart_interface.o.d ${OBJECTDIR}/my_utils.o.d ${OBJECTDIR}/spi_interface.o.d ${OBJECTDIR}/twi_interface.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/lcd_control_main.o ${OBJECTDIR}/atemga32a.o ${OBJECTDIR}/interfacing_connection_logic.o ${OBJECTDIR}/phone_keypad.o ${OBJECTDIR}/interrupt_configuration.o ${OBJECTDIR}/adc_interfacing.o ${OBJECTDIR}/timer0_interface.o ${OBJECTDIR}/usart_interface.o ${OBJECTDIR}/my_utils.o
+OBJECTFILES=${OBJECTDIR}/lcd_control_main.o ${OBJECTDIR}/atemga32a.o ${OBJECTDIR}/interfacing_connection_logic.o ${OBJECTDIR}/phone_keypad.o ${OBJECTDIR}/interrupt_configuration.o ${OBJECTDIR}/adc_interfacing.o ${OBJECTDIR}/timer0_interface.o ${OBJECTDIR}/usart_interface.o ${OBJECTDIR}/my_utils.o ${OBJECTDIR}/spi_interface.o ${OBJECTDIR}/twi_interface.o
 
 # Source Files
-SOURCEFILES=lcd_control_main.c atemga32a.c interfacing_connection_logic.c phone_keypad.c interrupt_configuration.c adc_interfacing.c timer0_interface.c usart_interface.c my_utils.c
+SOURCEFILES=lcd_control_main.c atemga32a.c interfacing_connection_logic.c phone_keypad.c interrupt_configuration.c adc_interfacing.c timer0_interface.c usart_interface.c my_utils.c spi_interface.c twi_interface.c
 
 
 
@@ -148,6 +148,18 @@ ${OBJECTDIR}/my_utils.o: my_utils.c  .generated_files/flags/default/b4bec781465b
 	@${RM} ${OBJECTDIR}/my_utils.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1 -g -DDEBUG  -gdwarf-2  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/my_utils.o.d" -MT "${OBJECTDIR}/my_utils.o.d" -MT ${OBJECTDIR}/my_utils.o -o ${OBJECTDIR}/my_utils.o my_utils.c 
 	
+${OBJECTDIR}/spi_interface.o: spi_interface.c  .generated_files/flags/default/7ac93bdc10e45abb7183f779ff4f39f8ea1b97f2 .generated_files/flags/default/2f9e58fd8ce1a2611b0e0fd33168db129b9285f3
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/spi_interface.o.d 
+	@${RM} ${OBJECTDIR}/spi_interface.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1 -g -DDEBUG  -gdwarf-2  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/spi_interface.o.d" -MT "${OBJECTDIR}/spi_interface.o.d" -MT ${OBJECTDIR}/spi_interface.o -o ${OBJECTDIR}/spi_interface.o spi_interface.c 
+	
+${OBJECTDIR}/twi_interface.o: twi_interface.c  .generated_files/flags/default/27fd585d557c6c3033708d0836d8bf94aa75143a .generated_files/flags/default/2f9e58fd8ce1a2611b0e0fd33168db129b9285f3
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/twi_interface.o.d 
+	@${RM} ${OBJECTDIR}/twi_interface.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1 -g -DDEBUG  -gdwarf-2  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/twi_interface.o.d" -MT "${OBJECTDIR}/twi_interface.o.d" -MT ${OBJECTDIR}/twi_interface.o -o ${OBJECTDIR}/twi_interface.o twi_interface.c 
+	
 else
 ${OBJECTDIR}/lcd_control_main.o: lcd_control_main.c  .generated_files/flags/default/3ef04d583ab9c3611a9a6b68e2cdd42abc7d8430 .generated_files/flags/default/2f9e58fd8ce1a2611b0e0fd33168db129b9285f3
 	@${MKDIR} "${OBJECTDIR}" 
@@ -202,6 +214,18 @@ ${OBJECTDIR}/my_utils.o: my_utils.c  .generated_files/flags/default/60bfe29e1c5b
 	@${RM} ${OBJECTDIR}/my_utils.o.d 
 	@${RM} ${OBJECTDIR}/my_utils.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/my_utils.o.d" -MT "${OBJECTDIR}/my_utils.o.d" -MT ${OBJECTDIR}/my_utils.o -o ${OBJECTDIR}/my_utils.o my_utils.c 
+	
+${OBJECTDIR}/spi_interface.o: spi_interface.c  .generated_files/flags/default/ef111e694bef7c3f130779722b0f2eb393e08f40 .generated_files/flags/default/2f9e58fd8ce1a2611b0e0fd33168db129b9285f3
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/spi_interface.o.d 
+	@${RM} ${OBJECTDIR}/spi_interface.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/spi_interface.o.d" -MT "${OBJECTDIR}/spi_interface.o.d" -MT ${OBJECTDIR}/spi_interface.o -o ${OBJECTDIR}/spi_interface.o spi_interface.c 
+	
+${OBJECTDIR}/twi_interface.o: twi_interface.c  .generated_files/flags/default/b3a35df9666fd25fadeefc9a480ee26be108d9e6 .generated_files/flags/default/2f9e58fd8ce1a2611b0e0fd33168db129b9285f3
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/twi_interface.o.d 
+	@${RM} ${OBJECTDIR}/twi_interface.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -x c -D__$(MP_PROCESSOR_OPTION)__   -mdfp="${DFP_DIR}/xc8"  -Wl,--gc-sections -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -DXPRJ_default=$(CND_CONF)  $(COMPARISON_BUILD)  -gdwarf-3     -MD -MP -MF "${OBJECTDIR}/twi_interface.o.d" -MT "${OBJECTDIR}/twi_interface.o.d" -MT ${OBJECTDIR}/twi_interface.o -o ${OBJECTDIR}/twi_interface.o twi_interface.c 
 	
 endif
 

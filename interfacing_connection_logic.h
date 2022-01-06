@@ -94,7 +94,7 @@
      *      placed on the DATA lines      
      */
     //#define LCD_EN PIN3 //portB pin:3 OUT
-    #define LCD_EN _PB_PIN0
+    #define LCD_EN _PB_PIN3
     
 //    //that's what connected on the Kit (4-bit LCD Mode nibble)
 //    #define LCD_D4 PIN4 //PortA pin:4 OUT/IN

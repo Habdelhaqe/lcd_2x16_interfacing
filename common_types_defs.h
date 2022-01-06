@@ -46,6 +46,8 @@
     #define  CLEAR_BIT_DELAY_UPDATE(REG , BIT_LOCATION)     (REG) & ~(HIGH<<(BIT_LOCATION))
     #define TOGGLE_BIT_DELAY_UPDATE(REG , BIT_LOCATION)     (REG) ^ (HIGH<<(BIT_LOCATION))
 
+    #define SET_REST_REG_BIT(REG ,BIT , H_OR_L) (H_OR_L ? SET_BIT_DELAY_UPDATE(REG , BIT) : CLEAR_BIT_DELAY_UPDATE(REG , BIT))
+
     /*
      * this is not wright to do cause you don't want to modify or change
      * the register value you want to read a specific bit either to be

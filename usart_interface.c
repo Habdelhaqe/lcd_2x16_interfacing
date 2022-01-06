@@ -120,6 +120,25 @@ void transmitMSGviaUSARTusingPolling(u16 msg){
     }
 }
 
+void transmitMSGviaUSARTusingPollingOnTXC(u16 msg){
+    
+    if(GET_BIT(UCSRB , UCSZ2)){
+        //9 BITS msg
+    }else{
+        //5 , 6 , 7 , 8 BITS msg
+        turnLEDOnOff(LED0 , ON);
+        UDR = (u8) msg;
+        /*
+         *  polling is on the opposite side of the equation that is : 
+         * after placing MSG on UDR i/o location wait till the TX buffer and the
+         * Shift REG transmits hole MSG out the USART unit wasting the feature of 
+         * TX buffer (DORE flag) in doing so
+         */
+        while(!GET_BIT(UCSRA , TXC));
+        turnLEDOnOff(LED0 , OFF);
+    }
+
+}
 void transmitMSGviaUSARTusingINTER(u16 msg){
     if(GET_BIT(UCSRB , UCSZ2)){
         //9 BITS MSG

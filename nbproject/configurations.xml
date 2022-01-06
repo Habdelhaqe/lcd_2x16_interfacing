@@ -13,6 +13,8 @@
       <itemPath>timer0_interfacing.h</itemPath>
       <itemPath>usart_interface.h</itemPath>
       <itemPath>my_utils.h</itemPath>
+      <itemPath>spi_interface.h</itemPath>
+      <itemPath>twi_interface.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -30,6 +32,8 @@
       <itemPath>timer0_interface.c</itemPath>
       <itemPath>usart_interface.c</itemPath>
       <itemPath>my_utils.c</itemPath>
+      <itemPath>spi_interface.c</itemPath>
+      <itemPath>twi_interface.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -16,6 +16,7 @@
 #include <avr/interrupt.h>
 #include "usart_interface.h"
 #include "my_utils.h"
+#include "spi_interface.h"
 
 #define KEEP_EXECUTING 1
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
@@ -52,6 +53,7 @@ void commandHandlerForMCUreceivedThroughUSART(u8 *ptr_command);
 void transmitAllAsciiChars(void);
 void readChannel0AnalogSiganl(void);
 void trafficLightFlickerring(void);
+void mainSPI(void);
 
 /*
  * external interrupt initiated on INT0
@@ -241,6 +243,32 @@ ISR(USART_UDRE_vect){
     }
 }
 
+ISR(SPI_STC_vect){
+    
+    static u8 ascii_index = 65;
+    
+//    turnLEDOnOff(LED0 , !isLEDOnOrOFF(LED0).scanned_data);
+    
+//    SPI_TRANSMIT_USING_INTERRUPT_COMPLETED(ascii_index++);
+    
+    transmitMSGviaUSARTusingPolling(SPI_RECEIVE_USING_INTERRUPT_COMPLETED);    
+    transmitPacketViaSPIUsingINTER(ascii_index++);
+    
+    /*
+      * this code does not work i still do not know why?!!
+      * what's wrong with this logic
+    */
+//    transmitMSGviaUSARTusingPolling( transmitPacketViaSPIUsingINTER(ascii_index++) );
+      
+    if(ascii_index > 122){
+        ascii_index = 65;
+    }
+
+    turnLEDOnOff(LED1 , GET_BIT(SPSR ,SPIF));
+    
+//    transmitMSGviaUSARTusingPolling(SPI_RECEIVE_USING_INTERRUPT_COMPLETED);
+    
+}
 
 //"in the name of allah the most gracious the most merciful"
 u8 start_msg[] = "in the name of allah most G & M";
@@ -273,8 +301,9 @@ int main(void) {
 //        mainInterfacingWithKeyPad();
 //      main8LM35On8ChannelsDispalyTemp();
 //        mainTimer0();
-    mainUSART();
+//    mainUSART();
 //    mainSimulatingRisingEdgeThroughBTN();
+    mainSPI();
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -1390,29 +1419,31 @@ void mainUSART(void) {
 //    u8 frame_size = FRAME_SIZE_5_BITS;
     CLEAR_LCD;
     
-    transmitMSGviaUSARTusingINTER(NULL_CHAR);
+//    transmitMSGviaUSARTusingINTER(NULL_CHAR);
    
 //    initiateTransimission();
     
     while (KEEP_EXECUTING) {
 
-//        CLEAR_LCD;
-//
-//        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
-//        *(lcd_string + (index = 0)) = 'S';
-//        *(lcd_string + ++index) = 'T';
-//        *(lcd_string + ++index) = 'A';
-//        *(lcd_string + ++index) = 'R';
-//        *(lcd_string + ++index) = 'T';
-//        *(lcd_string + ++index) = NULL_CHAR;
-//        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
-//        displayStringOnLCD(lcd_string);
+        CLEAR_LCD;
+
+        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
+        *(lcd_string + (index = 0)) = 'S';
+        *(lcd_string + ++index) = 'T';
+        *(lcd_string + ++index) = 'A';
+        *(lcd_string + ++index) = 'R';
+        *(lcd_string + ++index) = 'T';
+        *(lcd_string + ++index) = NULL_CHAR;
+        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
+        displayStringOnLCD(lcd_string);
         
-//        index = 0;
-//        while (index < 128) {
+        index = 0;
+        while (index < 128) {
 //            transmitMSGviaUSARTusingPolling(index++);
 //            transmitMSGviaUSARTusingPolling(CARRIAGE_RETURN);
-//        }
+            transmitMSGviaUSARTusingPollingOnTXC(index++);
+//            transmitMSGviaUSARTusingPollingOnTXC(CARRIAGE_RETURN);
+        }
 //        *(lcd_string + (index = 0)) = receiveMSGviaUSARTusingPolling();
 //        *(lcd_string + ++index) = NULL_CHAR;
 //        CLEAR_LCD;
@@ -1426,14 +1457,15 @@ void mainUSART(void) {
 //        turnLEDOnOff(LED1,OFF);
 //        turnLEDOnOff(LED2,OFF);
         
-//        CLEAR_LCD;
-//        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
-//        *(lcd_string + (index = 0)) = 'E';
-//        *(lcd_string + ++index) = 'N';
-//        *(lcd_string + ++index) = 'D';
-//        *(lcd_string + ++index) = NULL_CHAR;
-//        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
-//        displayStringOnLCD(lcd_string);
+        CLEAR_LCD;
+        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
+        *(lcd_string + (index = 0)) = 'E';
+        *(lcd_string + ++index) = 'N';
+        *(lcd_string + ++index) = 'D';
+        *(lcd_string + ++index) = NULL_CHAR;
+        moveCursorToLocation(LCD_START_POS, LCD_START_POS);
+        displayStringOnLCD(lcd_string);
+        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
         
         //Breaking Things Up
 //        CHANGE_FRAME_SIZE( frame_size );
@@ -1591,4 +1623,47 @@ void trafficLightFlickerring(void){
         _delay_ms(10);
     }
     ENABLE_RECEIVE_COMPLETE_INTERRUPT_FOR_USART_RECEIVER;
+}
+
+void mainSPI(void){
+    //initLCD();
+    
+    initLEDS();
+    
+    init_USART(ENABLE_USART_TX,
+            ENABLE_USART_RX,
+            DISABLE_DATA_REG_EMPTY_INTERRUPT,
+            DISABLE_TRANSMIT_COMPLETE_INTERRUPT,
+            ENABLE_RECEIVE_COMPLETE_INTERRUPT,
+            9600,
+            FRAME_SIZE_8_BITS,
+            ASYNC_MODE,
+            ASYNC_MODE_NORAML_RATE,
+            IGNORE_ARGUMENT,
+            DISABLE_MULTI_PROCESSOR_COMMUNICATION_MODE,
+            PARITY_MODE_NON,
+            _1_STOP_BIT,
+            POLARITY_RISING_EDGE);
+        
+    onInitSPI( SPI_MASTER_MODE , 
+               SPI_UNIT_ENABLE , 
+               SPI_CLK_DIVISOR_BY_128 , 
+               SPI_CLK_POLARITY_RISE_LEADING_FALL_TRAILLING , 
+               SPI_CLK_PHASE_SAMPLE_ON_LEADING_EDGE , 
+               SPI_TRANSIMT_MSB_FIRST , 
+               SPI_ENABLE_INTERRUPT_TRANSIMSION_COMPLETED_FLAG);
+    CLEAR_LCD;
+    
+//    SPI_TRANSMIT_USING_INTERRUPT_COMPLETED(NULL_CHAR);
+    
+    transmitPacketViaSPIUsingINTER(NULL_CHAR);
+    
+    while(KEEP_EXECUTING){
+        
+//        transmitMSGviaUSARTusingPolling(transmitPacketViaSPIUsingPolling('A'));
+//        
+//        _delay_ms(200);
+    }
+    
+
 }

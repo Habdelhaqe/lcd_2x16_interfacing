@@ -161,7 +161,8 @@
         NO_ERRORS, //0
         ERR_WRONG_PORT_NUMBER, //1
         ERR_WRONG_PIN_NUMBER, //2
-        ERR //3        
+        ERR, //3
+        DATA_NOT_AVAILABLE, //4      
     }FUN_RETURN_STATUS;
             
     typedef struct scan_fun_return{
