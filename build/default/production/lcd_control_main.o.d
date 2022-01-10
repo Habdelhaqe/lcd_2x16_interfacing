@@ -21,7 +21,7 @@ build/default/production/lcd_control_main.o.d \
  phone_keypad.h interrupt_configuration.h adc_interfacing.h \
  timer0_interfacing.h usart_interface.h \
  c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h \
- my_utils.h spi_interface.h
+ my_utils.h spi_interface.h twi_interface.h
 
 atmega32a.h:
 
@@ -76,3 +76,5 @@ c:\program\ files\microchip\xc8\v2.32\avr\avr\include\avr\interrupt.h:
 my_utils.h:
 
 spi_interface.h:
+
+twi_interface.h:

@@ -17,6 +17,7 @@
 #include "usart_interface.h"
 #include "my_utils.h"
 #include "spi_interface.h"
+#include "twi_interface.h"
 
 #define KEEP_EXECUTING 1
 #define DELAY_MAIN_RETRUN_IN_MS_FOR_TIMER0_SETUP_NOT_WORKING 0.1
@@ -54,6 +55,8 @@ void transmitAllAsciiChars(void);
 void readChannel0AnalogSiganl(void);
 void trafficLightFlickerring(void);
 void mainSPI(void);
+void mainTWIMaterTransmitter(void);
+void mainTWISlaveReceiver(void);
 
 /*
  * external interrupt initiated on INT0
@@ -285,7 +288,9 @@ int main(void) {
 
     displayStringOnLCD(start_msg);
 
-    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    _delay_ms(HW_INITIALIZATION_DELAY_IN_MS);
+
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
 
     //detect if initInterruptService is not a success
     //    turnLEDOnOff(LED0 , 
@@ -303,7 +308,8 @@ int main(void) {
 //        mainTimer0();
 //    mainUSART();
 //    mainSimulatingRisingEdgeThroughBTN();
-    mainSPI();
+//    mainSPI();
+    mainTWIMaterTransmitter();
 }
 
 //my own polling way trying not to stall/wait for ADC
@@ -1665,5 +1671,86 @@ void mainSPI(void){
 //        _delay_ms(200);
     }
     
+
+}
+
+void mainTWIMaterTransmitter(void){
+    
+    //0000 001 0
+    static u8 SLA_R_W = 2 , BD = 255 , PRESCALAR = 0 , data_to_transmit = 65;
+   
+    initLCD();
+    
+    initTWIselectingBaudRate(BD , PRESCALAR , FALSE , FALSE);
+ 
+//    _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+    
+    displayINTOnLCD(TWI_initiate_Re_initiateSessionWithSalveTWIusingPolling(FALSE , FALSE , FALSE , SLA_R_W));
+    
+    displayCharacterOnLCD('-');
+    
+    while(KEEP_EXECUTING){
+
+//        _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+ 
+        displayINTOnLCD(
+            TWITransmitDataToSlaveTWIusingPolling(data_to_transmit++ ,
+                                          TRUE , 
+                                          TWI_ON_MASTER_TRANSMIT_DONT_CHANGE_SESSION_CONDITION_CONTINUE_TRANSMITTING_DATA ,
+                                          SLA_R_W ,
+                                          TRUE , 
+                                          FALSE , 
+                                          TRUE ,                
+                                          TRUE));
+        
+        displayCharacterOnLCD('-');
+        
+        if(data_to_transmit >90 ){
+            data_to_transmit = 65;
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        }else{
+            _delay_ms(100);
+        }
+    }
+    
+}
+
+void mainTWISlaveReceiver(void){
+
+    //0000 011 0
+    static u8 SLA_R_W = 5 , BD = 255 , PRESCALAR = 0;
+   
+    initLCD();
+
+    initLEDS();
+    
+    initTWIselectingBaudRate(BD , PRESCALAR , TRUE , FALSE);
+        
+    extern scan_fun_return fun_ret_status_and_data;    
+    
+    while(KEEP_EXECUTING){
+                
+        fun_ret_status_and_data = TWIReceiveDataFromMasterTWIusingPolling( TRUE , 
+                                                                           TWI_ON_SLAVE_TRANSMIT_NO_ADD_ACK_SWITCH_MASTER_SESSION , 
+                                                                           SLA_R_W , 
+                                                                           FALSE);
+        
+        if(!fun_ret_status_and_data.scanned_data){
+            
+            turnLEDOnOff(LED0 , OFF);
+            
+            writeControlSignalOnPortPin(_PC_PIN0, LOW);
+            
+            _delay_ms(LCD_DISPLAY_DELAY_IN_MS);
+        
+            displayCharacterOnLCD(fun_ret_status_and_data.scanned_data);
+        
+            turnLEDOnOff(LED1 , !isLEDOnOrOFF(LED1).scanned_data);
+        
+            writeControlSignalOnPortPin(_PC_PIN0, HIGH);
+        
+        }
+        
+    }
 
 }

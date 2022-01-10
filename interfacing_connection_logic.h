@@ -37,9 +37,9 @@
     #define BTN1 _PB_PIN4
     #define BTN2 _PB_PIN5
 
-    #define LED0 _PC_PIN0 
-    #define LED1 _PC_PIN1
-    #define LED2 _PC_PIN2
+    #define LED0 _PD_PIN2 
+    #define LED1 _PD_PIN1
+    #define LED2 _PD_PIN0
 
 //    #define BUZZER PIN3 //portA pin:3 OUT
 //    #define RELLAY PIN2 //portA pin:2 OUT
